@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Actualizar datos del catálogo</h1>
+<form #myform="ngForm" [formGroup]="form">
+    <div mat-dialog-content>
+        <section>
+            <div class="generalBox">
+                <div class="controlBox inputColor">
+                    <div class="formNotif" fxLayout="row wrap">
+                        <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
+                            <div class="labelsColor">Tipo </div>
+                            <mat-form-field appearance="outline" style="width: 100%">
+                                <mat-select placeholder="Seleccione" formControlName="type">
+                                    <mat-option *ngFor="let item of types" [value]="item">
+                                        {{ item}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="" appearance="outline" style="width: 100%">
+                                <input type="text" class="form-control" formControlName="code" maxlength="100" matInput
+                                    placeholder="Código" />
+                            </mat-form-field>
+                            <mat-form-field class="" appearance="outline" style="width: 100%">
+                                <input type="text" class="form-control" formControlName="value" maxlength="100" matInput
+                                    placeholder="Valor" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <mat-dialog-actions>
+        <div fxFlex="100" class="newNotif" fxLayout="row" fxLayoutAlign="center center">
+            <button type="submit" class="btnBlue" mat-button [disabled]="myform.invalid || isLoading"
+                (click)="submit()">
+                ACEPTAR
+            </button>
+            <button class="btnBrown" mat-button (click)="cancel()">
+                CANCELAR
+            </button>
+        </div>
+    </mat-dialog-actions>
+</form>

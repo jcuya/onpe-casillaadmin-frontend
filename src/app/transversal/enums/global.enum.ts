@@ -1,0 +1,6 @@
+export enum Profile {
+    RegistryOperator = 'register',
+    Notifier         = 'notifier',
+    Administrador         = 'admin'
+
+}

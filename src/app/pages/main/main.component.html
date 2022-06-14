@@ -1,0 +1,99 @@
+<!-- 
+<app-header></app-header>
+<section>
+  <router-outlet></router-outlet>
+</section>
+<app-footer></app-footer>
+-->
+<div class="universe" fxLayout="column">
+  <app-header></app-header>
+  <section fxFlex fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" class="principalSection overClass">
+    <!-- Sidebar (Ini) -->
+    <div class="menuContent" fxLayout="row wrap" fxLayoutAlign="space-around start" fxHide.sm fxHide.xs>
+      <div>
+        <div class="usrIniciales" fxLayout="row" fxLayoutAlign="center center">
+          {{ letterInitial }}
+        </div>
+        <div class="usrPhoto" style="display: none">
+          <img
+            src="https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+            alt="Carlos Diaz" />
+        </div>
+        <div class="usrIntro">Bienvenido</div>
+        <div class="usrBox">
+          <h1 style="text-transform: none">
+            {{ userName }}
+          </h1>
+          <p class="usrPerfil">
+            {{ labelProfile }}
+          </p>
+          <p class="usrGerencia">
+            {{ jobAreaName }}
+          </p>
+          <button *ngIf="sidebar == 'notifier'" mat-button (click)="linkRedirect('nueva-notificacion')">
+            CREAR NOTIFICACIÓN
+          </button>
+          <button *ngIf="sidebar == 'register'" mat-button (click)="linkRedirect('operador/nueva-casilla')">
+            CREAR CASILLA ELECTRÓNICA
+          </button>
+        </div>
+      </div>
+      <div class="separatorLine"></div>
+      <div *ngIf="sidebar == 'admin'" class="menuOptions">
+        <button mat-stroked-button (click)="linkRedirect('list-boxes')">
+          <span class="material-icons">work</span> Casillas Electrónicas
+        </button>
+        <button mat-stroked-button (click)="linkRedirect('admin/usuarios')">
+          <span class="material-icons">supervisor_account</span> Usuarios
+        </button>
+        <!-- <button mat-stroked-button (click)="linkRedirect('notificaciones')">
+          <span class="material-icons">mail_outline</span> Notificaciones
+        </button> -->
+        <button mat-stroked-button (click)="linkRedirect('admin/catalog')">
+          <span class="material-icons">mail_outline</span> Catálogo
+        </button>
+      </div>
+      <div *ngIf="sidebar == 'notifier'" class="menuOptions">
+        <button mat-stroked-button (click)="refreshNotifications()">
+          <span class="material-icons">mail_outline</span> Notificaciones
+        </button>
+      </div>
+      <div *ngIf="sidebar == 'register'" class="menuOptions">
+        <button mat-stroked-button (click)="linkRedirect('operador/usuarios')">
+          <span class="material-icons">supervisor_account</span> Usuarios
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxFlex style="position: relative">
+      <router-outlet></router-outlet>
+    </div>
+  </section>
+  <div id="menuInferior" fxHide fxShow.sm fxShow.xs fxLayout="row">
+    <button mat-stroked-button fxFlex="50" *ngIf="sidebar == 'register'" (click)="linkRedirect('operador/usuarios')">
+      <p class="infBtn">
+        <span class="material-icons">supervisor_account</span><br />
+        Usuarios
+      </p>
+    </button>
+    <button mat-stroked-button fxFlex="50" *ngIf="sidebar == 'notifier'" (click)="refreshNotifications()">
+      <p class="infBtn">
+        <span class="material-icons">mail_outline</span><br />
+        Notificaciones
+      </p>
+    </button>
+    <button mat-stroked-button fxFlex="50" *ngIf="sidebar == 'register'"
+      (click)="linkRedirect('operador/nueva-casilla')">
+      <p class="infBtn">
+        <span class="material-icons">person_add_alt_1</span><br />
+        Nuevo Usuario
+      </p>
+    </button>
+    <button mat-stroked-button fxFlex="50" *ngIf="sidebar == 'notifier'" (click)="linkRedirect('nueva-notificacion')">
+      <p class="infBtn">
+        <span class="material-icons">add</span><br />
+        Crear Notificación
+      </p>
+    </button>
+  </div>
+  <app-footer></app-footer>
+</div>

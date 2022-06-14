@@ -1,0 +1,137 @@
+<section>
+  <div class="allTitles" fxLayout="row">
+    <span class="brownCircle"></span>
+    <span class="greyLine"></span>
+    Notificaciones
+  </div>
+  <div class="generalBox">
+    <div class="controlBox inputColor">
+      <form class="example-form" fxLayout="row wrap">
+        <div fxFlex class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100">
+          <div class="labelsColor">Buscar</div>
+          <mat-form-field class="" appearance="outline" style="width: 100%">
+            <input
+              type="tel"
+              matInput
+              placeholder="Buscar..."
+              name="txtSearch"
+              (keyup.enter)="searchByQuery()"
+              [(ngModel)]="textSearch"
+              [maxlength]="100"
+            />
+            <mat-icon matSuffix (click)="searchByQuery()">search</mat-icon>
+          </mat-form-field>
+        </div>
+        <div fxFlex.sm="100" fxFlex.xs="100">
+          <div class="labelsColor">Filtro</div>
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-select
+              name="filter"
+              [(ngModel)]="filterSelected"
+              (selectionChange)="loadNotifications(textSearch, 1, 5)"
+            >
+              <mat-option *ngFor="let filtro of filters" [value]="filtro.id">
+                {{ filtro.value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div class="listBoxGeneral">
+      <mat-selection-list [multiple]="false">
+        <mat-list-option *ngFor="let notification of notificationData.Items">
+          <div
+            fxLayout="row"
+            fxFlex
+            (click)="goNotificationDetail(notification.id)"
+          >
+            <div
+              class="listPhotoBox"
+              fxLayout="column"
+              fxLayoutAlign="center center"
+            >
+              <div
+                [ngClass]="getColor(notification.inbox_name)"
+                fxLayout="row"
+                fxLayoutAlign="center center"
+              >
+                {{ notification.inbox_name.length > 0 ? notification.inbox_name.charAt(0) : "O" }}
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxFlex>
+              <div
+                class="listSubject"
+                fxFlex
+                fxLayout="row"
+                fxLayoutAlign="start center"
+              >
+                <div>
+                  <p class="lSubject">
+                    {{ notification.expedient }}
+                  </p>
+                  <p class="lGerencia">
+                    {{ notification.organization_name }}
+                  </p>
+                  <p class="lNombre">
+                    NOMBRE: {{ notification.inbox_name }} &nbsp;
+                    {{ notification.inbox_doc_type }}:
+                    {{ notification.inbox_doc }}
+                  </p>
+                </div>
+              </div>
+              <div class="listCtrls" fxLayout="row" fxHide.xs>
+                <div
+                  class="listBtnBox"
+                  fxLayout.xs="row"
+                  fxLayoutAlign.xs="start center"
+                >
+                  Notificado
+                  <div
+                    [ngClass]="{
+                      color_1: !notification.automatic,
+                      color_2: notification.automatic
+                    }"
+                    fxLayout.xs="row"
+                    fxLayoutAlign.xs="start center"
+                  >
+                    <mat-icon *ngIf="notification.automatic">stop_circle</mat-icon>
+                    <mat-icon *ngIf="!notification.automatic">check_circle</mat-icon>
+                  </div>
+                </div>
+                <div
+                  class="listBtnBox"
+                  fxLayout.xs="row"
+                  fxLayoutAlign.xs="start center"
+                >
+                  Leído
+                  <div
+                    [ngClass]="{
+                      color_1: notification.read_at != undefined,
+                      color_2: notification.read_at == undefined
+                    }"
+                    fxLayout.xs="row"
+                    fxLayoutAlign.xs="start center"
+                  >
+                    <mat-icon *ngIf="notification.read_at == undefined">stop_circle</mat-icon>
+                    <mat-icon *ngIf="notification.read_at != undefined">check_circle</mat-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-list-option>
+      </mat-selection-list>
+      <mat-paginator #paginator
+        [length]="notificationData.recordsTotal"
+        [pageSize]="notificationData.count"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="pageChangeEvent($event)"
+      >
+      </mat-paginator>
+    </div>
+    <div fxLayout="row" *ngIf="!listReadyCheck" fxLayoutAlign="center center">
+      <div class="icon-loading"></div>
+    </div>
+  </div>
+</section>

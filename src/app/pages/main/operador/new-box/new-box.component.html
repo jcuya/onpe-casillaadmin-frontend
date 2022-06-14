@@ -1,0 +1,440 @@
+<section>
+  <div class="allTitles" fxLayout="row">
+    <span class="brownCircle"></span>
+    <span class="greyLine"></span>
+    Nueva casilla electrónica
+  </div>
+  <div class="generalBox">
+    <div class="controlBox inputColor">
+      <div class="centerTitle">CANDIDATO A ELECCIÓN POPULAR</div>
+      <form #myform="ngForm" [formGroup]="Formulario">
+        <div class="formNotif" fxLayout="row wrap">
+          <!-- SECCION CANDIDATO-->
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Tipo de documento</div>
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-select
+                placeholder="Seleccione"
+                name="fm_optiontipo"
+                formControlName="fm_optiontipo"
+                (selectionChange)="eChangeDocumento($event)"
+              >
+                <mat-option *ngFor="let doc of typeDocument" [value]="doc.id">
+                  {{ doc.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">{{ buildLabel("fm_numerodoc") }}</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="tel"
+                class="form-control"
+                formControlName="fm_numerodoc"
+                [class.control-invalid]="formInvalid('fm_numerodoc')"
+                [maxlength]="maxlengthNumDoc"
+                [minlength]="minlengthNumDoc"
+                matInput
+                [placeholder]="buildHolder('fm_numerodoc')"
+                (keyup.enter)="eSearch('general')"
+                (keydown)="keydown($event, 'fm_numerodoc')"
+                (keypress)="validar_campo($event, 'fm_numerodoc')"
+                name="doc"
+              />
+              <button mat-icon-button matSuffix (click)="eSearch('general')">
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" class="padd_4" *ngIf="buildHide('fm_razon_social')">
+            <div class="labelsColor">Organización</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="tel"
+                class="form-control"
+                formControlName="fm_razon_social"
+                [class.control-invalid]="formInvalid('fm_numerodoc')"
+                matInput
+                placeholder="Ingrese el nombre de la Organización"
+                name="fm_razon_social"
+                [readonly]="existData"
+              />
+            </mat-form-field>
+          </div>
+          <!-- -->
+          <div
+            *ngIf="buildHide('fm_razon_social')"
+            fxFlex="100"
+            class="centerTitle"
+          >
+            DATOS DEL REPRESENTANTE
+          </div>
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+            *ngIf="buildHide('fm_optiontipo_rep')"
+          >
+            <div class="labelsColor">Tipo de documento</div>
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-select
+                placeholder="Seleccione"
+                name="typeDoc"
+                formControlName="fm_optiontipo_rep"
+                (selectionChange)="eChangeDocumentoRep($event)"
+              >
+                <mat-option *ngFor="let doc of typeDocument2" [value]="doc.id">
+                  {{ doc.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+            *ngIf="buildHide('fm_numerodoc_rep')"
+          >
+            <div class="labelsColor">Número de Documento</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="tel"
+                class="form-control"
+                formControlName="fm_numerodoc_rep"
+                [class.control-invalid]="formInvalid('fm_numerodoc_rep')"
+                [maxlength]="maxlengthNumDocRep"
+                [minlength]="minlengthNumDocRep"
+                matInput
+                placeholder="Ingrese el número de Documento"
+                (keyup.enter)="eSearch('representante')"
+                (keypress)="validar_campo($event, 'fm_numerodoc_rep')"
+                (keydown)="keydown($event, 'fm_numerodoc_rep')"
+                name="doc"
+                ngxTrim
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="eSearch('representante')"
+              >
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Nombres</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fm_nombres"
+                [class.control-invalid]="formInvalid('fm_nombres')"
+                matInput
+                placeholder="Nombres"
+                [value]="name"
+                [readonly]="existData"
+                ngxTrim
+              />
+            </mat-form-field>
+          </div>
+
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Apellido Paterno</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fm_appaterno"
+                [class.control-invalid]="formInvalid('fm_appaterno')"
+                matInput
+                placeholder="Apellido Paterno"
+                [value]="name"
+                [readonly]="existData"
+                ngxTrim
+              />
+            </mat-form-field>
+          </div>
+
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Apellido Materno</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fm_apmaterno"
+                [class.control-invalid]="formInvalid('fm_apmaterno')"
+                matInput
+                placeholder="Apellido Materno"
+                [value]="name"
+                [readonly]="existData"
+                ngxTrim
+              />
+            </mat-form-field>
+          </div>
+
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Correo electrónico</div>
+            <mat-form-field
+              class=""
+              disabled="true"
+              appearance="outline"
+              style="width: 100%"
+            >
+              <input
+                type="email"
+                class="form-control"
+                formControlName="fm_correo"
+                [class.control-invalid]="formInvalid('fm_correo')"
+                name="email"
+                [attr.disabled]="inputDisabled ? '' : null"
+                matInput
+                placeholder="Ingrese correo electrónico"
+                ngxTrim
+              />
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100">
+            <div class="labelsColor">
+              Teléfono celular obligatorio y/o fijo opcional
+            </div>
+            <div fxLayout="row">
+              <div fxFlex="50" class="padd_4">
+                <mat-form-field
+                  class=""
+                  appearance="outline"
+                  style="width: 100%"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="fm_celular"
+                    [class.control-invalid]="formInvalid('fm_celular')"
+                    [maxlength]="14"
+                    [minlength]="9"
+                    (keypress)="validar_campo($event, 'fm_celular')"
+                    matInput
+                    placeholder="Número de celular"
+                    name="cellphone"
+                    (input)="onKeydown($event, 'fm_celular')"
+                    ngxTrim
+                  />
+                </mat-form-field>
+              </div>
+              <div fxFlex="50" class="padd_4">
+                <mat-form-field
+                  class=""
+                  appearance="outline"
+                  style="width: 100%"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="fm_fijo"
+                    [class.control-invalid]="formInvalid('fm_fijo')"
+                    [maxlength]="10"
+                    (keypress)="validar_campo($event, 'fm_fijo')"
+                    [attr.disabled]="inputDisabled ? '' : null"
+                    matInput
+                    placeholder="Número de teléfono"
+                    (input)="onKeydown($event, 'fm_fijo')"
+                    ngxTrim
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Dirección domiciliaria</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fm_direccion"
+                [class.control-invalid]="formInvalid('fm_direccion')"
+                [minlength]="9"
+                [maxlength]="100"
+                [attr.disabled]="inputDisabled ? '' : null"
+                matInput
+                ngxTrim
+                placeholder="Ingrese dirección"
+                name="address"
+              />
+            </mat-form-field>
+          </div>
+
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+            *ngIf="buildHide('fm_organizacion')"
+          >
+            <div class="labelsColor">Organización</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fm_organizacion"
+                [class.control-invalid]="formInvalid('fm_organizacion')"
+                matInput
+                placeholder="Organización"
+                [maxlength]="100"
+                [value]="name"
+                ngxTrim
+              />
+            </mat-form-field>
+          </div>
+
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Tipo de registro de acreditación</div>
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-select
+                placeholder="Seleccione"
+                [disableOptionCentering]="true"
+                name="typeDoc"
+                [disabled]="inputDisabled"
+                formControlName="fm_optiontacreditacion"
+              >
+                <mat-option
+                  *ngFor="let acc of listTypeAcreditation"
+                  [value]="acc.code"
+                >
+                  {{ acc.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" class="padd_4">
+            <div class="labelsColor">
+              Adjuntar 5 archivos PDF como máximo (peso máximo de 10 MB por cada
+              archivo)<br />
+              El nombre del archivo no debe superar los 100 caracteres
+            </div>
+            <!-- <p>{{ Formulario.get("files").errors | json }}</p> -->
+            <file-upload
+              [(ngModel)]="uploadedFiles"
+              formControlName="files"
+              [multiple]="true"
+              [animation]="true"
+              accept=".pdf"
+              [ngStyle]="{
+                'outline-color': filesControl.valid == false ? 'red' : ''
+              }"
+              [ngStyle]="{
+                'background-color': filesControl.valid == false ? '#fdf4f4' : ''
+              }"
+            >
+              <ng-template
+                let-isFileDragDropAvailable="isFileDragDropAvailable"
+                #placeholder
+              >
+                <file-upload-drop-zone>
+                  <ng-container
+                    *ngIf="isFileDragDropAvailable; else isNotDragDropAvailable"
+                  >
+                    Agregar archivos, o dar clic aquí.
+                  </ng-container>
+                  <ng-template #isNotDragDropAvailable> </ng-template>
+                </file-upload-drop-zone>
+              </ng-template>
+
+              <ng-template
+                let-i="index"
+                let-file="file"
+                let-control="control"
+                #item
+              >
+                <file-upload-list-item
+                  [index]="i"
+                  class="item-test"
+                  [file]="file"
+                  [control]="control"
+                  >Remover</file-upload-list-item
+                >
+              </ng-template>
+            </file-upload>
+          </div>
+          <mat-progress-bar
+            *ngIf="load"
+            mode="indeterminate"
+          ></mat-progress-bar>
+          <div
+            fxFlex="100"
+            class="newNotif"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+          >
+            <button
+              type="submit"
+              class="btnBlue"
+              mat-button
+              [disabled]="myform.invalid || load"
+              (click)="submit()"
+            >
+              ACEPTAR
+            </button>
+            <button class="btnBrown" mat-button (click)="cancelar()">
+              CANCELAR
+            </button>
+          </div>
+        </div>
+      </form>
+      <br />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,75 @@
+<section>
+    <div class="allTitles" fxLayout="row">
+        <span class="brownCircle"></span>
+        <span class="greyLine"></span> {{esVentanadeCasillas?'Casilla Electrónicas':'Usuarios'}}
+    </div>
+    <div class="generalBox">
+        <div class="controlBox inputColor">
+            <form class="example-form" fxLayout="row wrap">
+                <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100">
+                    <div class="labelsColor">Buscar</div>
+                    <mat-form-field class="" appearance="outline" style="width: 100%">
+                        <input type="tel" matInput placeholder="Buscar..." [maxlength]="100" name="txtSearch" (keyup.enter)="searchByQuery()" [(ngModel)]="textSearch" />
+                        <button mat-icon-button matSuffix (click)="searchByQuery()">
+              <mat-icon>search</mat-icon>
+            </button>
+                    </mat-form-field>
+                </div>
+
+                <button mat-fab color="primary" *ngIf="esAdministrador" (click)="newUser()" aria-label="Agregar usuario">
+          <mat-icon>add</mat-icon>
+        </button>
+
+            </form>
+        </div>
+        <div class="listBoxGeneral">
+            <mat-selection-list [multiple]="false">
+                <mat-list-option *ngFor="let user of userData.Items" >
+                    <div fxLayout="row" fxFlex>
+                        <div class="listPhotoBox" fxLayout="column" fxLayoutAlign="center center">
+                            <div [ngClass]="getColor(user.name)" fxLayout="row" fxLayoutAlign="center center">
+                                {{ user.name | slice: 0:1 }}
+                            </div>
+                        </div>
+                        <div class="listSubject" fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+                            <div>
+                                <p class="lNombre">
+                                    {{ user.name }} {{ user?.lastname }}
+                                </p>
+                                <p class="lOrganizacion">
+                                    {{ user.organization }}
+                                </p>
+                                <p class="lDocument" (click)="handleVerCasilla(user);">{{ user.doc_type }}: {{ user.doc }}</p>
+                                <p class="lOrganizacion" *ngIf="esAdministrador">
+                                    Creado por: {{user.createUser}}
+                                </p>
+                            </div>
+                            <div style="display: flex;align-items: center;">
+                                <div>
+                                    <p class="lOrganizacion" *ngIf="esAdministrador">
+                                        {{user.createdAt | date :'dd/MM/yyyy hh:mm:ss a' }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
+                    <span class="material-icons" style="color: green;">edit</span>
+                  </button>
+                                    <button mat-stroked-button *ngIf="esAdministrador" (click)="deleteUser(user)">
+                    <span class="material-icons" style="color: red;">delete</span>
+                  </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </mat-list-option>
+            </mat-selection-list>
+            <mat-paginator [length]="userData.recordsTotal" [pageSize]="userData.count" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent = $event;pageChangeEvent($event)">
+            </mat-paginator>
+        </div>
+        <div fxLayout="row" *ngIf="!listReadyCheck" fxLayoutAlign="center center">
+            <div class="icon-loading"></div>
+        </div>
+    </div>
+</section>

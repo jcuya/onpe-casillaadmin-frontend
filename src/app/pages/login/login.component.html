@@ -1,0 +1,104 @@
+<div class="main-div">
+  <div>
+    <div class="logoOnpe">
+      <img src="../../../assets/img/PantallasCS3_Onpe.png" alt="" />
+    </div>
+  </div>
+  <div class="center" style="z-index: 100;">
+    <div class="logoSistema">
+      <!-- <h1>SISEN</h1>
+      <p>Sistema de Notificación Electrónica</p> -->
+      <img src="../../../assets/img/loginLogo70.png" alt="" />
+    </div>
+    <div class="centerTitle">INGRESO</div>
+    <form
+      #myform="ngForm"
+      [formGroup]="Formulario"
+      class="example-form"
+      (ngSubmit)="loginInit()"
+    >
+      <div class="loginRadio labelsColor">
+        <mat-radio-group
+          aria-label="Select an option"
+          formControlName="fm_option"
+          aria-label="Select an option"
+          (change)="radioChange($event)"
+        >
+          <mat-radio-button value="1">DNI</mat-radio-button>
+          <mat-radio-button value="2">Carnet de extranjería</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <mat-form-field
+        class="example-full-width bigInputColor"
+        appearance="outline"
+      >
+        <span matPrefix class="material-icons">account_box</span>
+        <input
+          matInput
+          placeholder="{{ placeHolder }}"
+          (keypress)="validar_campo($event)"
+          type="text"
+          class="form-control"
+          formControlName="fm_usuario"
+          [class.control-invalid]="formInvalid('fm_usuario')"
+          [maxlength]="getMaxLengthNumeroDocumento"
+          [minlength]="getMin"
+          required
+          appOnlyNumber="integer"
+          autocomplete="false"
+        />
+        <mat-error *ngIf="Formulario.controls.fm_usuario.invalid">{{
+          eShowError("fm_usuario", Formulario.controls.fm_usuario.errors)
+        }}</mat-error>
+      </mat-form-field>
+      <!-- <div class="labelsColor">Password</div> -->
+      <mat-form-field
+        class="example-full-width bigInputColor"
+        appearance="outline"
+      >
+        <span matPrefix class="material-icons">lock</span>
+        <input
+          mat-icon="lock"
+          matInput
+          placeholder="Contraseña"
+          [type]="hide ? 'password' : 'text'"
+          maxlength="30"
+          class="form-control"
+          formControlName="fm_pass"
+          [class.control-invalid]="formInvalid('fm_pass')"
+          required
+        />
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </mat-form-field>
+      <br />
+      <span class="mensajeLogin">{{ mensaje }}</span>
+      <a class="linkContent" href="#" (click)="onloadGuia()">
+        Guía de procedimiento
+      </a>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <button
+          type="submit"
+          mat-raised-button
+          fxFlex="50"
+          class="btnBlue"
+          [class.spinner]="load"
+		      [disabled]="load || myform.invalid"
+        >
+          Ingresar
+        </button>
+      </div>
+    </form>
+    <a class="mensajeOlvidar" href="#" [routerLink]="['/recuperar-contrasena']" 
+    >Olvidé mi contraseña</a>
+  </div>
+  <div class="dirFooter">
+    Jr. Washington 1894, Lima 01<br />
+    informes@onpe.gob.pe - Fono ONPE: 417 0630 opción 1<br />
+    Horario de atención: Lunes a Sábado de 08:00 h – 20:00 h
+  </div>
+  <div style="height: 20px; min-height: 20px; max-height: 20px; padding: 7px; bottom: 0; left: 10px; position: fixed;" aria-hidden="false">
+    <div flex="50" style="color: rgb(23, 91, 165); font-size: 12px; display: flex; align-items: center; font-family: Roboto, 'Helvetica Neue', sans-serif; font-weight: 500;">
+      SISEN v1.1.1
+    </div>
+  </div>
+</div>

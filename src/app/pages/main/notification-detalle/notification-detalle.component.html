@@ -1,0 +1,197 @@
+<section>
+  <div class="allTitles" fxLayout="row">
+    <span class="brownCircle"></span>
+    <span class="greyLine"></span>
+    Notificaciones electrónicas
+  </div>
+  
+  <div id="imp1" class="generalBox">
+    <div class="controlBox inputColor">
+      <div id="no-imp1" class="topLine">
+        <div class="limit50 printLine">
+          <a href="#" [routerLink]="['/main/notificaciones']" routerLinkActive="router-link-active" >
+            <span class="material-icons">arrow_back</span>
+            Regresar
+          </a>
+          <a (click)="print()">
+            <span class="material-icons">print</span>
+            Imprimir
+          </a>
+        </div>
+      </div>
+        <ng-container *ngIf="loading; then mostrarLoading; else ocultarLoading"></ng-container>
+        <ng-template #mostrarLoading>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div class="icon-loading"></div>
+          </div>
+        </ng-template>
+        <ng-template #ocultarLoading>
+          <div fxLayout="row" class="limit50 detailHead">
+            <div
+              class="listPhotoBox"
+              fxLayout="column"
+              fxLayoutAlign="center center"
+            >
+              <div
+                [ngClass]="getColor(notification.inbox_name)"
+                fxLayout="row"
+                fxLayoutAlign="center center"
+              > <!-- class="listCircle rdmColor_1" -->
+                {{ notification.inbox_name.length > 0 ? notification.inbox_name.charAt(0) : "O" }}
+              </div>
+            </div>
+            <div
+              class="listSubject"
+              fxFlex
+              fxLayout="row"
+              fxLayoutAlign="start center">
+              <div fxFlex fxLayout="column">
+                <p class="lSubject">
+                  {{ isAutomatic ? this.notification.expedient : this.formulario.controls["n_expediente"].value }}
+                </p>
+                <p class="lGerencia"></p>
+                <p class="lDetalleDate">
+                  {{
+                    (isAutomatic ? this.notification.created_at : this.formulario.controls["n_received_at"].value) | date: "dd/MM/yyyy hh:mm a"
+                  }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="isAutomatic; then preNotificationTemplate; else notificationTemplate"></ng-container>
+          <ng-template #preNotificationTemplate>
+            <div
+              fxLayout="row wrap"
+              fxLayoutAlign="start start"
+              class="formNotif dobleGrey"
+              *ngFor="let adjunto of adjuntos"
+            >
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                matTooltip={{lbl_bloqueado}}
+              >
+                <button mat-stroked-button 
+                  [disabled]=true 
+                  (click)="viewDocument(adjunto)">
+                  <mat-icon matSuffix class="grad45">attach_file</mat-icon>
+                  {{ adjunto.name }}
+                </button>
+              </div>
+            </div>
+            <div class="formNotif textBlue" fxLayout="row wrap">
+              <div fxFlex="100" class="padd_4">
+                <div class="labelsColor">Destinatario:</div>
+                <p>{{ this.notification.inbox_name }}</p>
+              </div>
+              <div fxFlex="100" class="padd_4">
+                <div class="labelsColor">Mensaje:</div>
+                <p>{{ this.notification.message }}</p>
+              </div>
+            </div>
+            <div class="formNotif" fxLayout="row wrap">
+              <div
+                fxFlex="100"
+                class="newNotif"
+                fxLayout="row"
+                fxLayoutAlign="center center"
+              >
+                <button class="btnBrown" mat-button (click)="cancel()">
+                  CANCELAR
+                </button>
+                <button
+                  class="btnBlue"
+                  mat-button
+                  (click)="NotificationSign()"
+                >
+                  ENVIAR
+                </button>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #notificationTemplate>
+            <div class="formNotif textBlue" fxLayout="row wrap" fxLayoutGap="10px">
+              <span class="labelsColor">Destinatario:</span>
+              <p>{{ this.notification.inbox_name }}</p>
+            </div>
+            <div
+              fxLayout="row wrap"
+              fxLayoutAlign="start start"
+              class="formNotif dobleGrey"
+              *ngFor="let adjunto of adjuntos"
+            >
+              <ng-container *ngIf="adjunto.blocked != null ? adjunto.blocked : false; else blocked">
+                <div
+                fxLayout="row"
+                fxLayoutAlign="start start"
+                matTooltip={{lbl_bloqueado}}>
+                  <button mat-stroked-button 
+                    [disabled]=true
+                    (click)="viewDocument(adjunto)">
+                    <mat-icon matSuffix class="grad45">attach_file</mat-icon>
+                    {{ adjunto.name }}
+                  </button>
+              </div>
+              </ng-container>
+              <ng-template #blocked>
+                <div
+                fxLayout="row"
+                fxLayoutAlign="start start">
+                  <button mat-stroked-button 
+                    (click)="viewDocument(adjunto)">
+                    <mat-icon matSuffix class="grad45">attach_file</mat-icon>
+                    {{ adjunto.name }}
+                  </button>
+                </div>
+              </ng-template>
+              
+            </div>
+            <div class="formNotif textBlue" fxLayout="row wrap">
+              <div fxFlex="100" class="padd_4">
+                <p class="parrafo_texto">
+                  {{ this.formulario.controls["n_message"].value }}
+                </p>
+              </div>
+            </div>
+            <div class="blueSeed limit50">
+              <img src="../../../../assets/img/onpeblanco.svg" alt="" />
+            </div>
+            <div class="topLine1 limit50"></div>
+            <div class="greyBoxIndicator limit50" fxLayout="row">
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div class="greyBoxTitle">Estado de la notificación:</div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div class="listCtrls posRef" fxLayout="row">
+                  <div class="listBtnBox2">
+                    Notificado
+                    <div class="color_1 posUno">
+                      <mat-icon>check_circle</mat-icon>
+                    </div>
+                    <div class="microInfo">
+                      {{
+                        this.formulario.controls["n_received_at"].value
+                          | date: "dd/MM/yyyy hh:mm a"
+                      }}
+                    </div>
+                  </div>
+                  <div class="listBtnBox2">
+                    Leído
+                    <div class="{{ view2 }}">
+                      <mat-icon>{{ icon2 }}</mat-icon>
+                    </div>
+                    <div class="microInfo">
+                      {{
+                        this.formulario.controls["n_read_at"].value
+                          | date: "dd/MM/yyyy hh:mm a"
+                      }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>  
+    </div>
+  </div> 
+</section>
