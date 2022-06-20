@@ -40,6 +40,7 @@ import { ColeccionesComponent } from './pages/main/admin/colecciones/colecciones
 import { PopFiltroComponent } from './pages/main/admin/colecciones/pop-filtro/pop-filtro.component';
 import { CatalogComponent } from './pages/main/admin/catalog/catalog/catalog.component';
 import { NewCatalogComponent } from './pages/main/admin/catalog/new-catalog/new-catalog.component';
+import { SolicitudDetailComponent } from './pages/main/operador/solicitud-detail/solicitud-detail.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { NewCatalogComponent } from './pages/main/admin/catalog/new-catalog/new-
     PopFiltroComponent,
     CatalogComponent,
     NewCatalogComponent,
+    SolicitudDetailComponent,
   ],
   imports: [
     BrowserModule,

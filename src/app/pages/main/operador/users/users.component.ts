@@ -37,6 +37,7 @@ export class UsersComponent implements OnInit {
     private paginator: MatPaginatorIntl,
     private seguridadService: SeguridadService,
     public dialog: MatDialog,
+   
   ) {
     this.userData = new UserData();
     this.paginator.itemsPerPageLabel = 'Registros por página';
@@ -104,6 +105,10 @@ export class UsersComponent implements OnInit {
 
   getColor(name: string) {
     return this.funcionesService.colorLetter(name);
+  }
+
+  redirectDetail(){
+    this.route.navigate(['/main/operador/solicitud-detalle']);
   }
 
   pageChangeEvent(event) {

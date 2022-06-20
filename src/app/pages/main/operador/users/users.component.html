@@ -52,6 +52,9 @@
                                     </p>
                                 </div>
                                 <div>
+                                    <button mat-stroked-button  (click)="redirectDetail()">
+                                        <span class="material-icons" style="color: green;">edit</span>
+                                      </button>
                                     <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
                     <span class="material-icons" style="color: green;">edit</span>
                   </button>

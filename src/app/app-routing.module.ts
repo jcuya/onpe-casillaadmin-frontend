@@ -19,6 +19,7 @@ import { ViewBoxComponent } from './pages/main/operador/view-box/view-box.compon
 import { AdminComponent } from './pages/main/admin/admin.component';
 import { ColeccionesComponent } from './pages/main/admin/colecciones/colecciones.component';
 import { CatalogComponent } from './pages/main/admin/catalog/catalog/catalog.component';
+import { SolicitudDetailComponent } from './pages/main/operador/solicitud-detail/solicitud-detail.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -121,6 +122,13 @@ const routes: Routes = [
           {
             path: 'nueva-casilla',
             component: NewBoxComponent,
+            canActivate: [AuthGuard],
+          },
+          
+          ,
+          {
+            path: 'solicitud-detalle',
+            component: SolicitudDetailComponent,
             canActivate: [AuthGuard],
           },
         ],
