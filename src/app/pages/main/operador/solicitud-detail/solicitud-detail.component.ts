@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./solicitud-detail.component.scss']
 })
 export class SolicitudDetailComponent implements OnInit {
+    load = false;
 
   constructor() { }
 

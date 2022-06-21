@@ -51,16 +51,14 @@
                                         {{user.createdAt | date :'dd/MM/yyyy hh:mm:ss a' }}
                                     </p>
                                 </div>
-                                <div>
-                                    <button mat-stroked-button  (click)="redirectDetail()">
-                                        <span class="material-icons" style="color: green;">view</span>
-                                      </button>
+                                <div style="margin-left: 20px;">
+                                    <Button mat-stroked-button class="aprobacionBoton" (click)="redirectDetail()">Aprobación</Button>
                                     <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
-                    <span class="material-icons" style="color: green;">edit</span>
-                  </button>
+                                        <span class="material-icons" style="color: green;">edit</span>
+                                    </button>
                                     <button mat-stroked-button *ngIf="esAdministrador" (click)="deleteUser(user)">
-                    <span class="material-icons" style="color: red;">delete</span>
-                  </button>
+                                        <span class="material-icons" style="color: red;">delete</span>
+                                    </button>
                                 </div>
                             </div>
 
