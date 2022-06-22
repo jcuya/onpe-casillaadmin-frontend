@@ -83,7 +83,7 @@ export class SolicitudDetailComponent implements OnInit {
        binary += String.fromCharCode( bytes[ i ] );
     }
     let info =    'data:image/jpeg;base64,' +window.btoa( binary );
-    return info;
+    return info;  
   }
 
 }
