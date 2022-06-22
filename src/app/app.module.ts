@@ -101,6 +101,7 @@ import { SolicitudDetailComponent } from './pages/main/operador/solicitud-detail
     NewUserComponent,
     PopFiltroComponent,
     NewCatalogComponent,
+    SolicitudDetailComponent
   ]
 })
 export class AppModule { }

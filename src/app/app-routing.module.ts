@@ -126,7 +126,7 @@ const routes: Routes = [
           }          
           ,
           {
-            path: 'solicitud-detalle',
+            path: 'solicitud-detalle/:id',
             component: SolicitudDetailComponent,
             canActivate: [AuthGuard],
           },

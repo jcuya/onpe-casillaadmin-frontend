@@ -23,42 +23,50 @@
                             <!-- Column-2 Row-1-->
                             <div fxLayout="column" fxFlex="60" fxFlexFill fxLayoutAlign="space-between strech">
                               <div fxLayout="row" fxFlex="20px" fxLayoutAlign="center center"></div>
-                              <div fxLayout="row" fxFlex="220px" >
+                              <div *ngIf="data.type_user === 'n'; else juridico" fxLayout="row" fxFlex="220px" >
                                 <ol>
                                     <li>Persona Natural</li>
-                                    <li>Tipo de documento: <b>requestSave.tipoDocumento</b> </li>
-                                    <li>Número de documento: <b>requestSave.numeroDocumento</b></li>
-                                    <li>Apellidos y Nombres: <b>requestSave.apePaterno   requestSave.apeMaterno  requestSave.nombres</b></li>
-                                    <li>Correo Electrónico: <b>requestSave.correoElectronico</b></li>
-                                    <li>Número de Celular: <b>requestSave.numeroCelular</b></li>
+                                    <li>Tipo de documento: <b>{{data.doc_type}}</b> </li>
+                                    <li>Número de documento: <b>{{data.doc}}</b></li>
+                                    <li>Apellidos y Nombres: <b>{{data.lastname }}  {{data.name}}</b></li>
+                                    <li>Correo Electrónico: <b>{{data.email}}</b></li>
+                                    <li>Número de Celular: <b>{{data.cellphone}}</b></li>
                                     <li>Departamento / Provincia / Distrito: *Aquí el valor*</li>
-                                    <li>Dirección: <b>requestSave.domicilioFisico</b></li>
+                                    <li>Dirección: <b>{{data.address}}</b></li>
                                 </ol>                                  
                               </div>
-                              <div fxLayout="row" fxFlex="280px" >
-                                <ol>
-                                    <li>Persona Jurídica</li>
-                                    <li>RUC: *Aquí el valor*</li>
-                                    <li>Razón Social: *Aquí el valor*</li>
-                                    <li>Correo Electrónico: *Aquí el valor*</li>
-                                    <li>Número de Celular: *Aquí el valor*</li>
-                                    <li>Departamento / Provincia / Distrito: *Aquí el valor*</li>
-                                    <li>Dirección: *Aquí el valor*</li>
-                                    <li>Página Web: *Aquí el valor*</li>
-                                    <li>Representante:</li>
-                                    <ol style="margin-left: 20px;">
-                                        <li>Tipo de documento: *Aquí el valor*</li>
-                                        <li>Número de documento: *Aquí el valor*</li>
-                                        <li>Apellidos y Nombres: -Aquí el apepat--Aquí el apemat-,-Nombres-</li>
-                                        <li>Foto: *Aquí el valor*</li>
-                                    </ol>
-                                </ol>
-                              </div>
+
+                              <ng-template #juridico> 
+                                <div fxLayout="row" fxFlex="280px" >
+                                  <ol>
+                                      <li>Persona Jurídica</li>
+                                      <li>RUC: <b>{{data.doc}}</b></li>
+                                      <li>Razón Social: <b>{{data.name}}</b></li>
+                                      <li>Correo Electrónico:  <b>{{data.email}}</b></li>
+                                      <li>Número de Celular: <b>{{data.cellphone}}</b></li>
+                                      <li>Departamento / Provincia / Distrito: *Aquí el valor*</li>
+                                      <li>Dirección: <b>{{data.address}}</b></li>
+                                      <li>Página Web: *Aquí el valor*</li>
+                                      <li>Representante:</li>
+                                      <ol  style="margin-left: 20px;">
+                                          <li>Tipo de documento: <b>{{representante.tipoDocumento}}</b></li>
+                                          <li>Número de documento: <b>{{representante.numeroDocumento}}</b></li>
+                                          <li>Apellidos y Nombres: <b>{{representante.nombreCompleto}}</b></li>
+                                          <li>Documento:  <div fxFlex="100" class="padd_4">
+                                            <div *ngIf="representante.archivo"  (click)="download(representante.archivo.path,representante.archivo.name)"> {{representante.archivo.name}}</div>
+                                        </div></li>
+                                      </ol>
+                                  </ol>
+                                </div>
+                              </ng-template>
+                            
                               <div fxLayout="row" fxFlex="20px" fxLayoutAlign="center center"></div>
                             </div>
                             <!-- Column-2 Row-2-->
                             <div fxLayout="row" fxFlex="40" fxFlexFill style="background-color: #ebebeb" fxLayoutAlign="space-around strech">
-                              <div fxLayoutAlign="center center">Aquí la foto</div>
+                              <div fxLayoutAlign="center center"></div>
+                              <img src="{{imageURlss}}"  alt="">
+                            
                             </div>
                           </div>
                           <div fxLayout="row" fxFlex="50px" style="background-color: #ebebeb" fxLayoutAlign="center center">

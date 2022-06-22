@@ -49,7 +49,11 @@ export class MainComponent implements OnInit {
       }else if (this.typeProfile === Profile.Notifier) {
         this.sidebar = Profile.Notifier;
         this.labelProfile = 'Notificador';
-      } else {
+      }else if(this.typeProfile === Profile.Evaluator){
+        this.sidebar = Profile.Evaluator;
+        this.labelProfile = 'Evaluador';
+      }
+      else {
         this.sidebar = Profile.RegistryOperator;
         this.labelProfile = 'Operador de registro';
       }

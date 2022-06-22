@@ -35,7 +35,7 @@
 
                             <div>
                                 <p class="lNombre">
-                                    {{ user.name }} {{ user?.lastname }}
+                                    {{ user.name }} {{user?.lastname }}
                                 </p>
                                 <p class="lOrganizacion">
                                     {{ user.organization }}
@@ -52,7 +52,7 @@
                                     </p>
                                 </div>
                                 <div style="margin-left: 20px;">
-                                    <Button mat-stroked-button class="aprobacionBoton" (click)="redirectDetail()">Aprobación</Button>
+                                    <Button mat-stroked-button class="aprobacionBoton" (click)="redirectDetail(user)">Aprobación</Button>
                                     <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
                                         <span class="material-icons" style="color: green;">edit</span>
                                     </button>

@@ -63,6 +63,7 @@ export class UsersComponent implements OnInit {
         if (res.success) {
           this.listReadyCheck = true;
           this.userData = res;
+          console.log("data", this.userData)
         }
       },
       (err) => {
@@ -107,8 +108,8 @@ export class UsersComponent implements OnInit {
     return this.funcionesService.colorLetter(name);
   }
 
-  redirectDetail(){
-    this.route.navigate(['/main/operador/solicitud-detalle']);
+  redirectDetail(user){
+    this.route.navigate(['/main/operador/solicitud-detalle',user.id]);
   }
 
   pageChangeEvent(event) {

@@ -41,6 +41,16 @@ export class UserService {
         })
       }).pipe(map((res) => res));
   }
+
+
+  getUserDetail(id: string): Observable<any> {
+    return this.http
+      .get<any>(API_URL + '/get-user-info-detail', {
+        params: { id }, headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        })
+      }).pipe(map((res) => res));
+  }
   GetUsers(userRequest: UserRequest): Observable<UserData> {
     return this.http
       .post<any>(API_URL + '/users', userRequest, httpOptions)
