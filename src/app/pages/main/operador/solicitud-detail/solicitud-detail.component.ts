@@ -86,4 +86,22 @@ export class SolicitudDetailComponent implements OnInit {
     return info;  
   }
 
+  aprobarUser() {
+    this.funcionesService
+      .mensajeConfirmar('¿Estás seguro de aprobar la creación de Casilla Electrónica de Juan Perez?')
+      .then((resp) => {
+
+      })
+      .catch((err) => { });
+  }
+  desaprobarUser() {
+    this.funcionesService
+      .mensajeConfirmar('¿Estás seguro de desaprobar la creación de Casilla Electrónica de Juan Perez?')
+      .then((resp) => {
+
+      })
+      .catch((err) => { });
+  }
+
+
 }

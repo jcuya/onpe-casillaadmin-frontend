@@ -65,7 +65,7 @@
                             <!-- Column-2 Row-2-->
                             <div fxLayout="row" fxFlex="40" fxFlexFill style="background-color: #ebebeb" fxLayoutAlign="space-around strech">
                               <div fxLayoutAlign="center center"></div>
-                              <img src="{{imageURlss}}"  alt="">
+                              <img height="250px" src="{{imageURlss}}"  alt="">
                             
                             </div>
                           </div>
@@ -74,10 +74,10 @@
                             <div fxLayout="column" fxFlex="60" fxFlexFill fxLayoutAlign="space-between strech"></div>
                             <div fxLayout="row" fxFlex="40" fxFlexFill fxLayoutAlign="space-around strech">
                               <div fxFlex="50" fxLayoutAlign="center center">
-                                <button type="submit" mat-raised-button fxFlex="50" class="btnBlue" [class.spinner]="load">Aprobar</button>
+                                <button type="submit" mat-raised-button fxFlex="50" class="btnBlue" [class.spinner]="load" (click)="aprobarUser()">Aprobar</button>
                               </div>
                               <div fxFlex="50" fxLayoutAlign="center center">
-                                <button type="submit" mat-raised-button fxFlex="70" class="btnRed" [class.spinner]="load">Desaprobar</button>
+                                <button type="submit" mat-raised-button fxFlex="70" class="btnRed" [class.spinner]="load" (click)="desaprobarUser()">Desaprobar</button>
                               </div>
                             </div>
                           </div>
