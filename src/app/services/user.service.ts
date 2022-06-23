@@ -52,7 +52,16 @@ export class UserService {
       }).pipe(map((res) => res));
   }
 
-  updateEstateInbox(request: { idUser: string, estado: string, motivo: {} }
+
+  // sendEmailEstateInbox(request: { email: string, estado: string, nombres: string }): Observable<any> {
+  //   return this.http
+  //     .post<any>(API_URL + '/sendEmailEstateInbox', {request, headers: new HttpHeaders({
+  //         'Content-Type': 'application/json',
+  //       })
+  //     }).pipe(map((res) => res));
+  // }
+
+  updateEstateInbox(request: { idUser: string, estado: string, motivo: {},name :string ,email : string }
     ) {
       return this.http
         .post<any>(API_URL + '/updateEstateInbox', request)

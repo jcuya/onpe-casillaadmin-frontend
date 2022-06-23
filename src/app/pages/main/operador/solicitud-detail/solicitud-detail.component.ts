@@ -101,6 +101,8 @@ export class SolicitudDetailComponent implements OnInit {
               idUser: this.id,
               estado: envioestado,
               motivo: motivoenvio,
+              name : this.data.lastname + " " + this.data.name,
+              email : this.data.email
             })
             .subscribe((res) => {
               if (res.success) {
@@ -187,6 +189,8 @@ export class SolicitudDetailComponent implements OnInit {
             idUser: this.id,
             estado: envioestado,
             motivo: result.value,
+            name : this.data.lastname + " " + this.data.name,
+            email : this.data.email
           })
           .subscribe((res) => {
             if (res.success) {
