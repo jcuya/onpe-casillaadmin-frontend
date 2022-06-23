@@ -64,6 +64,12 @@ export class UsersComponent implements OnInit {
           this.listReadyCheck = true;
           this.userData = res;
           console.log("data", this.userData)
+
+          this.userData.Items.map(res =>{
+            if(res.estate_inbox === ""){
+              res.estate_inbox = "Registro interno"
+            }
+          })
         }
       },
       (err) => {

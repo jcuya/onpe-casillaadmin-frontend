@@ -3,6 +3,7 @@ export class User {
   organization: string;
   doc: string;
   doc_type?: string;
+  estate_inbox?:string;
 }
 
 export class Box {
