@@ -74,10 +74,10 @@
                             <div fxLayout="column" fxFlex="60" fxFlexFill fxLayoutAlign="space-between strech"></div>
                             <div fxLayout="row" fxFlex="40" fxFlexFill fxLayoutAlign="space-around strech">
                               <div fxFlex="50" fxLayoutAlign="center center">
-                                <button type="submit" mat-raised-button fxFlex="50" class="btnBlue" [class.spinner]="load" (click)="aprobarUser()">Aprobar</button>
+                                <button type="submit" mat-raised-button fxFlex="50" class="btnBlue" [class.spinner]="load" (click)="consultar(1)">Aprobar</button>
                               </div>
                               <div fxFlex="50" fxLayoutAlign="center center">
-                                <button type="submit" mat-raised-button fxFlex="70" class="btnRed" [class.spinner]="load" (click)="desaprobarUser()">Desaprobar</button>
+                                <button type="submit" mat-raised-button fxFlex="70" class="btnRed" [class.spinner]="load" (click)="consultar(2)">Desaprobar</button>
                               </div>
                             </div>
                           </div>

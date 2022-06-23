@@ -51,6 +51,14 @@ export class UserService {
         })
       }).pipe(map((res) => res));
   }
+
+  updateEstateInbox(request: { idUser: string, estado: string, motivo: {} }
+    ) {
+      return this.http
+        .post<any>(API_URL + '/updateEstateInbox', request)
+        .pipe(map((res) => res));
+    }
+
   GetUsers(userRequest: UserRequest): Observable<UserData> {
     return this.http
       .post<any>(API_URL + '/users', userRequest, httpOptions)

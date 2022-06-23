@@ -47,12 +47,17 @@
                             </div>
                             <div style="display: flex;align-items: center;">
                                 <div>
-                                    <p class="lOrganizacion" *ngIf="esAdministrador">
+                                    <p class="lOrganizacion" *ngIf="esAdministrador || esEvaluador">
+                                        {{user.createdAt | date :'dd/MM/yyyy hh:mm:ss a' }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="lOrganizacion" *ngIf="esAdministrador || esEvaluador">
                                         {{user.createdAt | date :'dd/MM/yyyy hh:mm:ss a' }}
                                     </p>
                                 </div>
                                 <div style="margin-left: 20px;">
-                                    <Button mat-stroked-button class="aprobacionBoton" (click)="redirectDetail(user)">Aprobación</Button>
+                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="esAdministrador || esEvaluador" (click)="redirectDetail(user)">Aprobación</Button>
                                     <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
                                         <span class="material-icons" style="color: green;">edit</span>
                                     </button>

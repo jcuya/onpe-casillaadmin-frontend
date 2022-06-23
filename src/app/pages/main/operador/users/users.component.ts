@@ -104,6 +104,11 @@ export class UsersComponent implements OnInit {
     return typeProfile === Profile.Administrador;
   }
 
+  get esEvaluador() {
+    const typeProfile = this.seguridadService.getUserProfile();
+    return typeProfile === Profile.Evaluator;
+  }
+
   getColor(name: string) {
     return this.funcionesService.colorLetter(name);
   }
