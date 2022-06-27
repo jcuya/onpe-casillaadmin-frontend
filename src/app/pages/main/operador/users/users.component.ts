@@ -37,7 +37,6 @@ export class UsersComponent implements OnInit {
     private paginator: MatPaginatorIntl,
     private seguridadService: SeguridadService,
     public dialog: MatDialog,
-   
   ) {
     this.userData = new UserData();
     this.paginator.itemsPerPageLabel = 'Registros por página';
@@ -58,24 +57,24 @@ export class UsersComponent implements OnInit {
     this.userRequest.count = pageSize;
     const promesa = this.esAdministrador && this.esVentanadeCasillas == false ? this.userService.ListUsers(this.userRequest) :
       this.userService.GetUsers(this.userRequest);
-    promesa.subscribe(
-      (res) => {
-        if (res.success) {
-          this.listReadyCheck = true;
-          this.userData = res;
-          console.log("data", this.userData)
-
-          this.userData.Items.map(res =>{
-            if(res.estate_inbox === ""){
-              res.estate_inbox = "Registro interno"
-            }
-          })
+      promesa.subscribe(
+        (res) => {
+          if (res.success) {
+            this.listReadyCheck = true;
+            this.userData = res;
+            console.log("data revisar", this.userData)
+  
+            this.userData.Items.map(res =>{
+              if(res.estate_inbox === ""){
+                res.estate_inbox = "Registro interno"
+              }
+            })
+          }
+        },
+        (err) => {
+          console.log('Problemas del servicio', err);
         }
-      },
-      (err) => {
-        console.log('Problemas del servicio', err);
-      }
-    );
+      );
   }
   searchByQuery() {
     this.loadUsers(this.textSearch, 1, 5);

@@ -7,7 +7,7 @@ export const environment = {
   //Segment Developing-
   URL_SERVICES: 'http://localhost:3031',
   URL_API_LOGIN: 'http://localhost:3030',
-  KeycodeCaptcha: '6LeFgcMZAAAAACDRx5DWqeuvRVAnYqvXNazcSDNf',
+  KeycodeCaptcha: '6Ld8Z2oeAAAAAKR8fzQCyiSt-sItVnEi2D-xJBie',
   SECRET_KEY: '5iseN-$2022',
 };
 

@@ -37,7 +37,8 @@ export class MainComponent implements OnInit {
   }
 
   refreshNotifications() {
-    this.notificationService.refreshNoticacions(true);
+    this.notificationService.searchNotifications({textSearch: '', pageIndex: 1, pageSize: 5});
+    this.linkRedirect('notificaciones');
   }
 
   validateProfile() {
@@ -52,8 +53,7 @@ export class MainComponent implements OnInit {
       }else if(this.typeProfile === Profile.Evaluator){
         this.sidebar = Profile.Evaluator;
         this.labelProfile = 'Evaluador';
-      }
-      else {
+      }else {
         this.sidebar = Profile.RegistryOperator;
         this.labelProfile = 'Operador de registro';
       }

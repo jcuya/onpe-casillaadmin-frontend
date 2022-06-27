@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   OnInit,
+  Renderer2,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -23,6 +24,8 @@ import {
 } from '@iplab/ngx-file-upload';
 import { Profile } from 'src/app/transversal/enums/global.enum';
 import { SeguridadService } from 'src/app/services/seguridad.service';
+import { LBL_ADD_FILES, LBL_ERROR_MAX_LENGTH_NAME, LBL_ERROR_ONLY_FILE, LBL_FEATURES_FILE, MAXFILES, MAX_LENGTH_NAME_FILES, MAX_TAM_FILES_10, MIN_TAM_FILES, 
+  LBL_ERROR_MAX_SIZE_FILE, LBL_ERROR_MAX_FILES } from '../../../../shared/constantes';
 
 interface Filtro {
   value: string;
@@ -44,6 +47,7 @@ export class NewBoxComponent implements OnInit {
   typeAccreditationSelected: string = '';
   name: string = '';
   documentTypeSelected: string = '';
+  documentTypeSelectedRep: string = '';
   maxlengthNumDoc: number;
   minlengthNumDoc: number;
   maxlengthNumDocRep: number;
@@ -52,10 +56,32 @@ export class NewBoxComponent implements OnInit {
   inputDisabled: boolean = false;
   placeHolder = 'Ingrese número ';
   Formulario: FormGroup;
-
+  nombres: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
+  apPaterno: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
+  apMaterno: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
+  fm_direccion: FormControl = new FormControl({ value: '', disabled: this.inputDisabled }, [Validators.required, Validators.minLength(9)]);
+  fm_correo: FormControl = new FormControl({ value: '', disabled: this.inputDisabled }, [Validators.required, Validators.pattern('[a-zA-Z0-9.+-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]);
+  fm_organizacion: FormControl = new FormControl({value: '', disabled: this.inputDisabled},[]);
+  
   fileLoad: any;
   public fileToUpload: File;
   uploadedFiles: Array<File> = [];
+  errmaxLengthName: boolean = false;
+  errmaxSizeFile: boolean = false;
+  errminSizeFile: boolean = false;
+  errorOnlyFile: boolean = false;
+  errmaxFiles: boolean = false;
+  errduplicate: boolean = false;
+  maxFiles: number = MAXFILES;
+  maxSizeFile: number = MAX_TAM_FILES_10;
+  minSizeFile: number = MIN_TAM_FILES;
+  maxLengthName: number = MAX_LENGTH_NAME_FILES;
+  lblAddFiles: string = LBL_ADD_FILES;
+  lblFeaturesFile: string = LBL_FEATURES_FILE;
+  lblErrorOnlyFile: string = LBL_ERROR_ONLY_FILE;
+  lblErrorMaxLengthName : string = LBL_ERROR_MAX_LENGTH_NAME;
+  lblErrorMaxSizeFile: string = LBL_ERROR_MAX_SIZE_FILE;
+  lblErrorMaxFiles: string = LBL_ERROR_MAX_FILES;
 
   existData = true;
   typeDocument: TypeDocument[] = [
@@ -68,17 +94,25 @@ export class NewBoxComponent implements OnInit {
     { id: 'ce', value: 'Carnet de Extranjería' },
   ];
 
+  isCE: boolean = false;
+  isCERep: boolean = false;
+  lblNombre: string = 'Nombres';
+  lblApPat: string = 'Apellido paterno';
+  lblApMat: string = 'Apellido materno';
+
   constructor(
     private userService: UserService,
     private funcionesService: FuncionesService,
     private router: Router,
     private fb: FormBuilder,
+    private renderer: Renderer2,
     private seguridadService: SeguridadService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.getTypeAcreditacion();
+    this.validarFiles();
   }
 
   ///----------------------------
@@ -105,48 +139,21 @@ export class NewBoxComponent implements OnInit {
         },
         [Validators.required]
       ),
-      fm_organizacion: this.fb.control({
-        value: '',
-        disabled: this.inputDisabled,
-      }),
+      fm_organizacion: this.fm_organizacion,
       fm_numerodoc: this.fb.control('', [
         Validators.required,
-        Validators.pattern('^[0-9]+$'),
+        //Validators.pattern('^[0-9]+$'),
+        //this.validRep,
       ]),
       fm_numerodoc_rep: this.fb.control('', [
         Validators.required,
-        Validators.pattern('^[0-9]+$'),
+        //Validators.pattern('^[0-9]+$'),
+        //this.validRep,
       ]),
-      fm_nombres: this.fb.control({ value: '', disabled: this.inputDisabled }, [
-        Validators.required,
-        Validators.pattern(
-          "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
-        ),
-      ]),
-      fm_appaterno: this.fb.control(
-        { value: '', disabled: this.inputDisabled },
-        [
-          Validators.required,
-          Validators.pattern(
-            "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
-          ),
-        ]
-      ),
-      fm_apmaterno: this.fb.control(
-        { value: '', disabled: this.inputDisabled },
-        [
-          Validators.required,
-          Validators.pattern(
-            "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
-          ),
-        ]
-      ),
-      fm_correo: this.fb.control({ value: '', disabled: this.inputDisabled }, [
-        Validators.required,
-        Validators.pattern(
-          '[a-zA-Z0-9.+-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}'
-        ),
-      ]),
+      nombres: this.nombres,
+      apPaterno: this.apPaterno,
+      apMaterno: this.apMaterno,
+      fm_correo: this.fm_correo,    
       fm_celular: this.fb.control({ value: '', disabled: this.inputDisabled }, [
         Validators.required,
         Validators.minLength(9),
@@ -157,10 +164,7 @@ export class NewBoxComponent implements OnInit {
         this.validatorRepeatFijo,
         Validators.pattern('^(?=.*).{7,}$'),
       ]),
-      fm_direccion: this.fb.control(
-        { value: '', disabled: this.inputDisabled },
-        [Validators.required]
-      ),
+      fm_direccion: this.fm_direccion,
       fm_optiontacreditacion: this.fb.control(
         {
           value: '',
@@ -170,79 +174,184 @@ export class NewBoxComponent implements OnInit {
       ),
       files: this.filesControl,
     });
+
+    this.getNumeroDocumento();
+    this.getNumeroDocumentoRep();
   };
   private eResetForm = (level: number) => {
-    this.Formulario.get('fm_nombres').setValue('');
-    this.Formulario.get('fm_appaterno').setValue('');
-    this.Formulario.get('fm_apmaterno').setValue('');
-    this.Formulario.get('fm_correo').setValue('');
-    this.Formulario.get('fm_celular').setValue('');
-    this.Formulario.get('fm_fijo').setValue('');
-    this.Formulario.get('fm_direccion').setValue('');
-    this.Formulario.get('fm_optiontacreditacion').setValue(null);
-    if (level == 1) return;
+    this.nombres.setValue('');
+    this.apPaterno.setValue('');
+    this.apMaterno.setValue('');
     this.Formulario.get('fm_numerodoc_rep').setValue('');
-    if (level == 2) return;
+    if (level == 6) return;
     this.Formulario.get('fm_razon_social').setValue('');
     this.Formulario.get('fm_optiontipo_rep').setValue(null);
-    this.Formulario.get('fm_organizacion').setValue('');
-    this.Formulario.get('files').setValue(null);
-    this.uploadedFiles = [];
-    if (level == 3) return;
+    this.fm_organizacion.setValue('');
     this.Formulario.get('fm_numerodoc').setValue('');
-    if (level == 4) return;
+    if (level == 5) return;
   };
+
   eChangeDocumento(event) {
-    this.eResetForm(4);
+    this.eResetForm(5);
     this.existData = true;
     this.documentTypeSelected = event.value;
+    this.isCE = this.documentTypeSelected === 'ce';
     if (this.documentTypeSelected === 'dni') {
       this.minlengthNumDoc = 8;
       this.maxlengthNumDoc = 8;
+      this.changeLabelRequired(false);
+      this.eChangeType(false);
       this.eChangeRequired(false);
     } else if (this.documentTypeSelected === 'ce') {
       this.minlengthNumDoc = 9;
-      this.maxlengthNumDoc = 9;
+      this.maxlengthNumDoc = 12;
+      this.changeLabelRequired(true);
+      this.eChangeType(true);
       this.eChangeRequired(false);
     } else if (this.documentTypeSelected === 'ruc') {
       this.minlengthNumDoc = 11;
       this.maxlengthNumDoc = 11;
+      this.changeLabelRequired(false);
+      this.eChangeType(false);
       this.eChangeRequired(true);
     }
   }
-  eChangeDocumentoRep(event) {
-    this.eResetForm(2);
-    if (event.value === 'dni') {
-      this.minlengthNumDocRep = 8;
-      this.maxlengthNumDocRep = 8;
-    } else if (event.value === 'ce') {
-      this.minlengthNumDocRep = 9;
-      this.maxlengthNumDocRep = 9;
+
+  changeLabelRequired(required: boolean) {
+    if(required) {
+      this.lblNombre = "Nombres*";
+      //this.lblApPat = "Apellido paterno*";
+      //this.lblApMat = "Apellido materno*";
+    } else {
+      this.lblNombre = "Nombres";
+      //this.lblApPat = "Apellido paterno";
+      //this.lblApMat = "Apellido materno";
     }
   }
+  
+  eChangeDocumentoRep(event) {
+    this.eResetForm(6);
+    this.existData = true;
+    this.documentTypeSelectedRep = event.value;
+    this.isCERep = this.documentTypeSelectedRep === 'ce';
+    if (this.documentTypeSelectedRep === 'dni') {
+      this.minlengthNumDocRep = 8;
+      this.maxlengthNumDocRep = 8;
+      this.changeLabelRequired(false);
+      this.eChangeType(false);
+      //this.eChangeRequired(false);
+    } else if (this.documentTypeSelectedRep === 'ce') {
+      this.minlengthNumDocRep = 9;
+      this.maxlengthNumDocRep = 12;
+      this.changeLabelRequired(true);
+      this.eChangeType(true);
+      //this.eChangeRequired(false);
+    }
+  }
+
+  getNumeroDocumento() {
+    this.Formulario.get('fm_numerodoc').valueChanges.subscribe((documento) => {
+      if(this.documentTypeSelected == 'dni') {
+        if(documento.length == this.minlengthNumDoc){
+          this.eSearch('general');
+        }
+        else {
+          this.nombres.setValue('');
+          this.apPaterno.setValue('');
+          this.apMaterno.setValue('');
+        }
+      }
+      else if(this.documentTypeSelected == 'ruc') {
+        if(documento.length == this.minlengthNumDoc){
+          this.eSearch('general');
+        }
+        else {
+          this.Formulario.get('fm_razon_social').setValue('');
+        }
+      }
+      else if(this.documentTypeSelected == 'ce') {
+        this.existData = true;
+        this.nombres.setValue('');
+        this.apPaterno.setValue('');
+        this.apMaterno.setValue('');
+      }
+    });
+  }
+
+  getNumeroDocumentoRep() {
+    this.Formulario.get('fm_numerodoc_rep').valueChanges.subscribe((documento) => {
+      if(this.documentTypeSelectedRep == 'dni') {
+        if(documento.length == this.minlengthNumDocRep){
+          this.eSearch('representante');
+        }
+        else {
+          this.nombres.setValue('');
+          this.apPaterno.setValue('');
+          this.apMaterno.setValue('');
+        }
+      }
+      else if(this.documentTypeSelectedRep == 'ruc') {
+        if(documento.length == this.minlengthNumDocRep){
+          this.eSearch('representante');
+        }
+      }
+      else if(this.documentTypeSelectedRep == 'ce') {
+        this.existData = true;
+        this.nombres.setValue('');
+        this.apPaterno.setValue('');
+        this.apMaterno.setValue('');
+      }
+    });
+  }
+
+  private eChangeType = (status) => {
+    let required = status ? [
+          Validators.required,
+          Validators.pattern(
+            "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
+          ),
+        ] : null;
+
+    let required2 = status ? [
+          Validators.pattern(
+            "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$"
+          ),
+        ] : null;
+
+    this.nombres.setErrors(null);
+    this.apPaterno.setErrors(null);
+    this.apMaterno.setErrors(null);
+
+    this.nombres.setValidators(required);
+    this.apPaterno.setValidators(required2);
+    this.apMaterno.setValidators(required2);
+
+    this.nombres.updateValueAndValidity();
+    this.apPaterno.updateValueAndValidity();
+    this.apMaterno.updateValueAndValidity();
+  }
+
   private eChangeRequired = (status) => {
     var required = status ? [Validators.required] : null;
-    //var required2 = !status ? [Validators.required] : null;
+    var required2 = status ? [Validators.required, this.validRep] : null;
+    
     const a1 = this.Formulario.get('fm_optiontipo_rep');
     const a2 = this.Formulario.get('fm_numerodoc_rep');
     const a3 = this.Formulario.get('fm_razon_social');
-    //const a4 = this.Formulario.get('fm_organizacion');
-
+    
     a1.setErrors(null);
     a2.setErrors(null);
     a3.setErrors(null);
-    //a4.setErrors(null);
-
+    
     a1.setValidators(required);
-    a2.setValidators(required);
+    a2.setValidators(required2);
     a3.setValidators(required);
-    //a4.setValidators(required2);
-
-    a1.reset();
-    a2.reset();
-    a3.reset();
-    //a4.reset();
+    
+    a1.updateValueAndValidity();
+    a2.updateValueAndValidity();
+    a3.updateValueAndValidity();
   };
+
   eSearch = async (type: string) => {
     switch (type) {
       case 'general':
@@ -261,8 +370,8 @@ export class NewBoxComponent implements OnInit {
     const esRuc = this.Formulario.get('fm_optiontipo').value == 'ruc';
     switch (name) {
       case 'fm_numerodoc':
-        if (esRuc) return 'Número de RUC';
-        return 'Número de Documento';
+        if (esRuc) return 'Número de RUC*';
+        return 'Número de documento*';
     }
   };
   buildHolder = (name: string) => {
@@ -270,7 +379,7 @@ export class NewBoxComponent implements OnInit {
     switch (name) {
       case 'fm_numerodoc':
         if (esRuc) return 'Ingrese el número de RUC';
-        return 'Ingrese el número de Documento';
+        return 'Ingrese el número de documento';
     }
   };
   buildHide = (name: string) => {
@@ -293,6 +402,9 @@ export class NewBoxComponent implements OnInit {
   private buildError = (message: string) => {
     this.funcionesService.mensajeError(message);
   };
+  private buildInfo = (message: string) => {
+    this.funcionesService.mensajeInfo(message);
+  }
   private validDocument = async (type: string) => {
     var isGeneral = type == 'general';
     var isRepresentante = type == 'representante';
@@ -332,25 +444,29 @@ export class NewBoxComponent implements OnInit {
       tipo = this.Formulario.controls['fm_optiontipo_rep'].value;
       doc = this.Formulario.controls['fm_numerodoc_rep'].value;
     }
+    var userExist = await this.consultaCasilla(doc, tipo);
+
+    if(!userExist){
+      this.buildError('El documento ingresado ya se encuentra registrado');
+      this.load = false;
+      return;
+    }
     var response = null;
     var message = 'No se encontró los datos del documento.';
     switch (tipo) {
       case 'ruc':
         response = await this.consultaSunat(doc);
-        message = 'El RUC ' + doc + ' solicitado no está registrado';
+        message = 'El RUC ' + doc + ' no ha sido encontrado';
         break;
       case 'ce':
-        response = await this.consultaExtranjeria(doc);
+        response = await this.consultaExtranjeria(doc, tipo);
         message =
-          'El CE ' +
-          doc +
-          ' solicitado no está registrado, por favor ingrese los datos';
-        this.existData = false;
+          'Por favor ingrese los datos del CE ' + doc;
         break;
       case 'dni':
         response = await this.consultaReniec(doc, type);
         message =
-          'El DNI ' + doc + ' solicitado no está registrado en el padrón';
+          'El DNI ' + doc + ' no ha sido encontrado en el padrón';
         break;
       default:
         break;
@@ -359,20 +475,28 @@ export class NewBoxComponent implements OnInit {
     if (response) {
       this.existData = true;
     } else {
-      this.buildError(message);
+      if(tipo == 'ce') {
+        this.buildInfo(message);
+        this.existData = false;
+        this.nombres.setValue('');
+        this.apPaterno.setValue('');
+        this.apMaterno.setValue('');
+      }
+      else this.buildError(message);
     }
   };
-
   private consultaReniec = (doc: string, type: string) => {
     return new Promise<boolean>((resolve) => {
       this.userService.ConsultaReniec(doc).subscribe(
         (resp: any) => {
           if (resp) {
-            var nombres = `${resp.nombres} ${resp.appat} ${resp.apmat}`;
-            this.Formulario.get('fm_nombres').setValue(resp.nombres);
-            this.Formulario.get('fm_appaterno').setValue(resp.appat);
-            this.Formulario.get('fm_apmaterno').setValue(resp.apmat);
-            resolve(true);
+            if(resp.nombres == null && resp.appat == null && resp.apmat == null) resolve(false);
+            else {
+              this.nombres.setValue(resp.nombres);
+              this.apPaterno.setValue(resp.appat != null ? resp.appat: "");
+              this.apMaterno.setValue(resp.apmat != null ? resp.apmat: "");
+              resolve(true);
+            }
           } else {
             resolve(false);
           }
@@ -410,20 +534,76 @@ export class NewBoxComponent implements OnInit {
       resolve(false);
     });
   };
-  private consultaExtranjeria = (doc: string) => {
+  private consultaExtranjeria = (doc: string, type:string) => {
     return new Promise<boolean>((resolve) => {
-      resolve(false);
+      this.userService.ConsultaCE(doc, type).subscribe(
+        (resp) => {
+          if (resp.success) {
+            this.nombres.setValue(resp.name);
+            this.apPaterno.setValue(resp.lastname != null ? resp.lastname: "");
+            this.apMaterno.setValue(resp.second_lastname != null ? resp.second_lastname: "");
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        },
+        (error) => {
+          resolve(false);
+        }
+      )
     });
   };
+  private consultaCasilla = (doc: string, type:string) => {
+    return new Promise<boolean>((resolve) => {
+      this.userService.ConsultaCasilla(doc, type).subscribe(
+        (resp) => {
+          if (resp.success) {
+            resolve(true);  
+          }else{
+            resolve(false);
+          }
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  };  
   //----------------------------
 
-  public filesControl = new FormControl(null, [
+  filesControl = new FormControl(null, [
     Validators.required,
-    FileUploadValidators.accept(['.pdf']),
-    FileUploadValidators.filesLimit(5),
-    FileUploadValidators.fileSize(1048576 * 10),
+    FileUploadValidators.accept(['.pdf', '.jpg', '.jpeg', '.png', '.bmp']),
+    FileUploadValidators.filesLimit(this.maxFiles),
+    FileUploadValidators.sizeRange({minSize: this.minSizeFile, maxSize: this.maxSizeFile}),
     this.noWhitespaceValidator,
   ]);
+  
+  validarFiles() {
+    this.Formulario.controls['files'].valueChanges.subscribe((file:[any]) => {
+      this.errmaxFiles = file.length > this.maxFiles;
+      if(file.length > 1) {
+        let count = 0;
+        for(let i = 0; i<file.length; i++) {
+          let j = i+1;
+          while(j<file.length){
+            if(file[i].name == file[j].name) {
+              count++;
+              break;
+            }
+            j++;
+          }
+        }
+        this.errduplicate = !(count == 0);
+      } else this.errduplicate = false;
+      this.errmaxLengthName = file.filter((x:File) => this.baseName(x.name).length > this.maxLengthName).length > 0;
+      this.errorOnlyFile = file.filter((x:File) => !(x.name.endsWith('pdf') || x.name.endsWith('png') || x.name.endsWith('jpg') || x.name.endsWith('jpeg') || x.name.endsWith('bmp'))).length > 0;
+      this.errminSizeFile = file.filter((x:File) => x.size == 0 ).length > 0;
+      this.errmaxSizeFile = file.filter((x:File) => x.size > this.maxSizeFile).length > 0;
+      if(this.errmaxLengthName) this.Formulario.get(`files`)?.setErrors({ errmaxLengthName: true });
+      if(this.errduplicate) this.Formulario.get(`files`)?.setErrors({ errduplicate: true });
+    });
+  }
 
   private noWhitespaceValidator(control: FormControl) {
     if (control.value == null) return null;
@@ -462,7 +642,7 @@ export class NewBoxComponent implements OnInit {
       this.maxlengthNumDoc = 8;
       this.placeHolder = 'Ingrese número de DNI';
     } else if (this.documentTypeSelected === 'ce') {
-      this.maxlengthNumDoc = 9;
+      this.maxlengthNumDoc = 12;
       this.placeHolder = 'Ingrese número de CE';
     } else if (this.documentTypeSelected === 'ruc') {
       this.maxlengthNumDoc = 12;
@@ -514,10 +694,10 @@ export class NewBoxComponent implements OnInit {
   }
 
   enableForm() {
-    this.Formulario.get('fm_correo').enable();
+    this.fm_correo.enable();
     this.Formulario.get('fm_celular').enable();
     this.Formulario.get('fm_fijo').enable();
-    this.Formulario.get('fm_direccion').enable();
+    this.fm_direccion.enable();
   }
 
   baseName(str) {
@@ -567,49 +747,44 @@ export class NewBoxComponent implements OnInit {
   }
 
   submit = () => {
-    // console.log(this.Formulario.valid);
-    //console.log(this.Formulario.value);
-    // return;
-    this.load = true;
     const esRuc = this.Formulario.get('fm_optiontipo').value == 'ruc';
     if (!this.Formulario.valid) return;
 
     const fd = new FormData();
-    fd.append('email', this.Formulario.controls['fm_correo'].value);
-    fd.append('cellphone', this.Formulario.controls['fm_celular'].value);
-    fd.append('phone', this.Formulario.controls['fm_fijo'].value);
-    fd.append('address', this.Formulario.controls['fm_direccion'].value);
-    fd.append('name', this.Formulario.controls['fm_nombres'].value);
-    fd.append('lastname', this.Formulario.controls['fm_appaterno'].value);
-    fd.append(
-      'second_lastname',
-      this.Formulario.controls['fm_apmaterno'].value
-    );
-    fd.append(
-      'acreditation_type',
-      this.Formulario.controls['fm_optiontacreditacion'].value
-    );
-
-    if (esRuc) {
-      fd.append('docType', this.Formulario.controls['fm_optiontipo_rep'].value);
-      fd.append('doc', this.Formulario.controls['fm_numerodoc_rep'].value);
-      fd.append('ruc', this.Formulario.controls['fm_numerodoc'].value);
-      fd.append(
-        'razonsocial',
-        this.Formulario.controls['fm_razon_social'].value
-      );
-      fd.append(
-        'organization',
-        this.Formulario.controls['fm_razon_social'].value
-      );
-    } else {
-      fd.append('docType', this.Formulario.controls['fm_optiontipo'].value);
-      fd.append('doc', this.Formulario.controls['fm_numerodoc'].value);
-      fd.append(
-        'organization',
-        this.Formulario.controls['fm_organizacion'].value
-      );
+    // validamos si elegio DNI o CE
+    if(this.apPaterno.value == '' && this.apMaterno.value == '') {
+      let message: string = `Debe ingresar al menos un apellido`;
+      this.funcionesService.mensajeError(message.toUpperCase());
+      return;
     }
+    if(this.nombres.value == '' && this.apPaterno.value == '' && this.apMaterno.value == '') {
+      let message: string = `Número de documento no válido, se debe registrar nombre(s) y apellido(s)`;
+      this.funcionesService.mensajeError(message.toUpperCase());
+      return;
+    }
+
+    //usuario
+    fd.append('user_doc_type', this.Formulario.controls['fm_optiontipo'].value);
+    fd.append('user_doc', this.Formulario.controls['fm_numerodoc'].value);
+    fd.append('user_rep_doc_type', esRuc ? this.Formulario.controls['fm_optiontipo_rep'].value : null);
+    fd.append('user_rep_doc', esRuc ? this.Formulario.controls['fm_numerodoc_rep'].value : null);      
+    fd.append('user_name', this.nombres.value);
+    fd.append('user_lastname', this.apPaterno.value);
+    fd.append('user_second_lastname',this.apMaterno.value);
+    fd.append('user_email', this.fm_correo.value);
+    fd.append('user_cellphone', this.Formulario.controls['fm_celular'].value);
+    fd.append('user_phone', this.Formulario.controls['fm_fijo'].value);
+    fd.append('user_address', this.fm_direccion.value);
+    fd.append('user_acreditation_type',this.Formulario.controls['fm_optiontacreditacion'].value);    
+    fd.append('user_organization_name', esRuc ? this.Formulario.controls['fm_razon_social'].value : this.fm_organizacion.value);  
+
+    //casilla
+    fd.append('box_doc_type', this.Formulario.controls['fm_optiontipo'].value);
+    fd.append('box_doc', this.Formulario.controls['fm_numerodoc'].value);
+    fd.append('box_organization_name', esRuc ? this.Formulario.controls['fm_razon_social'].value : this.fm_organizacion.value);
+    fd.append('box_email', this.fm_correo.value);
+    fd.append('box_address', this.fm_direccion.value);        
+    fd.append('box_acreditation_type',this.Formulario.controls['fm_optiontacreditacion'].value);
 
     var files = this.Formulario.controls['files'].value;
 
@@ -617,23 +792,24 @@ export class NewBoxComponent implements OnInit {
       var str1 = files[index].name.replace(/.([^.]*)$/, '.pdf');
       const tempFile = new File(
         [files[index]],
-        str1.replace(/[^a-zA-Z0-9\\.\\-]/g, '-'),
+        str1, //str1.replace(/[^a-zA-Z0-9\\.\\-]/g, '-'),
         {
           type: files[index].type.toLowerCase(),
         }
       );
       fd.append('file' + (index + 1), tempFile);
     }
-
+    this.load = true;
     this.userService.CreateBox(fd).subscribe(
       (res) => {
         this.load = false;
         if (res.success) {
           this.funcionesService.mensajeOk(
             'Los datos de casilla electrónica fueron registrados con éxito',
-            this.esAdministrador
-              ? '/main/list-boxes'
-              : '/main/operador/usuarios'
+            '/main/list-boxes'
+            // this.esAdministrador
+            //   ? '/main/list-boxes'
+            //   : '/main/operador/usuarios'
           );
         } else {
           this.funcionesService.mensajeError(res.error.message);
@@ -648,7 +824,7 @@ export class NewBoxComponent implements OnInit {
 
   get esAdministrador() {
     const typeProfile = this.seguridadService.getUserProfile();
-    return typeProfile === Profile.Administrador;
+    return typeProfile === Profile.Administrador || typeProfile === Profile.RegistryOperator;
   }
 
   validateInputs() {
@@ -680,17 +856,6 @@ export class NewBoxComponent implements OnInit {
     return true;
   }
 
-  keydown(event, type) {
-    if (event.keyCode == 9) return;
-
-    if (type == 'fm_numerodoc_rep') {
-      this.eResetForm(1);
-    }
-    if (type == 'fm_numerodoc') {
-      this.eResetForm(3);
-    }
-  }
-
   cancelar() {
     if (this.esAdministrador) this.router.navigate(['/main/list-boxes']);
     else this.router.navigate(['/main']);
@@ -714,6 +879,28 @@ export class NewBoxComponent implements OnInit {
       return null;
     }
   }
+  private validRep(control: FormControl) {
+    if (control.value) {
+      var re = new RegExp(/^(\d)\1{7,}$/);
+      var matches = re.test(control.value);
+      return !matches ? null : { invalidName: true };
+    } else {
+      return null;
+    }
+  }  
+  eShowError = (input, error = null) => {
+    if (error.required != undefined) {
+      return 'Campo Requerido';
+    } else if (error.pattern != undefined) {
+      return 'Formato no válido';
+    } else if (error.fileSize != undefined) {
+      return 'Archivo(s) con peso excedido';
+    } else if (error.minlength != undefined) {
+      return 'Se requiere '+error.minlength.requiredLength+ ' caracteres como mínimo' ;
+    } else {
+      return 'Campo inválido';
+    }
+  };  
   onKeydown(event, type) {
     // switch (type) {
     //   case 'fm_celular':
@@ -744,5 +931,35 @@ export class NewBoxComponent implements OnInit {
     //     }
     //     break;
     // }
+  }
+
+  soloExpLetras(idInput: string, inputForm: FormControl, e: any) {
+    let inicio = this.renderer.selectRootElement(`#${idInput}`).selectionStart;
+    let fin = this.renderer.selectRootElement(`#${idInput}`).selectionEnd;
+    let value : string = inputForm.value;
+    if (e.metaKey || e.ctrlKey) {
+      return true;
+    }
+    if(inicio == 0 && e.key === ' ') return false;
+    inputForm.setValue(value.replace(/ {2,}/g, ' '));
+    this.renderer.selectRootElement(`#${idInput}`).setSelectionRange(inicio, fin, 'none');
+    return !!/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(e.key);
+  }
+
+  quitarDobleEspacio(idInput: string, inputForm: FormControl, e: any) {
+    let inicio = this.renderer.selectRootElement(`#${idInput}`).selectionStart;
+    let fin = this.renderer.selectRootElement(`#${idInput}`).selectionEnd;
+    let value : string = inputForm.value;
+    if (e.metaKey || e.ctrlKey) {
+      return true;
+    }
+    if(inicio == 0 && e.key === ' ') return false;
+    inputForm.setValue(value.replace(/ {2,}/g, ' '));
+    this.renderer.selectRootElement(`#${idInput}`).setSelectionRange(inicio, fin, 'none');
+  }
+
+  buscarCE() {
+    if(this.isCE) this.eSearch('general');
+    if(this.isCERep) this.eSearch('representante');
   }
 }

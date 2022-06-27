@@ -14,13 +14,17 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
-  notificationRequest: NotificationRequest;
-  notificationData: NotificationData;
+  notificationRequest: NotificationRequest = new NotificationRequest();
+  notificationData: NotificationData = new NotificationData();
   listReadyCheck: boolean;
   textSearch: string = '';
   filterSelected: string = '0';
   subscription: Subscription;
   @ViewChild('paginator') initPage: MatPaginator;
+
+  mensaje: string;
+  pageIndex: number;
+  pageSize: number;
 
   constructor(
     private notificationService: NotificationService,
@@ -28,7 +32,8 @@ export class NotificationsComponent implements OnInit {
     private funcionesService: FuncionesService,
     private paginator: MatPaginatorIntl
   ) {
-    this.notificationData = new NotificationData();
+    this.pageIndex = 1;
+    this.pageSize = 5;
     this.paginator.itemsPerPageLabel = 'Registros por página';
     this.paginator.nextPageLabel = 'Siguiente pagina';
     this.paginator.previousPageLabel = 'Pagina anterior';
@@ -36,34 +41,56 @@ export class NotificationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadNotifications('', 1, 5);
-    this.subscription = this.notificationService.refreshNot.subscribe(refresh => {
-      if(refresh) {
-        this.textSearch = '';
-        this.initPage.firstPage();
-        //this.loadNotifications('', 1, 5);
-      }
+    //this.loadNotifications('', 1, 5);
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+  
+      this.subscription = this.notificationService.fieldsSearch.subscribe(value => {
+        if(value != null) {
+          this.textSearch = value.textSearch;
+          this.pageIndex = value.pageIndex;
+          this.pageSize = value.pageSize;
+          if(this.pageIndex == 1 && this.pageSize == 5) {
+            this.initPage.firstPage();
+          }
+          else {
+            this.initPage.pageIndex = this.pageIndex - 1;
+            this.initPage.pageSize = this.pageSize;
+          }
+          this.loadNotifications(this.textSearch, this.pageIndex, this.pageSize);
+        } else {
+          this.resetValores();
+          this.initPage.firstPage();
+          this.loadNotifications('', this.pageIndex, this.pageSize);
+        }
+      });
     });
   }
 
   loadNotifications(querySearch: string, page?: number, pageSize?: number) {
     this.listReadyCheck = false;
-    this.notificationRequest = new NotificationRequest();
     this.notificationRequest.search = querySearch;
     this.notificationRequest.filter = this.filterSelected.toString();
     this.notificationRequest.page = page;
     this.notificationRequest.count = pageSize;
+    
     this.notificationService
-      .GetNotifications(this.notificationRequest)
+      .GetNotifications<any>(this.notificationRequest)
       .subscribe(
-        (res) => {
-          if (res.success) {
+        (data) => {
+          if (data.success) {
             this.listReadyCheck = true;
-            this.notificationData = res;
+            this.notificationData = data;
+          } else {
+            this.mensaje = data.error.message;
+
+            this.funcionesService.mensajeError(this.mensaje);
           }
         },
-        (err) => {
-          console.log('Problemas del servicio', err);
+        (error) => {
+          this.funcionesService.mensajeError('Problemas en el servicio.');
         }
       );
   }
@@ -80,17 +107,26 @@ export class NotificationsComponent implements OnInit {
     return this.funcionesService.colorLetter(name);
   }
   searchByQuery() {
-    this.loadNotifications(this.textSearch, 1, 5);
+    this.resetValores();
+    this.loadNotifications(this.textSearch, this.pageIndex, this.pageSize);
     this.initPage.firstPage();
   }
 
   pageChangeEvent(event) {
-    this.loadNotifications(this.textSearch, event.pageIndex + 1, event.pageSize);
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.loadNotifications(this.textSearch, this.pageIndex, this.pageSize);
   }
 
   goNotificationDetail(item: any) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.navigate(['/main/notificaciones-detalle/' + item]);
+    this.router.navigate(['/main/notificaciones-detalle/' + item], {state: {textSearch: this.textSearch, pageIndex: this.pageIndex, pageSize: this.pageSize}});
+  }
+
+  resetValores() {
+    this.pageIndex = 1;
+    this.pageSize = 5;
+    this.filterSelected = '0';
   }
 
   private rangoPaginacion = (

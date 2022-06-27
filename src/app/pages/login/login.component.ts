@@ -13,6 +13,7 @@ import {
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as CryptoJS from 'crypto-js';
+import { VERSION_SISEN } from '../../shared/constantes';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,8 @@ import * as CryptoJS from 'crypto-js';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+
+  version: string = VERSION_SISEN;
   sitekey = '';
   intent: number = 0;
   RequerdCaptcha: boolean = true;

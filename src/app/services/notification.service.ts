@@ -5,7 +5,7 @@ import { NotificationData } from '../models/notifications/notification-data';
 import { NotificationRequest, SendNotificationRequest } from '../models/notifications/notification-request';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { notificationRequest } from '../models/notifications/notification';
+import { notificationRequest, searchNotifications } from '../models/notifications/notification';
 
 const API_URL = environment.URL_SERVICES;
 
@@ -26,11 +26,11 @@ const httpOptionsFormData = {
 })
 export class NotificationService {
 
-  private refresh = new BehaviorSubject(false);
-  refreshNot = this.refresh.asObservable();
+  private fields = new BehaviorSubject<searchNotifications>(null);
+  fieldsSearch = this.fields.asObservable();
 
-  refreshNoticacions(refresh: boolean) {
-    this.refresh.next(refresh)
+  searchNotifications(value : searchNotifications) {
+    this.fields.next(value);
   }
 
   openWindow = new Subject<boolean>();
@@ -38,9 +38,8 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  GetNotifications(notificationRequest: NotificationRequest): Observable<NotificationData> {
-    return this.http.post<any>(API_URL + '/notifications', notificationRequest, httpOptions)
-    .pipe(map(res => res));
+  GetNotifications<T>(notificationRequest: NotificationRequest): Observable<T> {
+    return this.http.post<any>(API_URL + '/notifications', notificationRequest, httpOptions).pipe(map(res => res));
   }
 
   GetProcedure(): Observable<any> {

@@ -93,7 +93,7 @@ export class SolicitudDetailComponent implements OnInit {
 
       this.funcionesService
         .mensajeConfirmar(
-          '¿Estás seguro de aprobar la creación de Casilla Electrónica de Juan Perez?'
+          '¿Estás seguro de aprobar la creación de Casilla Electrónica de '+ this.data.name +'?'
         )
         .then((resp) => {
           this.usuarioService

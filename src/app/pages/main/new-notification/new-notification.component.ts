@@ -15,12 +15,13 @@ import { SendNotificationRequest } from 'src/app/models/notifications/notificati
 import { NotificationService } from 'src/app/services/notification.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  FileUploadControl,
   FileUploadValidators,
 } from '@iplab/ngx-file-upload';
-import { MAXFILES, MAX_LENGTH_NAME_FILES, MAX_TAM_FILES, MIN_TAM_FILES, ResultSignature } from 'src/app/shared/constantes';
+import {  } from 'src/app/shared/constantes';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { MAX_TAM_FILES_10, LBL_ADD_FILES, LBL_ERROR_ONLY_FILE, LBL_ERROR_MAX_LENGTH_NAME, LBL_ERROR_MAX_SIZE_FILE, 
+  MAXFILES, MAX_LENGTH_NAME_FILES, MIN_TAM_FILES, ResultSignature, LBL_FEATURES_FILE, LBL_ERROR_MAX_FILES } from '../../../shared/constantes';
 
 declare var initInvoker: any;
 declare var dispatchEventClient: any;
@@ -76,18 +77,21 @@ export class NewNotificationComponent implements OnInit {
   errmaxLengthName: boolean = false;
   errmaxSizeFile: boolean = false;
   errminSizeFile: boolean = false;
-  erronlyPdf: boolean = false;
+  errorOnlyFile: boolean = false;
   errmaxFiles: boolean = false;
   errduplicate: boolean = false;
   maxFiles: number = MAXFILES;
-  maxSizeFile: number = MAX_TAM_FILES;
+  maxSizeFile: number = MAX_TAM_FILES_10;
   minSizeFile: number = MIN_TAM_FILES;
   maxLengthName: number = MAX_LENGTH_NAME_FILES;
+  lblAddFiles: string = LBL_ADD_FILES;
+  lblFeaturesFile: string = LBL_FEATURES_FILE;
+  lblErrorOnlyFile: string = LBL_ERROR_ONLY_FILE;
+  lblErrorMaxLengthName : string = LBL_ERROR_MAX_LENGTH_NAME;
+  lblErrorMaxSizeFile: string = LBL_ERROR_MAX_SIZE_FILE;
+  lblErrorMaxFiles: string = LBL_ERROR_MAX_FILES;
 
   modeloResponse: ModeloResponse;
-  public fileUploadControl = new FileUploadControl(
-    FileUploadValidators.filesLimit(2)
-  );
 
   constructor(
     private fb: FormBuilder,
@@ -99,7 +103,7 @@ export class NewNotificationComponent implements OnInit {
 
   filesControl = new FormControl(null, [
     Validators.required,
-    FileUploadValidators.accept(['.pdf']),
+    FileUploadValidators.accept(['.pdf', '.jpg', '.jpeg', '.png', '.bmp']),
     FileUploadValidators.filesLimit(this.maxFiles),
     FileUploadValidators.sizeRange({minSize: this.minSizeFile, maxSize: this.maxSizeFile}),
     this.noWhitespaceValidator,
@@ -119,7 +123,6 @@ export class NewNotificationComponent implements OnInit {
   
   ngOnInit(): void {
     this.getProcedure();
-    this.notificationService.refreshNoticacions(false);
     if(this.notificationService.openWindow.isStopped) this.notificationService.openWindow = new Subject<boolean>();
     if(this.notificationService.saveNotification.isStopped) this.notificationService.saveNotification = new Subject<boolean>();
     this.notificationService.saveNotification.subscribe(save => {
@@ -265,7 +268,7 @@ export class NewNotificationComponent implements OnInit {
         this.errduplicate = !(count == 0);
       } else this.errduplicate = false;
       this.errmaxLengthName = file.filter((x:File) => this.baseName(x.name).length > this.maxLengthName).length > 0;
-      this.erronlyPdf = file.filter((x:File) => !x.name.endsWith('pdf')).length > 0;
+      this.errorOnlyFile = file.filter((x:File) => !(x.name.endsWith('pdf') || x.name.endsWith('png') || x.name.endsWith('jpg') || x.name.endsWith('jpeg') || x.name.endsWith('bmp'))).length > 0;
       this.errminSizeFile = file.filter((x:File) => x.size == 0 ).length > 0;
       this.errmaxSizeFile = file.filter((x:File) => x.size > this.maxSizeFile).length > 0;
       if(this.errmaxLengthName) this.Formulario.get(`files`)?.setErrors({ errmaxLengthName: true });
@@ -341,7 +344,8 @@ export class NewNotificationComponent implements OnInit {
           this.clearData();
           this.funcionesService.mensajeOk(
             'Los datos de notificación fueron registrados con éxito',
-            '/main/notificaciones'
+            '/main/notificaciones',
+            {textSearch: '', pageIndex: 1, pageSize: 5}
           );
         } else {
           this.funcionesService.mensajeError(res.error.message);

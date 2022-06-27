@@ -1,6 +1,14 @@
 // file-upload span {
 //   white-space: normal !important;
 // }
+.input_text {
+  text-transform: uppercase;
+}
+.text-file-valid {
+  font-size: 12px;
+  text-align: end;
+  color: red;
+}
 .item-test span {
   white-space: normal !important;
 }
