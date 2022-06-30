@@ -4,7 +4,7 @@ export enum ResultSignature {
 }
 //export const KeycodeCaptcha = '6LeFgcMZAAAAACDRx5DWqeuvRVAnYqvXNazcSDNf';
 
-export const VERSION_SISEN : string = 'SISEN v1.1.3';
+export const VERSION_SISEN : string = 'SISEN v1.2.0';
 export const ERROR_SERVER : string = 'El servicio no esta disponible, inténtelo de nuevo o más tarde';
 export const MAXINTENT : number = 3;
 export const MAXFILES : number  = 10;
