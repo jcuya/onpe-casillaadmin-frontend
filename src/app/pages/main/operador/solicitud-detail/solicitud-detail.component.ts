@@ -162,34 +162,34 @@ export class SolicitudDetailComponent implements OnInit {
 
       <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="value5">
-      <label class="form-check-label" for="value4">
+      <label class="form-check-label" for="value5">
       ${this.motivo5_detalle}
       </label>
       </div>
 
       <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="value6">
-      <label class="form-check-label" for="value4">
+      <label class="form-check-label" for="value6">
       ${this.motivo6_detalle}
       </label>
       </div>
 
       <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="value7">
-      <label class="form-check-label" for="value4">
+      <label class="form-check-label" for="value7">
       ${this.motivo7_detalle}
       </label>
       </div>
 
       <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="value8">
-      <label class="form-check-label" for="value4">
+      <label class="form-check-label" for="value8">
       ${this.motivo8_detalle}
       </label>
       </div>
 
       <div class="form">
-      <label class="form-check-label" for="value4">
+      <label class="form-check-label" for="value9">
       ${this.motivo9_detalle} : 
       </label>
       <input class="form-check-input" type="text" value="" id="value9">
