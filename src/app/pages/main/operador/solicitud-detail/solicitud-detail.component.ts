@@ -196,7 +196,7 @@ export class SolicitudDetailComponent implements OnInit {
       </div>
       </div>
           `,
-
+          
         focusConfirm: false,
         preConfirm: () => {
           return {
