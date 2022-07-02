@@ -13,10 +13,15 @@ export class SolicitudDetailComponent implements OnInit {
   load = false;
 
   id;
-  motivo1_detalle = "DNI no corresponde al solicitante";
-  motivo2_detalle = " DNI caducó";
-  motivo3_detalle = "La resolución del representante no corresponde a los datos registrados";
-  motivo4_detalle = "Resolución ilegible";
+  motivo1_detalle = "DNI no corresponde al usuario";
+  motivo2_detalle = "Documento de representante no corresponde al representante legal";
+  motivo3_detalle = "Documento de representante no corresponde al personero legal (titular)";
+  motivo4_detalle = "Documento adjunto ilegible o en blanco";
+  motivo5_detalle = "Documento de representación mayor a 90 días calendarios";
+  motivo6_detalle = "Foto adjunto no cumple con las especificaciones";
+  motivo7_detalle = "Foro adjunta no corresponde a los datos registrados";
+  motivo8_detalle = "Información registrada errada (ejm. colocan lisuras en el campo de la direccion";
+  motivo9_detalle = "otros";
   data: any = {};
   representante: any = {};
 
@@ -122,6 +127,7 @@ export class SolicitudDetailComponent implements OnInit {
     
 
       Swal.fire({
+        width: '800px',
         title: 'Motivo de desaprobación',
         showCancelButton: true,
         confirmButtonText: 'Enviar',
@@ -153,6 +159,41 @@ export class SolicitudDetailComponent implements OnInit {
       ${this.motivo4_detalle}
       </label>
       </div>
+
+      <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="value5">
+      <label class="form-check-label" for="value4">
+      ${this.motivo5_detalle}
+      </label>
+      </div>
+
+      <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="value6">
+      <label class="form-check-label" for="value4">
+      ${this.motivo6_detalle}
+      </label>
+      </div>
+
+      <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="value7">
+      <label class="form-check-label" for="value4">
+      ${this.motivo7_detalle}
+      </label>
+      </div>
+
+      <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="value8">
+      <label class="form-check-label" for="value4">
+      ${this.motivo8_detalle}
+      </label>
+      </div>
+
+      <div class="form">
+      <label class="form-check-label" for="value4">
+      ${this.motivo9_detalle} : 
+      </label>
+      <input class="form-check-input" type="text" value="" id="value9">
+      </div>
       </div>
           `,
 
@@ -178,6 +219,31 @@ export class SolicitudDetailComponent implements OnInit {
               detalle : this.motivo4_detalle,
               value : (<HTMLInputElement>document.getElementById('value4'))
               .checked
+            }  ,
+            motivo5:{
+              detalle : this.motivo5_detalle,
+              value : (<HTMLInputElement>document.getElementById('value5'))
+              .checked
+            }  ,
+            motivo6:{
+              detalle : this.motivo6_detalle,
+              value : (<HTMLInputElement>document.getElementById('value6'))
+              .checked
+            }  ,
+            motivo7:{
+              detalle : this.motivo7_detalle,
+              value : (<HTMLInputElement>document.getElementById('value7'))
+              .checked
+            }  ,
+            motivo8:{
+              detalle : this.motivo8_detalle,
+              value : (<HTMLInputElement>document.getElementById('value8'))
+              .checked
+            }  ,
+            motivo9:{
+              detalle : this.motivo9_detalle,
+              value : (<HTMLInputElement>document.getElementById('value9')).value
+              
             } 
           };
         },
