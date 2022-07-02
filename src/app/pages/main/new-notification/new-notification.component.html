@@ -83,14 +83,13 @@
           </div>
           <div fxFlex="100" class="padd_4">
             <div class="labelsColor">
-              Adjuntar archivos* (hasta 5 PDF con peso máximo de 3MB por cada
-              archivo). El nombre del archivo no debe superar los 100 caracteres.
+              {{lblFeaturesFile}}
             </div>
-            <file-upload [(ngModel)]="uploadedFiles" formControlName="files" [multiple]="true" [animation]="true" discard="true" accept=".pdf">
+            <file-upload [(ngModel)]="uploadedFiles" formControlName="files" [multiple]="true" [animation]="true" discard="true" accept=".pdf,.jpg,.jpeg,.png,.bmp">
               <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
                 <file-upload-drop-zone>
                   <ng-container *ngIf="isFileDragDropAvailable; else isNotDragDropAvailable">
-                    Agregar archivos o dar click aquí.
+                    {{lblAddFiles}}
                   </ng-container>
                   <ng-template #isNotDragDropAvailable> </ng-template>
                 </file-upload-drop-zone>
@@ -101,12 +100,12 @@
               </ng-template>
             </file-upload>
 
-            <p *ngIf="errmaxLengthName" class="text-file-valid">El nombre de los archivos debe tener un máximo de 100 caracteres</p>
+            <p *ngIf="errmaxLengthName" class="text-file-valid">{{lblErrorMaxLengthName}}</p>
             <p *ngIf="errduplicate" class="text-file-valid">Archivo con nombre duplicado</p>
-            <p *ngIf="erronlyPdf" class="text-file-valid">Sólo se acepta formato PDF</p>
+            <p *ngIf="errorOnlyFile" class="text-file-valid">{{lblErrorOnlyFile}}</p>
             <p *ngIf="errminSizeFile" class="text-file-valid">El tamaño del archivo mínimo es 1B</p>
-            <p *ngIf="errmaxSizeFile" class="text-file-valid">El tamaño del archivo máximo es 3Mb</p>
-            <p *ngIf="errmaxFiles" class="text-file-valid">Máximo cinco (5) documentos</p>
+            <p *ngIf="errmaxSizeFile" class="text-file-valid">{{lblErrorMaxSizeFile}}</p>
+            <p *ngIf="errmaxFiles" class="text-file-valid">{{lblErrorMaxFiles}}</p>
           </div>
         </div>
       </form>

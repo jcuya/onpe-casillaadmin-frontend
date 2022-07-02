@@ -36,6 +36,10 @@ export class NotificationDetalleComponent implements OnInit {
   loading: boolean = true;
   lbl_bloqueado: string = 'El documento contiene datos que sólo el administrado puede acceder';
 
+  textSearch: string = '';
+  pageIndex: number;
+  pageSize: number;
+
   @Input() numNotview: number;
 
   constructor(
@@ -46,6 +50,11 @@ export class NotificationDetalleComponent implements OnInit {
     private funcionesService: FuncionesService
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
+    if(this.router.getCurrentNavigation() != null) {
+      this.textSearch = this.router.getCurrentNavigation().extras.state != null ? this.router.getCurrentNavigation().extras.state.textSearch : '';
+      this.pageIndex = this.router.getCurrentNavigation().extras.state != null ? this.router.getCurrentNavigation().extras.state.pageIndex : 1;
+      this.pageSize = this.router.getCurrentNavigation().extras.state != null ? this.router.getCurrentNavigation().extras.state.pageSize : 5;
+    }
   }
 
   ngOnInit(): void {
@@ -67,8 +76,6 @@ export class NotificationDetalleComponent implements OnInit {
         dispatchEventClient('sendArguments', this.parametro);
       }
     });
-
-    this.notificationService.refreshNoticacions(false);
   }
 
   createForm(): void {
@@ -150,6 +157,7 @@ export class NotificationDetalleComponent implements OnInit {
   }
 
   cancel() {
+    this.notificationService.searchNotifications({textSearch: this.textSearch, pageIndex: this.pageIndex, pageSize: this.pageSize});
     this.router.navigate(['/main/notificaciones']);
   }
 

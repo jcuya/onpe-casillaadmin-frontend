@@ -39,7 +39,6 @@ export class NewUserComponent implements OnInit {
     { id: Profile.RegistryOperator, value: 'Registrador' },
     { id: Profile.Notifier, value: 'Notificador' },
     { id: Profile.Administrador, value: 'Administrador' },
-    {id: Profile.Evaluator ,value : 'Evaluador'}
   ];
 
   formInvalid(control: string) {

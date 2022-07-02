@@ -41,8 +41,7 @@ export class UserService {
         })
       }).pipe(map((res) => res));
   }
-
-
+ 
   getUserDetail(id: string): Observable<any> {
     return this.http
       .get<any>(API_URL + '/get-user-info-detail', {
@@ -51,15 +50,6 @@ export class UserService {
         })
       }).pipe(map((res) => res));
   }
-
-
-  // sendEmailEstateInbox(request: { email: string, estado: string, nombres: string }): Observable<any> {
-  //   return this.http
-  //     .post<any>(API_URL + '/sendEmailEstateInbox', {request, headers: new HttpHeaders({
-  //         'Content-Type': 'application/json',
-  //       })
-  //     }).pipe(map((res) => res));
-  // }
 
   updateEstateInbox(request: { idUser: string, estado: string, motivo: {},name :string ,email : string }
     ) {
@@ -141,6 +131,32 @@ export class UserService {
       });
   }
 
+  ConsultaCE(doc: string, type: string): Observable<any> {
+    var request = {
+      doc: doc,
+      type: type
+    };
+    return this.http.get(API_URL + '/search-ce', {
+      params: convertObjectToGetParams(request),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+
+  ConsultaCasilla(doc: string, type: string): Observable<any> {
+    var request = {
+      doc: doc,
+      type: type
+    };
+    return this.http.get(API_URL + '/search-casilla', {
+      params: convertObjectToGetParams(request),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+  
   ConsultaClaridad(doc: string): Observable<any> {
     return this.http.post<any>('', '', httpOptions);
   }

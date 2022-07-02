@@ -7,7 +7,7 @@
   <div class="generalBox">
     <div class="controlBox inputColor">
       <div class="centerTitle">CANDIDATO A ELECCIÓN POPULAR</div>
-      <form #myform="ngForm" [formGroup]="Formulario">
+      <form #myform="ngForm" [formGroup]="Formulario" (keydown.enter)="$event.preventDefault()" autocomplete="on">
         <div class="formNotif" fxLayout="row wrap">
           <!-- SECCION CANDIDATO-->
           <div
@@ -17,7 +17,7 @@
             fxFlex.xs="100"
             class="padd_4"
           >
-            <div class="labelsColor">Tipo de documento</div>
+            <div class="labelsColor">Tipo de documento*</div>
             <mat-form-field appearance="outline" style="width: 100%">
               <mat-select
                 placeholder="Seleccione"
@@ -29,6 +29,9 @@
                   {{ doc.value }}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="Formulario.controls.fm_optiontipo.invalid">{{
+                eShowError("fm_optiontipo", Formulario.controls.fm_optiontipo.errors)
+              }}</mat-error>
             </mat-form-field>
           </div>
           <div
@@ -41,29 +44,27 @@
             <div class="labelsColor">{{ buildLabel("fm_numerodoc") }}</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
-                type="tel"
+                type="text"
                 class="form-control"
                 formControlName="fm_numerodoc"
-                [class.control-invalid]="formInvalid('fm_numerodoc')"
                 [maxlength]="maxlengthNumDoc"
-                [minlength]="minlengthNumDoc"
+                [minlength]="minlengthNumDoc"               
                 matInput
-                [placeholder]="buildHolder('fm_numerodoc')"
-                (keyup.enter)="eSearch('general')"
-                (keydown)="keydown($event, 'fm_numerodoc')"
-                (keypress)="validar_campo($event, 'fm_numerodoc')"
-                name="doc"
+                [placeholder]="buildHolder('fm_numerodoc')"                                             
+                (keypress)="validar_campo($event, 'documento')"
+                (keyup.enter)="buscarCE()"
+                [readonly]="Formulario.controls.fm_optiontipo.value == ''"                       
               />
-              <button mat-icon-button matSuffix (click)="eSearch('general')">
-                <mat-icon>search</mat-icon>
-              </button>
+              <mat-icon *ngIf="isCE" style="cursor: pointer;" (click)="buscarCE()" matSuffix>search</mat-icon> 
+              <mat-error *ngIf="Formulario.controls.fm_numerodoc.invalid">{{
+                eShowError("fm_numerodoc", Formulario.controls.fm_numerodoc.errors)
+              }}</mat-error>        
             </mat-form-field>
           </div>
           <div fxFlex="100" class="padd_4" *ngIf="buildHide('fm_razon_social')">
             <div class="labelsColor">Organización</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
-              <input
-                type="tel"
+              <input                
                 class="form-control"
                 formControlName="fm_razon_social"
                 [class.control-invalid]="formInvalid('fm_numerodoc')"
@@ -72,9 +73,11 @@
                 name="fm_razon_social"
                 [readonly]="existData"
               />
+              <mat-error *ngIf="Formulario.controls.fm_razon_social.invalid">{{
+                eShowError("fm_razon_social", Formulario.controls.fm_razon_social.errors)
+              }}</mat-error>               
             </mat-form-field>
           </div>
-          <!-- -->
           <div
             *ngIf="buildHide('fm_razon_social')"
             fxFlex="100"
@@ -90,18 +93,20 @@
             class="padd_4"
             *ngIf="buildHide('fm_optiontipo_rep')"
           >
-            <div class="labelsColor">Tipo de documento</div>
+            <div class="labelsColor">Tipo de documento*</div>
             <mat-form-field appearance="outline" style="width: 100%">
               <mat-select
                 placeholder="Seleccione"
-                name="typeDoc"
                 formControlName="fm_optiontipo_rep"
                 (selectionChange)="eChangeDocumentoRep($event)"
-              >
+              > <!-- name="typeDoc" -->
                 <mat-option *ngFor="let doc of typeDocument2" [value]="doc.id">
                   {{ doc.value }}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="Formulario.controls.fm_optiontipo_rep.invalid">{{
+                eShowError("fm_optiontipo_rep", Formulario.controls.fm_optiontipo_rep.errors)
+              }}</mat-error>                
             </mat-form-field>
           </div>
           <div
@@ -111,31 +116,27 @@
             fxFlex.xs="100"
             class="padd_4"
             *ngIf="buildHide('fm_numerodoc_rep')"
-          >
-            <div class="labelsColor">Número de Documento</div>
+          >  
+            <div class="labelsColor">Número de documento*</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
-                type="tel"
+                type="text"
                 class="form-control"
                 formControlName="fm_numerodoc_rep"
-                [class.control-invalid]="formInvalid('fm_numerodoc_rep')"
                 [maxlength]="maxlengthNumDocRep"
                 [minlength]="minlengthNumDocRep"
                 matInput
                 placeholder="Ingrese el número de Documento"
-                (keyup.enter)="eSearch('representante')"
                 (keypress)="validar_campo($event, 'fm_numerodoc_rep')"
-                (keydown)="keydown($event, 'fm_numerodoc_rep')"
+                [readonly]="Formulario.controls.fm_optiontipo_rep.value == null" 
                 name="doc"
-                ngxTrim
+                (keyup.enter)="buscarCE()"
               />
-              <button
-                mat-icon-button
-                matSuffix
-                (click)="eSearch('representante')"
-              >
-                <mat-icon>search</mat-icon>
-              </button>
+              <!-- (keydown)="keydown($event, 'fm_numerodoc_rep')"-->
+              <mat-icon *ngIf="isCERep" style="cursor: pointer;" (click)="buscarCE()" matSuffix>search</mat-icon>
+              <mat-error *ngIf="Formulario.controls.fm_numerodoc_rep.invalid">{{
+                eShowError("fm_numerodoc_rep", Formulario.controls.fm_numerodoc_rep.errors)
+              }}</mat-error>     
             </mat-form-field>
           </div>
           <div
@@ -145,19 +146,22 @@
             fxFlex.xs="100"
             class="padd_4"
           >
-            <div class="labelsColor">Nombres</div>
+            <div class="labelsColor">{{lblNombre}}</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
+                id="nombres"
                 type="text"
-                class="form-control"
-                formControlName="fm_nombres"
-                [class.control-invalid]="formInvalid('fm_nombres')"
+                class="input_text"
+                formControlName="nombres"
                 matInput
                 placeholder="Nombres"
-                [value]="name"
+                [maxlength]="100"
                 [readonly]="existData"
-                ngxTrim
+                (keypress)="soloExpLetras('nombres', nombres, $event)"
               />
+              <mat-error *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)">{{
+                eShowError("fm_nombres", nombres.errors)
+              }}</mat-error>               
             </mat-form-field>
           </div>
 
@@ -168,19 +172,22 @@
             fxFlex.xs="100"
             class="padd_4"
           >
-            <div class="labelsColor">Apellido Paterno</div>
+            <div class="labelsColor">{{lblApPat}}</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
+                id="appaterno"
                 type="text"
-                class="form-control"
-                formControlName="fm_appaterno"
-                [class.control-invalid]="formInvalid('fm_appaterno')"
+                class="input_text"
+                formControlName="apPaterno"
                 matInput
                 placeholder="Apellido Paterno"
-                [value]="name"
+                [maxlength]="100"
                 [readonly]="existData"
-                ngxTrim
+                (keypress)="soloExpLetras('appaterno', apPaterno, $event)"
               />
+              <mat-error *ngIf="apPaterno.invalid && (apPaterno.dirty || apPaterno.touched)">{{
+                eShowError("fm_appaterno", apPaterno.errors)
+              }}</mat-error>               
             </mat-form-field>
           </div>
 
@@ -191,19 +198,22 @@
             fxFlex.xs="100"
             class="padd_4"
           >
-            <div class="labelsColor">Apellido Materno</div>
+            <div class="labelsColor">{{lblApMat}}</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
+                id="apmaterno"
                 type="text"
-                class="form-control"
-                formControlName="fm_apmaterno"
-                [class.control-invalid]="formInvalid('fm_apmaterno')"
+                class="input_text"
+                formControlName="apMaterno"
                 matInput
                 placeholder="Apellido Materno"
-                [value]="name"
+                [maxlength]="100"
                 [readonly]="existData"
-                ngxTrim
+                (keypress)="soloExpLetras('apmaterno', apMaterno, $event)"
               />
+              <mat-error *ngIf="apMaterno.invalid && (apMaterno.dirty || apMaterno.touched)">{{
+                eShowError("fm_apmaterno", apMaterno.errors)
+              }}</mat-error>                
             </mat-form-field>
           </div>
 
@@ -214,7 +224,7 @@
             fxFlex.xs="100"
             class="padd_4"
           >
-            <div class="labelsColor">Correo electrónico</div>
+            <div class="labelsColor">Correo electrónico*</div>
             <mat-form-field
               class=""
               disabled="true"
@@ -222,21 +232,26 @@
               style="width: 100%"
             >
               <input
-                type="email"
+                id="fm_correo"
+                type="text"
                 class="form-control"
                 formControlName="fm_correo"
                 [class.control-invalid]="formInvalid('fm_correo')"
-                name="email"
+                name="text"
                 [attr.disabled]="inputDisabled ? '' : null"
                 matInput
                 placeholder="Ingrese correo electrónico"
-                ngxTrim
+                [maxlength]="100"
+                (keypress)="quitarDobleEspacio('fm_correo', fm_correo, $event)"
               />
+              <mat-error *ngIf="Formulario.controls.fm_correo.invalid">{{
+                eShowError("fm_correo", Formulario.controls.fm_correo.errors)
+              }}</mat-error>                
             </mat-form-field>
           </div>
           <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100">
             <div class="labelsColor">
-              Teléfono celular obligatorio y/o fijo opcional
+              Teléfono celular* y/o fijo opcional
             </div>
             <div fxLayout="row">
               <div fxFlex="50" class="padd_4">
@@ -257,8 +272,10 @@
                     placeholder="Número de celular"
                     name="cellphone"
                     (input)="onKeydown($event, 'fm_celular')"
-                    ngxTrim
                   />
+                  <mat-error *ngIf="Formulario.controls.fm_celular.invalid">{{
+                    eShowError("fm_celular", Formulario.controls.fm_celular.errors)
+                  }}</mat-error>                      
                 </mat-form-field>
               </div>
               <div fxFlex="50" class="padd_4">
@@ -278,8 +295,10 @@
                     matInput
                     placeholder="Número de teléfono"
                     (input)="onKeydown($event, 'fm_fijo')"
-                    ngxTrim
                   />
+                  <mat-error *ngIf="Formulario.controls.fm_fijo.invalid">{{
+                    eShowError("fm_fijo", Formulario.controls.fm_fijo.errors)
+                  }}</mat-error>                     
                 </mat-form-field>
               </div>
             </div>
@@ -291,9 +310,10 @@
             fxFlex.xs="100"
             class="padd_4"
           >
-            <div class="labelsColor">Dirección domiciliaria</div>
+            <div class="labelsColor">Dirección domiciliaria*</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
+                id="fm_direccion"
                 type="text"
                 class="form-control"
                 formControlName="fm_direccion"
@@ -302,10 +322,13 @@
                 [maxlength]="100"
                 [attr.disabled]="inputDisabled ? '' : null"
                 matInput
-                ngxTrim
                 placeholder="Ingrese dirección"
                 name="address"
+                (keypress)="quitarDobleEspacio('fm_direccion', fm_direccion, $event)"
               />
+              <mat-error *ngIf="Formulario.controls.fm_direccion.invalid">{{
+                eShowError("fm_direccion", Formulario.controls.fm_direccion.errors)
+              }}</mat-error>                
             </mat-form-field>
           </div>
 
@@ -320,6 +343,7 @@
             <div class="labelsColor">Organización</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
+                id="fm_organizacion"
                 type="text"
                 class="form-control"
                 formControlName="fm_organizacion"
@@ -328,8 +352,11 @@
                 placeholder="Organización"
                 [maxlength]="100"
                 [value]="name"
-                ngxTrim
+                (keypress)="quitarDobleEspacio('fm_organizacion', fm_organizacion, $event)"
               />
+              <mat-error *ngIf="Formulario.controls.fm_organizacion.invalid">{{
+                eShowError("fm_organizacion", Formulario.controls.fm_organizacion.errors)
+              }}</mat-error>               
             </mat-form-field>
           </div>
 
@@ -340,7 +367,7 @@
             fxFlex.xs="100"
             class="padd_4"
           >
-            <div class="labelsColor">Tipo de registro de acreditación</div>
+            <div class="labelsColor">Tipo de registro de acreditación*</div>
             <mat-form-field appearance="outline" style="width: 100%">
               <mat-select
                 placeholder="Seleccione"
@@ -356,14 +383,15 @@
                   {{ acc.value }}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="Formulario.controls.fm_optiontacreditacion.invalid">{{
+                eShowError("fm_optiontacreditacion", Formulario.controls.fm_optiontacreditacion.errors)
+              }}</mat-error>                
             </mat-form-field>
           </div>
 
           <div fxFlex="100" class="padd_4">
             <div class="labelsColor">
-              Adjuntar 5 archivos PDF como máximo (peso máximo de 10 MB por cada
-              archivo)<br />
-              El nombre del archivo no debe superar los 100 caracteres
+              {{lblFeaturesFile}}
             </div>
             <!-- <p>{{ Formulario.get("files").errors | json }}</p> -->
             <file-upload
@@ -371,13 +399,7 @@
               formControlName="files"
               [multiple]="true"
               [animation]="true"
-              accept=".pdf"
-              [ngStyle]="{
-                'outline-color': filesControl.valid == false ? 'red' : ''
-              }"
-              [ngStyle]="{
-                'background-color': filesControl.valid == false ? '#fdf4f4' : ''
-              }"
+              discard="true" accept=".pdf,.jpg,.jpeg,.png,.bmp"
             >
               <ng-template
                 let-isFileDragDropAvailable="isFileDragDropAvailable"
@@ -387,7 +409,7 @@
                   <ng-container
                     *ngIf="isFileDragDropAvailable; else isNotDragDropAvailable"
                   >
-                    Agregar archivos, o dar clic aquí.
+                    {{lblAddFiles}}
                   </ng-container>
                   <ng-template #isNotDragDropAvailable> </ng-template>
                 </file-upload-drop-zone>
@@ -404,15 +426,23 @@
                   class="item-test"
                   [file]="file"
                   [control]="control"
-                  >Remover</file-upload-list-item
+                  >Eliminar</file-upload-list-item
                 >
               </ng-template>
             </file-upload>
+            
+            <p *ngIf="errmaxLengthName" class="text-file-valid">{{lblErrorMaxLengthName}}</p>
+            <p *ngIf="errduplicate" class="text-file-valid">Archivo con nombre duplicado</p>
+            <p *ngIf="errorOnlyFile" class="text-file-valid">{{lblErrorOnlyFile}}</p>
+            <p *ngIf="errminSizeFile" class="text-file-valid">El tamaño del archivo mínimo es 1B</p>
+            <p *ngIf="errmaxSizeFile" class="text-file-valid">{{lblErrorMaxSizeFile}}</p>
+            <p *ngIf="errmaxFiles" class="text-file-valid">{{lblErrorMaxFiles}}</p>
           </div>
           <mat-progress-bar
             *ngIf="load"
             mode="indeterminate"
           ></mat-progress-bar>
+          <span class="labelsColor">*Campos requeridos</span>
           <div
             fxFlex="100"
             class="newNotif"
@@ -422,8 +452,8 @@
             <button
               type="submit"
               class="btnBlue"
-              mat-button
-              [disabled]="myform.invalid || load"
+              mat-button     
+              [disabled]="!(Formulario.valid && Formulario.dirty)"         
               (click)="submit()"
             >
               ACEPTAR

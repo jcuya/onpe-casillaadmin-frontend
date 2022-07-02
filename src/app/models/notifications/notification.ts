@@ -61,3 +61,9 @@ export class notification{
     inbox_name      : string;
     inbox_doc       : string;
 }
+
+export class searchNotifications {
+    textSearch: string;
+    pageIndex: number;
+    pageSize: number;
+}

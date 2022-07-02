@@ -1,6 +1,8 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { searchNotifications } from '../models/notifications/notification';
+import { NotificationService } from '../services/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +11,10 @@ export class FuncionesService {
 
   colorMtc: string = '';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private notificationService: NotificationService) {
   }
 
-  mensajeOk(text: string, accionRedirect?: string): Promise<null> {
+  mensajeOk(text: string, accionRedirect?: string, search?: searchNotifications): Promise<null> {
     return new Promise((resolve) => {
       Swal.fire({
         text: text,
@@ -22,6 +24,7 @@ export class FuncionesService {
       }).then(() => {
         if (accionRedirect !== undefined) {
           this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+          if(search != null) this.notificationService.searchNotifications({textSearch: search.textSearch, pageIndex: search.pageIndex, pageSize: search.pageSize});
           this.router.navigate([accionRedirect]);
         }
       });
@@ -33,6 +36,21 @@ export class FuncionesService {
       Swal.fire({
         text: text,
         icon: 'error',
+        confirmButtonText: 'Aceptar',
+        allowOutsideClick: false,
+        confirmButtonColor: '#23DF05'
+      }).then(() => {
+        resolve();
+      });
+    });
+
+  }
+
+  mensajeInfo(text: string): Promise<null> {
+    return new Promise((resolve, reject) => {
+      Swal.fire({
+        text: text,
+        icon: 'info',
         confirmButtonText: 'Aceptar',
         allowOutsideClick: false,
         confirmButtonColor: '#23DF05'

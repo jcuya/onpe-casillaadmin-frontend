@@ -123,8 +123,7 @@ const routes: Routes = [
             path: 'nueva-casilla',
             component: NewBoxComponent,
             canActivate: [AuthGuard],
-          }          
-          ,
+          }, 
           {
             path: 'solicitud-detalle/:id',
             component: SolicitudDetailComponent,
