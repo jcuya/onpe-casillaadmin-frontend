@@ -18,9 +18,9 @@ export class SolicitudDetailComponent implements OnInit {
   motivo3_detalle = "Documento de representante no corresponde al personero legal (titular)";
   motivo4_detalle = "Documento adjunto ilegible o en blanco";
   motivo5_detalle = "Documento de representación mayor a 90 días calendarios";
-  motivo6_detalle = "Foto adjunto no cumple con las especificaciones";
-  motivo7_detalle = "Foro adjunta no corresponde a los datos registrados";
-  motivo8_detalle = "Información registrada errada (ejm. colocan lisuras en el campo de la direccion";
+  motivo6_detalle = "Foto adjunta no cumple con las especificaciones";
+  motivo7_detalle = "Foto adjunta no corresponde a los datos registrados";
+  motivo8_detalle = "Información registrada errada (ejm. colocan lisuras en el campo de la dirección)";
   motivo9_detalle = "otros";
   data: any = {};
   representante: any = {};
@@ -106,7 +106,7 @@ export class SolicitudDetailComponent implements OnInit {
               idUser: this.id,
               estado: envioestado,
               motivo: motivoenvio,
-              name : this.data.lastname + " " + this.data.name,
+              name : this.data.name + ' ' + this.data.lastname + ' ' + this.data.second_lastname,
               email : this.data.email
             })
             .subscribe((res) => {
@@ -241,10 +241,9 @@ export class SolicitudDetailComponent implements OnInit {
               .checked
             }  ,
             motivo9:{
-              detalle : this.motivo9_detalle,
-              value : (<HTMLInputElement>document.getElementById('value9')).value
-              
-            } 
+              detalle : this.motivo9_detalle + ': ' + (<HTMLInputElement>document.getElementById('value9')).value,
+              value : (<HTMLInputElement>document.getElementById('value9')).value.length > 0
+            }
           };
         },
       }).then((result) => {
@@ -255,7 +254,7 @@ export class SolicitudDetailComponent implements OnInit {
             idUser: this.id,
             estado: envioestado,
             motivo: result.value,
-            name : this.data.lastname + " " + this.data.name,
+            name : this.data.name + ' ' + this.data.lastname + ' ' + this.data.second_lastname,
             email : this.data.email
           })
           .subscribe((res) => {

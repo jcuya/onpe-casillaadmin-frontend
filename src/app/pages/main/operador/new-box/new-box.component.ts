@@ -204,7 +204,7 @@ export class NewBoxComponent implements OnInit {
       this.eChangeRequired(false);
     } else if (this.documentTypeSelected === 'ce') {
       this.minlengthNumDoc = 9;
-      this.maxlengthNumDoc = 12;
+      this.maxlengthNumDoc = 9;
       this.changeLabelRequired(true);
       this.eChangeType(true);
       this.eChangeRequired(false);

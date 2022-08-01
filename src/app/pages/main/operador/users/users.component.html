@@ -57,7 +57,7 @@
                                     </p>
                                 </div>
                                 <div style="margin-left: 20px;">
-                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'PENDIENTE'" (click)="redirectDetail(user)">Aprobación</Button>
+                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'PENDIENTE'" (click)="redirectDetail(user)">Validar</Button>
                                     <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
                                         <span class="material-icons" style="color: green;">edit</span>
                                     </button>

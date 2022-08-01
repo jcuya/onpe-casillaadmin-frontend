@@ -12,7 +12,7 @@
 
                 <mat-card class="card">                  
                     <mat-card-subtitle>
-                        Verfique que la documentación anexa a la solicitud cumpla con lo indicado en el Art. 3 del TUPA: 
+                      Verifique que la documentación anexa, cumpla con lo descrito en el art. 19° del Reglamento SISEN - ONPE:
                     </mat-card-subtitle>
                   
                     <!-- content -->
@@ -28,7 +28,7 @@
                                     <li>Persona Natural</li>
                                     <li>Tipo de documento: <b>{{data.doc_type}}</b> </li>
                                     <li>Número de documento: <b>{{data.doc}}</b></li>
-                                    <li>Apellidos y Nombres: <b>{{data.lastname }}  {{data.name}}</b></li>
+                                    <li>Apellidos y Nombres: <b>{{data.lastname }} {{data.second_lastname }},  {{data.name}}</b></li>
                                     <li>Correo Electrónico: <b>{{data.email}}</b></li>
                                     <li>Número de Celular: <b>{{data.cellphone}}</b></li>
                                     <li>Departamento / Provincia / Distrito: <b>{{data.ubigeo}}</b></li>
@@ -65,7 +65,7 @@
                             <!-- Column-2 Row-2-->
                             <div fxLayout="row" fxFlex="40" fxFlexFill style="background-color: #ebebeb" fxLayoutAlign="space-around strech">
                               <div fxLayoutAlign="center center"></div>
-                              <img height="250px" src="{{imageURlss}}"  alt="">
+                              <img style="max-width:150px;" height="250px" src="{{imageURlss}}"  alt="">
                             
                             </div>
                           </div>

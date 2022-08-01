@@ -6,7 +6,7 @@
   </div>
   <div class="generalBox">
     <div class="controlBox inputColor">
-      <div class="centerTitle">CANDIDATO A ELECCIÓN POPULAR</div>
+      <!-- <div class="centerTitle">CANDIDATO A ELECCIÓN POPULAR</div> -->
       <form #myform="ngForm" [formGroup]="Formulario" (keydown.enter)="$event.preventDefault()" autocomplete="on">
         <div class="formNotif" fxLayout="row wrap">
           <!-- SECCION CANDIDATO-->
@@ -44,8 +44,8 @@
             <div class="labelsColor">{{ buildLabel("fm_numerodoc") }}</div>
             <mat-form-field class="" appearance="outline" style="width: 100%">
               <input
-                type="text"
                 class="form-control"
+                type="text"
                 formControlName="fm_numerodoc"
                 [maxlength]="maxlengthNumDoc"
                 [minlength]="minlengthNumDoc"               
@@ -271,6 +271,7 @@
                     matInput
                     placeholder="Número de celular"
                     name="cellphone"
+                    type="number"
                     (input)="onKeydown($event, 'fm_celular')"
                   />
                   <mat-error *ngIf="Formulario.controls.fm_celular.invalid">{{
@@ -288,6 +289,7 @@
                     type="text"
                     class="form-control"
                     formControlName="fm_fijo"
+                    type="number"
                     [class.control-invalid]="formInvalid('fm_fijo')"
                     [maxlength]="10"
                     (keypress)="validar_campo($event, 'fm_fijo')"
