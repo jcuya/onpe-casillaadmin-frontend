@@ -116,6 +116,9 @@ export class SolicitudDetailComponent implements OnInit {
                   '/main/operador/usuarios'
                 );
               } else {
+                this.funcionesService.mensajeError(
+                  res.error + ""
+                );
               }
             });
         })
