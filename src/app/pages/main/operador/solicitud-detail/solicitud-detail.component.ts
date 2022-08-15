@@ -250,30 +250,51 @@ export class SolicitudDetailComponent implements OnInit {
           };
         },
       }).then((result) => {
-        if (result.isConfirmed) {
-          console.log('resultado', result);
-          this.usuarioService
-          .updateEstateInbox({
-            idUser: this.id,
-            estado: envioestado,
-            motivo: result.value,
-            name : this.data.name + ' ' + this.data.lastname + ' ' + this.data.second_lastname,
-            email : this.data.email
-          })
-          .subscribe((res) => {
-            if (res.success) {
-              this.funcionesService.mensajeOk(
-                'La casilla ha sido desaprobada',
-                '/main/operador/usuarios'
-              );
-            } else {
+        let val1 = (<HTMLInputElement>document.getElementById('value1')).checked;
+        let val2 = (<HTMLInputElement>document.getElementById('value2')).checked;
+        let val3 = (<HTMLInputElement>document.getElementById('value3')).checked;
+        let val4 = (<HTMLInputElement>document.getElementById('value4')).checked;
+        let val5 = (<HTMLInputElement>document.getElementById('value5')).checked;
+        let val6 = (<HTMLInputElement>document.getElementById('value6')).checked;
+        let val7 = (<HTMLInputElement>document.getElementById('value7')).checked;
+        let val8 = (<HTMLInputElement>document.getElementById('value8')).checked;
+        let val9 = (<HTMLInputElement>document.getElementById('value9')).value.length;
+        let valTotal = (val1 || val2 || val3 || val4 || val5 || val6 || val7 || val8 || val9>0);
+        
+      
+        
+          if (result.isConfirmed) {
+            console.log('resultado', result);
+            console.log('Resultado total checks', valTotal);
+
+            if(valTotal){
+              this.usuarioService
+              .updateEstateInbox({
+                idUser: this.id,
+                estado: envioestado,
+                motivo: result.value,
+                name : this.data.name + ' ' + this.data.lastname + ' ' + this.data.second_lastname,
+                email : this.data.email
+              })
+              .subscribe((res) => {
+                if (res.success) {
+                  this.funcionesService.mensajeOk(
+                    'La casilla ha sido desaprobada',
+                    '/main/operador/usuarios'
+                  );
+                } else {
+                  this.funcionesService.mensajeError(res.error);
+                  return;
+                }
+              });
+            }else{
+              this.funcionesService.mensajeError('Debe seleccionar por lo menos un motivo');
+              return;
             }
-          });
 
-
-        } else {
-          return;
-        }
+          } else {
+            return;
+          }
       });
     }
   }

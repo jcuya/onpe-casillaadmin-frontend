@@ -48,6 +48,7 @@ export class NewNotificationComponent implements OnInit {
   procedureSelectedValue: string;
   inputDisabled: boolean = true;
   loading: boolean = false;
+  disabledVal: boolean =  false;
 
   patt = new RegExp(/^([a-zA-Z0-9-_°. \/]+\s?)*$/);
   fm_expediente: FormControl = new FormControl('', [
@@ -277,6 +278,7 @@ export class NewNotificationComponent implements OnInit {
   }
 
   NotificationSign() {
+    this.disabledVal =  true;
     const formDataNotification = new FormData();
     formDataNotification.append('docType', this.Formulario.controls['fm_optiontipo'].value);
     formDataNotification.append('doc', this.fm_numerodoc.value);
@@ -295,10 +297,7 @@ export class NewNotificationComponent implements OnInit {
       );
       formDataNotification.append('file' + (index + 1), tempFile);
     }
-    this.notificationService
-      .GetNotificationSign(formDataNotification)
-      .subscribe(
-        (res) => {
+    this.notificationService.GetNotificationSign(formDataNotification).subscribe((res) => {
           this.loading = false;
           if (res.success) {
             this.parametro = res.param;
@@ -308,14 +307,17 @@ export class NewNotificationComponent implements OnInit {
               this.funcionesService.mensajeError(
                 'No hay data para envío invoker'
               );
+              this.disabledVal =  false;
             }
           } else {
             this.funcionesService.mensajeError(res.error.message);
+            this.disabledVal =  false;
           }
         },
         (err) => {
           this.loading = false;
           console.log('Problemas del servicio', err);
+          this.disabledVal =  false;
         }
       );
   }
@@ -338,6 +340,7 @@ export class NewNotificationComponent implements OnInit {
       );
       formDataNotification.append('file' + (index + 1), tempFile);
     }
+
     this.notificationService.SendNotification(formDataNotification).subscribe(
       (res) => {
         if (res.success) {

@@ -54,6 +54,7 @@ export class NewBoxComponent implements OnInit {
   minlengthNumDocRep: number;
   listTypeAcreditation: TypeAccreditation[];
   inputDisabled: boolean = false;
+  deshabilitado: boolean = false;
   placeHolder = 'Ingrese número ';
   Formulario: FormGroup;
   nombres: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
@@ -747,6 +748,7 @@ export class NewBoxComponent implements OnInit {
   }
 
   submit = () => {
+    this.deshabilitado = true;
     const esRuc = this.Formulario.get('fm_optiontipo').value == 'ruc';
     if (!this.Formulario.valid) return;
 
@@ -755,11 +757,13 @@ export class NewBoxComponent implements OnInit {
     if(this.apPaterno.value == '' && this.apMaterno.value == '') {
       let message: string = `Debe ingresar al menos un apellido`;
       this.funcionesService.mensajeError(message.toUpperCase());
+      this.deshabilitado = false;
       return;
     }
     if(this.nombres.value == '' && this.apPaterno.value == '' && this.apMaterno.value == '') {
       let message: string = `Número de documento no válido, se debe registrar nombre(s) y apellido(s)`;
       this.funcionesService.mensajeError(message.toUpperCase());
+      this.deshabilitado = false;
       return;
     }
 
@@ -811,12 +815,15 @@ export class NewBoxComponent implements OnInit {
             //   ? '/main/list-boxes'
             //   : '/main/operador/usuarios'
           );
+          this.deshabilitado = true;
         } else {
           this.funcionesService.mensajeError(res.error.message);
+          this.deshabilitado = false;
         }
       },
       (err) => {
         this.load = false;
+        this.deshabilitado = false;
         console.log('Problemas del servicio', err);
       }
     );

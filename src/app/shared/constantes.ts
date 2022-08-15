@@ -4,11 +4,11 @@ export enum ResultSignature {
 }
 //export const KeycodeCaptcha = '6LeFgcMZAAAAACDRx5DWqeuvRVAnYqvXNazcSDNf';
 
-export const VERSION_SISEN : string = 'SISEN v1.2.7';
+export const VERSION_SISEN : string = 'SISEN v1.3.0';
 export const ERROR_SERVER : string = 'El servicio no esta disponible, inténtelo de nuevo o más tarde';
 export const MAXINTENT : number = 3;
 export const MAXFILES : number  = 10;
-export const MAX_MB_FILES : number = 10;
+export const MAX_MB_FILES : number = 3;
 export const MAX_TAM_FILES : number = 1048576 * 3;
 export const MAX_TAM_FILES_10 : number = 1048576 * MAX_MB_FILES;
 export const MIN_TAM_FILES : number = 1;

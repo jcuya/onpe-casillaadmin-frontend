@@ -133,13 +133,13 @@
       <div class="formNotif" fxLayout="row wrap">
         <span *ngIf="buttonNext" class="labelsColor">*Campos requeridos</span>
         <div fxFlex="100" class="newNotif" fxLayout="row" fxLayoutAlign="center center">
-          <button class="btnBrown" mat-button (click)="cancel()">
+          <button class="btnBrown" [disabled]="disabledVal" mat-button (click)="cancel()">
             CANCELAR
           </button>
           <button *ngIf="buttonNext" class="btnBlue" mat-button [disabled]="Formulario.invalid" (click)="next()">
             ENVIAR
           </button>
-          <button *ngIf="buttonSend" class="btnBlue" [disabled]="loading" mat-button (click)="NotificationSign()">
+          <button *ngIf="buttonSend" class="btnBlue" [disabled]="loading || disabledVal" mat-button (click)="NotificationSign()">
             ENVIAR
           </button>
         </div>

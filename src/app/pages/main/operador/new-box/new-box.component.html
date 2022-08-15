@@ -265,13 +265,12 @@
                     class="form-control"
                     formControlName="fm_celular"
                     [class.control-invalid]="formInvalid('fm_celular')"
-                    [maxlength]="14"
+                    [maxlength]="9"
                     [minlength]="9"
                     (keypress)="validar_campo($event, 'fm_celular')"
                     matInput
                     placeholder="Número de celular"
                     name="cellphone"
-                    type="number"
                     (input)="onKeydown($event, 'fm_celular')"
                   />
                   <mat-error *ngIf="Formulario.controls.fm_celular.invalid">{{
@@ -289,9 +288,9 @@
                     type="text"
                     class="form-control"
                     formControlName="fm_fijo"
-                    type="number"
                     [class.control-invalid]="formInvalid('fm_fijo')"
                     [maxlength]="10"
+                    [minlength]="7"
                     (keypress)="validar_campo($event, 'fm_fijo')"
                     [attr.disabled]="inputDisabled ? '' : null"
                     matInput
@@ -455,7 +454,7 @@
               type="submit"
               class="btnBlue"
               mat-button     
-              [disabled]="!(Formulario.valid && Formulario.dirty)"         
+              [disabled]="!(Formulario.valid && Formulario.dirty) || deshabilitado"         
               (click)="submit()"
             >
               ACEPTAR
