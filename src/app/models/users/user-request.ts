@@ -5,6 +5,9 @@ export class UserRequest {
     filter: string;
     page  : number;
     count : number;
+    estado :string;
+    fechaInicio: string;
+    fechaFin : string;
 }
 
 export class BoxRequest {
