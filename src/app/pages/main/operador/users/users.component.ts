@@ -26,6 +26,9 @@ export class UsersComponent implements OnInit {
   userData: UserData;
   filterSelected: string = '0';
   textSearch: string = '';
+  txtestado : string ='APROBADO'
+  txtfechaini : string = '';
+  txtfechafin : string = '';
   listReadyCheck: boolean;
   pageEvent: PageEvent;
 
@@ -46,15 +49,19 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadUsers('', 1, 5);
+    this.loadUsers('', 1, 5,'','','');
   }
 
-  loadUsers(uerySearch: string, page?: number, pageSize?: number) {
+  loadUsers(uerySearch: string, page?: number, pageSize?: number, estado ?:string, fechaini ?:string , fechafin ?: string) {
     this.listReadyCheck = false;
     this.userRequest = new UserRequest();
     this.userRequest.search = uerySearch;
     this.userRequest.page = page;
     this.userRequest.count = pageSize;
+
+    this.userRequest.estado = estado;
+    this.userRequest.fechaInicio = fechaini;
+    this.userRequest.fechaFin = fechafin;
     const promesa = this.esAdministrador && this.esVentanadeCasillas == false ? this.userService.ListUsers(this.userRequest) :
       this.userService.GetUsers(this.userRequest);
       promesa.subscribe(
@@ -77,7 +84,7 @@ export class UsersComponent implements OnInit {
       );
   }
   searchByQuery() {
-    this.loadUsers(this.textSearch, 1, 5);
+    this.loadUsers(this.textSearch, 1, 5, this.txtestado, this.txtfechaini, this.txtfechafin);
   }
   deleteUser(user: any) {
     this.funcionesService
