@@ -747,7 +747,26 @@ export class NewBoxComponent implements OnInit {
     }
   }
 
+  alert(){
+
+    this.funcionesService
+    .mensajeConfirmar(
+      'Está seguro de crear la casilla electrónica?'
+    )
+    .then((resp) => {
+      
+        this.submit();
+    
+    })
+    .catch((err) => {});
+
+  }
+
   submit = () => {
+
+
+
+
     this.deshabilitado = true;
     const esRuc = this.Formulario.get('fm_optiontipo').value == 'ruc';
     if (!this.Formulario.valid) return;
