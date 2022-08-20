@@ -875,11 +875,26 @@ export class NewBoxComponent implements OnInit {
   }
 
   validar_campo(event, type): boolean {
-    const charCode = event.which ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      return false;
+
+    const charCode = (event.which) ? event.which : event.keyCode;
+    var posicion = event.target.selectionStart;
+  
+    if(posicion == 0  && type === "fm_celular" ){
+      if(charCode == 57 ){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
     }
-    return true;
+
+
+
+
   }
 
   cancelar() {

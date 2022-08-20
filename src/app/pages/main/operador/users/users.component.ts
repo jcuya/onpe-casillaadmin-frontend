@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,7 +32,8 @@ export class UsersComponent implements OnInit {
   txtfechafin : string = '';
   listReadyCheck: boolean;
   pageEvent: PageEvent;
-
+  toDay = new Date();
+  dateMax ="";
 
   constructor(
     private route: Router,
@@ -40,12 +42,15 @@ export class UsersComponent implements OnInit {
     private paginator: MatPaginatorIntl,
     private seguridadService: SeguridadService,
     public dialog: MatDialog,
+    private datePipe: DatePipe
   ) {
     this.userData = new UserData();
     this.paginator.itemsPerPageLabel = 'Registros por página';
     this.paginator.nextPageLabel = 'Página siguiente';
     this.paginator.previousPageLabel = 'Página anterior';
     this.paginator.getRangeLabel = this.rangoPaginacion;
+    this.dateMax = this.datePipe.transform(this.toDay, "yyyy-MM-dd");
+    console.log("datemax",this.dateMax)
   }
 
   ngOnInit(): void {

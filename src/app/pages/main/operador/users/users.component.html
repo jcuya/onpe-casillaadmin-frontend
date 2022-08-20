@@ -24,19 +24,21 @@
                         <mat-select [(ngModel)]="txtestado" name="txtestado">
                           <mat-option value="APROBADO">APROBADO</mat-option>
                           <mat-option value="DESAPROBADO">DESAPROBADO</mat-option>
+                          <mat-option value="REGISTRO INTERNO">REGISTRO INTERNO</mat-option>
+                          <mat-option value="PENDIENTE">PENDIENTE</mat-option>
                         </mat-select>
                       </mat-form-field>
                 </div>
                 <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100" >
                     <div class="labelsColor">Fecha inicio</div>
                     <mat-form-field appearance="outline" style="width: 100%">
-                        <input type="date" matInput placeholder="dd/MM/YYY"  name="txtfechaini" [(ngModel)]="txtfechaini"/>
+                        <input type="date" matInput placeholder="dd/MM/YYY"  name="txtfechaini" [(ngModel)]="txtfechaini" [max]="txtfechafin || dateMax "/>
                       </mat-form-field>
                 </div>
                 <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100" >
                     <div class="labelsColor">Fecha fin</div>
                     <mat-form-field appearance="outline" style="width: 100%">
-                        <input type="date" matInput placeholder="dd/MM/YYY" name="txtfechafin" [(ngModel)]="txtfechafin" />
+                        <input type="date" matInput placeholder="dd/MM/YYY" name="txtfechafin" [(ngModel)]="txtfechafin" [max]="dateMax"  />
                       </mat-form-field>
                 </div>
                 <div class="marg_r10" fxFlex fxFlex.sm="40" fxFlex.xs="40">

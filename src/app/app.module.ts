@@ -41,6 +41,7 @@ import { PopFiltroComponent } from './pages/main/admin/colecciones/pop-filtro/po
 import { CatalogComponent } from './pages/main/admin/catalog/catalog/catalog.component';
 import { NewCatalogComponent } from './pages/main/admin/catalog/new-catalog/new-catalog.component';
 import { SolicitudDetailComponent } from './pages/main/operador/solicitud-detail/solicitud-detail.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { SolicitudDetailComponent } from './pages/main/operador/solicitud-detail
     NgxTrimModule,
   ],
   providers: [
+    DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {
