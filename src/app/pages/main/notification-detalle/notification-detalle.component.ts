@@ -180,7 +180,8 @@ export class NotificationDetalleComponent implements OnInit {
           if (res.success) {
             this.parametro = res.param;
             if (this.parametro.length > 0) {
-              initInvoker(ResultSignature.TypeEvenReniec);
+              //initInvoker(ResultSignature.TypeEvenReniec);
+              this.updateNotification();
             } else {
               this.funcionesService.mensajeError(
                 'No hay data para envío invoker'
