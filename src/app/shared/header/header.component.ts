@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SeguridadService} from '../../services/seguridad.service';
 import {Usuario} from '../../models/Usuario';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,8 @@ export class HeaderComponent implements OnInit {
   userName: string;
 
   constructor(
-    private seguridadService: SeguridadService
+    private seguridadService: SeguridadService,
+    private userService : UserService
   ) {
 
   }
@@ -33,6 +35,17 @@ export class HeaderComponent implements OnInit {
   }
 
   cerrarSession() {
-    this.seguridadService.cerrarSesion();
+    this.userService.CerrarSesion().subscribe(
+      (res) => {
+        if (res.success) {
+          this.seguridadService.cerrarSesion();
+        } else {
+        return;
+        }
+      },
+      (err) => {
+        console.log('Problemas del servicio', err);
+      }
+    );
   }
 }

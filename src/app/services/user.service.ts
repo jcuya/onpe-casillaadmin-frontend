@@ -160,4 +160,10 @@ export class UserService {
   ConsultaClaridad(doc: string): Observable<any> {
     return this.http.post<any>('', '', httpOptions);
   }
+
+  CerrarSesion(): Observable<any> {
+    return this.http
+      .post<any>(API_URL + '/logout',"")
+      .pipe(map((res) => res));
+  }
 }
