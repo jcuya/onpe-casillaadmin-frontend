@@ -14,7 +14,9 @@ import { FuncionesService } from 'src/app/utils/funciones.service';
 export class NewPasswordComponent implements OnInit {
   usuario: UserLogin = new UserLogin();
   mensaje: string;
-
+  hideOldPass: boolean = true;
+  hideNewPass: boolean = true;
+  hideRepeatNewPass: boolean = true;
   Formulario: FormGroup;
   userchangepass: userChangePass = new userChangePass();
 

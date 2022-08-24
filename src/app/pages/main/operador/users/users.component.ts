@@ -139,7 +139,7 @@ export class UsersComponent implements OnInit {
   }
 
   pageChangeEvent(event) {
-    this.loadUsers('', event.pageIndex + 1, event.pageSize);
+    this.loadUsers(this.textSearch, event.pageIndex + 1, event.pageSize,this.txtestado, this.txtfechaini, this.txtfechafin);
   }
   private rangoPaginacion = (
     page: number,
