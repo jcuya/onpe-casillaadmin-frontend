@@ -751,7 +751,7 @@ export class NewBoxComponent implements OnInit {
 
     this.funcionesService
     .mensajeConfirmar(
-      'Está seguro de crear la casilla electrónica?'
+      '¿Está seguro de crear la casilla electrónica?'
     )
     .then((resp) => {
       
