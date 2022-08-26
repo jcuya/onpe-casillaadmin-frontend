@@ -22,11 +22,13 @@
                     <div class="labelsColor">Estado</div>
                     <mat-form-field appearance="outline" style="width: 100%">
                         <mat-select [(ngModel)]="txtestado" name="txtestado">
-                          <mat-option value="">- TODOS -</mat-option>
+
+                            <mat-option *ngFor="let est of listEstados" [value]="est.value">{{est.name}}</mat-option>
+                          <!-- <mat-option value="">- TODOS -</mat-option>
                           <mat-option value="APROBADO">APROBADO</mat-option>
                           <mat-option value="DESAPROBADO">DESAPROBADO</mat-option>
                           <mat-option value="REGISTRO INTERNO">REGISTRO INTERNO</mat-option>
-                          <mat-option value="PENDIENTE">PENDIENTE</mat-option>
+                          <mat-option value="PENDIENTE">PENDIENTE</mat-option> -->
                         </mat-select>
                       </mat-form-field>
                 </div>
