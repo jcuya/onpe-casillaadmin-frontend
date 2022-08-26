@@ -35,6 +35,14 @@ export class UsersComponent implements OnInit {
   toDay = new Date();
   dateMax ="";
 
+  listEstados = [
+    {name: "- TODOS -", value:""},
+    {name: "APROBADO", value:"APROBADO"},
+    {name: "DESAPROBADO", value:"DESAPROBADO"},
+    {name: "REGISTRO INTERNO", value:"REGISTRO INTERNO"},
+    {name: "PENDIENTE", value:"PENDIENTE"}
+  ]
+
   constructor(
     private route: Router,
     private userService: UserService,
@@ -50,10 +58,11 @@ export class UsersComponent implements OnInit {
     this.paginator.previousPageLabel = 'Página anterior';
     this.paginator.getRangeLabel = this.rangoPaginacion;
     this.dateMax = this.datePipe.transform(this.toDay, "yyyy-MM-dd");
-    console.log("datemax",this.dateMax)
+
   }
 
   ngOnInit(): void {
+
     this.loadUsers('', 1, 5,'','','');
   }
 
@@ -199,6 +208,15 @@ export class UsersComponent implements OnInit {
 
   cleanSearch(){
     this.loadUsers('', 1, 5,'','','');
+    this.cleanInputs();
+  }
+
+  cleanInputs(){
+    this.textSearch = "";
+    this.txtestado = "";
+    this.txtfechaini = "";
+    this.txtfechafin = "";
+
   }
 
 }
