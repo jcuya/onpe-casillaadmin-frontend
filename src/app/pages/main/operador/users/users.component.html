@@ -9,10 +9,10 @@
                 <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100">
                     <div class="labelsColor">Buscar</div>
                     <mat-form-field class="" appearance="outline" style="width: 100%">
-                        <input type="tel" matInput placeholder="Buscar..." [maxlength]="100" name="txtSearch" (keyup.enter)="searchByQuery()" [(ngModel)]="textSearch" />
-                        <button mat-icon-button matSuffix (click)="searchByQuery()">
+                        <input type="tel" matInput placeholder="Buscar..." [maxlength]="100" name="txtSearch"  [(ngModel)]="textSearch" />
+                        <!-- <button mat-icon-button matSuffix (click)="searchByQuery()">
                         <mat-icon>search</mat-icon>
-                        </button>
+                        </button> -->
                     </mat-form-field>
 
                    
@@ -22,6 +22,7 @@
                     <div class="labelsColor">Estado</div>
                     <mat-form-field appearance="outline" style="width: 100%">
                         <mat-select [(ngModel)]="txtestado" name="txtestado">
+                          <mat-option value="">- TODOS -</mat-option>
                           <mat-option value="APROBADO">APROBADO</mat-option>
                           <mat-option value="DESAPROBADO">DESAPROBADO</mat-option>
                           <mat-option value="REGISTRO INTERNO">REGISTRO INTERNO</mat-option>
@@ -51,6 +52,18 @@
                     (click)="searchByQuery()"
                   >
                     Buscar
+                  </button>
+                </div>
+                <div class="marg_r10" fxFlex fxFlex.sm="40" fxFlex.xs="40">
+                    <div class="labelsColor hidden_">.</div>
+                    <button
+                    style="width: 100%"
+                    type="submit"
+                   
+                    mat-raised-button                                 
+                    (click)="cleanSearch()"
+                  >
+                    Limpiar
                   </button>
                 </div>
 
