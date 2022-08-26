@@ -27,7 +27,7 @@ export class UsersComponent implements OnInit {
   userData: UserData;
   filterSelected: string = '0';
   textSearch: string = '';
-  txtestado : string ='APROBADO'
+  txtestado : string =''
   txtfechaini : string = '';
   txtfechafin : string = '';
   listReadyCheck: boolean;
@@ -195,6 +195,10 @@ export class UsersComponent implements OnInit {
     if(this.esAdministrador && this.esVentanadeCasillas){
       this.route.navigate(['/main/view-box',user.id]);
     }
+  }
+
+  cleanSearch(){
+    this.loadUsers('', 1, 5,'','','');
   }
 
 }
