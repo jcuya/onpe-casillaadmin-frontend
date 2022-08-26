@@ -125,7 +125,7 @@
                     </div>
                 </mat-list-option>
             </mat-selection-list>
-            <mat-paginator [length]="userData.recordsTotal" [pageSize]="userData.count" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent = $event;pageChangeEvent($event)">
+            <mat-paginator style="margin-right: 30px;" [length]="userData.recordsTotal" [pageSize]="userData.count" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent = $event;pageChangeEvent($event)">
             </mat-paginator>
         </div>
         <div fxLayout="row" *ngIf="!listReadyCheck" fxLayoutAlign="center center">
