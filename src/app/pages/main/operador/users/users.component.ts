@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { UserData } from 'src/app/models/users/user-data';
 import { UserRequest } from 'src/app/models/users/user-request';
 import { SeguridadService } from 'src/app/services/seguridad.service';
@@ -34,6 +35,7 @@ export class UsersComponent implements OnInit {
   pageEvent: PageEvent;
   toDay = new Date();
   dateMax ="";
+  subscription: Subscription;
 
   listEstados = [
     {name: "- TODOS -", value:""},
@@ -63,8 +65,42 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.loadUsers('', 1, 5,'','','');
+    // this.loadUsers('', 1, 5,'','','');
   }
+
+
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+  
+      this.subscription = this.userService.fieldsSearch.subscribe(value => {
+        if(value != null) {
+          // this.textSearch = value.search;
+          // this.page = value.page;
+          // this.pageSize = value.filter;
+          // if(this.pageIndex == 1 && this.pageSize == 5) {
+          //   this.initPage.firstPage();
+          // }
+          // else {
+          //   this.initPage.pageIndex = this.pageIndex - 1;
+          //   this.initPage.pageSize = this.pageSize;
+          // }
+          this.cleanSearch();
+        } else {
+          // this.resetValores();
+          // this.initPage.firstPage();
+          // this.loadUsers('', this.pageIndex, this.pageSize);
+        }
+      });
+    });
+  }
+
+
+
+
+
+
+
 
   loadUsers(uerySearch: string, page?: number, pageSize?: number, estado ?:string, fechaini ?:string , fechafin ?: string) {
     this.listReadyCheck = false;
@@ -83,7 +119,7 @@ export class UsersComponent implements OnInit {
           if (res.success) {
             this.listReadyCheck = true;
             this.userData = res;
-            console.log("data revisar", this.userData)
+           
   
             this.userData.Items.map(res =>{
               if(res.estate_inbox === ""){

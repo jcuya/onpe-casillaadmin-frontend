@@ -46,12 +46,12 @@ export class MainComponent implements OnInit {
 
 
   refreshUsuarios(){
-    this.userService.ListUsers({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
+    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
     this.linkRedirect('admin/usuarios')
   }
 
   refreshCasilla(){
-    this.userService.GetUsers({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
+    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
     this.linkRedirect('list-boxes')
   }
 
