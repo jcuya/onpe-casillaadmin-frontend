@@ -40,10 +40,10 @@
       </div>
       <div class="separatorLine"></div>
       <div *ngIf="sidebar == 'admin'" class="menuOptions">
-        <button mat-stroked-button (click)="linkRedirect('list-boxes')">
+        <button mat-stroked-button (click)="refreshCasilla()">
           <span class="material-icons">work</span> Casillas Electrónicas
         </button>
-        <button mat-stroked-button (click)="linkRedirect('admin/usuarios')">
+        <button mat-stroked-button (click)="refreshUsuarios()">
           <span class="material-icons">supervisor_account</span> Usuarios
         </button>
         <!-- <button mat-stroked-button (click)="linkRedirect('notificaciones')">
