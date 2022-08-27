@@ -15,10 +15,10 @@
                         </button> -->
                     </mat-form-field>
 
-                   
+
                 </div>
 
-                <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100" >
+                <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100" style="display: none">
                     <div class="labelsColor">Estado</div>
                     <mat-form-field appearance="outline" style="width: 100%">
                         <mat-select [(ngModel)]="txtestado" name="txtestado">
@@ -50,7 +50,7 @@
                     style="width: 100%"
                     type="submit"
                     class="btnBlue"
-                    mat-button                                 
+                    mat-button
                     (click)="searchByQuery()"
                   >
                     Buscar
