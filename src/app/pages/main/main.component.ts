@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification.service';
 import { SeguridadService } from 'src/app/services/seguridad.service';
+import { UserService } from 'src/app/services/user.service';
 import { Profile } from 'src/app/transversal/enums/global.enum';
 import { FuncionesService } from 'src/app/utils/funciones.service';
 
@@ -22,7 +23,8 @@ export class MainComponent implements OnInit {
     private router: Router,
     private seguridadService: SeguridadService,
     private funcionesService: FuncionesService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private userService : UserService
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +42,19 @@ export class MainComponent implements OnInit {
     this.notificationService.searchNotifications({textSearch: '', pageIndex: 1, pageSize: 5});
     this.linkRedirect('notificaciones');
   }
+
+
+
+  refreshUsuarios(){
+    this.userService.ListUsers({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
+    this.linkRedirect('admin/usuarios')
+  }
+
+  refreshCasilla(){
+    this.userService.GetUsers({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
+    this.linkRedirect('list-boxes')
+  }
+
 
   validateProfile() {
     if (this.seguridadService.getUserProfile() !== '') {
