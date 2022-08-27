@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BoxRequest, UserRequest } from '../models/users/user-request';
 import { UserData } from '../models/users/user-data';
 import { convertObjectToGetParams } from '../utils/http-utils';
@@ -18,6 +18,10 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class UserService {
+  private fields = new BehaviorSubject<UserRequest>(null);
+  fieldsSearch = this.fields.asObservable();
+
+
   constructor(private http: HttpClient) { }
   delete(docType: string, doc: any): Observable<any> {
     return this.http
@@ -165,5 +169,10 @@ export class UserService {
     return this.http
       .post<any>(API_URL + '/logout',"")
       .pipe(map((res) => res));
+  }
+
+
+  searchListuser(value : UserRequest) {
+    this.fields.next(value);
   }
 }
