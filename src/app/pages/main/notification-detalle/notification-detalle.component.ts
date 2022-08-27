@@ -32,6 +32,7 @@ export class NotificationDetalleComponent implements OnInit {
   formDataNotification: FormData = new FormData();
   notification: notification = new notification();
   isAutomatic: boolean = false;
+  enviando: boolean = false;
   parametro: string;
   loading: boolean = true;
   lbl_bloqueado: string = 'El documento contiene datos que sólo el administrado puede acceder';
@@ -171,6 +172,7 @@ export class NotificationDetalleComponent implements OnInit {
   }
 
   NotificationSign() {
+    this.enviando = true;
     this.getFormDataNotification();
     
     this.notificationService
@@ -186,13 +188,16 @@ export class NotificationDetalleComponent implements OnInit {
               this.funcionesService.mensajeError(
                 'No hay data para envío invoker'
               );
+              this.enviando = false;
             }
           } else {
             this.funcionesService.mensajeError(res.error.message);
+            this.enviando = false;
           }
         },
         (err) => {
           console.log('Problemas del servicio', err);
+          this.enviando = false;
         }
       );
   }
