@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FuncionesService } from 'src/app/utils/funciones.service';
 import Swal from 'sweetalert2';
@@ -30,6 +30,7 @@ export class SolicitudDetailComponent implements OnInit {
   constructor(
     private usuarioService: UserService,
     private router: ActivatedRoute,
+    private route :Router,
     private funcionesService: FuncionesService,
     public domSanitizer: DomSanitizer
   ) {
@@ -42,14 +43,34 @@ export class SolicitudDetailComponent implements OnInit {
 
   async getDataUser() {
     const info = await this.usuarioService.getUserDetail(this.id).toPromise();
+
     if (!info) return;
-    console.log('informacion', info);
     this.data = info.user;
+    if(this.data.enAtencion == undefined){
+
+      this.funcionesService.mensajeInfo("El .... ya está siendo atendido.") .then((resp) => {
+      
+        this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
+        this.linkRedirect('list-boxes')   
+    
+    })
+    .catch((err) => {});
+
+   
+    }
+
+    console.log('informacion', info);
+    
     this.representante = this.data.representante;
     console.log('DATA-INFO', this.data);
     if (this.data.imageDNI) {
       this.imageURlss = this._arrayBufferToBase64(this.data.imageDNI);
     }
+  }
+
+  linkRedirect(section: any) {
+    this.route.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.route.navigate(['/main/' + section]);
   }
 
   download = async (path: string, name: string) => {
