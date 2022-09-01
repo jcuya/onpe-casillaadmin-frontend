@@ -4,6 +4,7 @@ export class User {
   doc: string;
   doc_type?: string;
   estate_inbox?:string;
+  enAtencion ?: boolean;
 }
 
 export class Box {
