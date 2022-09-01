@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SeguridadService } from 'src/app/services/seguridad.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { ERROR_SERVER, MAXINTENT } from 'src/app/shared/constantes';
+import { Profile } from 'src/app/transversal/enums/global.enum';
 import {
   RECAPTCHA_V3_SITE_KEY,
   RecaptchaV3Module,
@@ -39,10 +40,12 @@ export class LoginComponent implements OnInit {
   load: boolean = false;
   public formModel: any = {};
   hide: boolean = true;
+  typeProfile: string;
 
   constructor(
     private fb: FormBuilder,
     private securityService: SeguridadService,
+    private seguridadService: SeguridadService,
     private router: Router,
     private route: ActivatedRoute,
     private reCaptchaV3Service: ReCaptchaV3Service
@@ -131,7 +134,20 @@ export class LoginComponent implements OnInit {
   };
 
   setMenuOption() {
-    this.router.navigate(['/main']);
+    //this.router.navigate(['/main']);
+
+    if (this.seguridadService.getUserProfile() !== '') {
+      this.typeProfile = this.seguridadService.getUserProfile();
+      if (this.typeProfile === Profile.Administrador) {
+        this.router.navigate(['/main/admin/usuarios']);
+      }
+      if (this.typeProfile === Profile.Notifier) {
+        this.router.navigate(['/main']);
+      }
+      if (this.typeProfile === Profile.RegistryOperator) {
+        this.router.navigate(['/main/admin/usuarios']);
+      }
+    } 
   }
 
   forgetpass() {

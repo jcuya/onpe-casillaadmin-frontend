@@ -828,13 +828,14 @@ export class NewBoxComponent implements OnInit {
         this.load = false;
         if (res.success) {
           this.funcionesService.mensajeOk(
-            'Los datos de casilla electrónica fueron registrados con éxito',
-            '/main/list-boxes'
+            'Los datos de casilla electrónica fueron registrados con éxito'//,
+            //'/main/admin/usuarios'
             // this.esAdministrador
             //   ? '/main/list-boxes'
             //   : '/main/operador/usuarios'
           );
           this.deshabilitado = true;
+          this.refreshUsuarios();
         } else {
           this.funcionesService.mensajeError(res.error.message);
           this.deshabilitado = false;
@@ -847,6 +848,16 @@ export class NewBoxComponent implements OnInit {
       }
     );
   };
+
+  
+  linkRedirect(section: any) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.navigate(['/main/' + section]);
+  }
+  refreshUsuarios(){
+    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
+    this.linkRedirect('admin/usuarios')
+  }
 
   get esAdministrador() {
     const typeProfile = this.seguridadService.getUserProfile();
