@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Route } from '@angular/compiler/src/core';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,7 +23,7 @@ interface Filtro {
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, AfterViewInit {
   userRequest: UserRequest;
   userData: UserData;
   filterSelected: string = '0';
@@ -66,7 +66,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
 
-     this.loadUsers('', 1, 5,'','','');
+     this.loadUsers('', 1, 100,'','','');
   }
 
 
@@ -136,7 +136,7 @@ export class UsersComponent implements OnInit {
       );
   }
   searchByQuery() {
-    this.loadUsers(this.textSearch, 1, 5, this.txtestado, this.txtfechaini, this.txtfechafin, this.ordenFec);
+    this.loadUsers(this.textSearch, 1, 100, this.txtestado, this.txtfechaini, this.txtfechafin, this.ordenFec);
   }
   deleteUser(user: any) {
     this.funcionesService
@@ -149,7 +149,7 @@ export class UsersComponent implements OnInit {
             this.loadUsers(
               this.textSearch,
               this.pageEvent?.pageIndex || 1,
-              this.pageEvent?.pageSize || 5
+              this.pageEvent?.pageSize || 100
             );
           } else {
             this.funcionesService.mensajeError(
@@ -222,7 +222,7 @@ export class UsersComponent implements OnInit {
 
       component.afterClosed().subscribe(resp => {
         if (resp) {
-          this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || 5);
+          this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || 100);
         }
       })
     }
@@ -236,19 +236,19 @@ export class UsersComponent implements OnInit {
 
     component.afterClosed().subscribe(resp => {
       if (resp) {
-        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || 5);
+        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || 100);
       }
     })
   }
 
   handleVerCasilla(user){
-    if(this.esAdministrador && this.esVentanadeCasillas){
+    if((this.esAdministrador || this.esRegistrador) && !this.esVentanadeCasillas){
       this.route.navigate(['/main/view-box',user.id]);
     }
   }
 
   cleanSearch(){
-    this.loadUsers('', 1, 5,'','','');
+    this.loadUsers('', 1, 100,'','','');
     this.cleanInputs();
   }
 
@@ -261,4 +261,8 @@ export class UsersComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+  
 }
