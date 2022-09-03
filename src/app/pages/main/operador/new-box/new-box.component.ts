@@ -855,7 +855,7 @@ export class NewBoxComponent implements OnInit {
     this.router.navigate(['/main/' + section]);
   }
   refreshUsuarios(){
-    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:""});
+    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"", ordenFec:"desc"});
     this.linkRedirect('admin/usuarios')
   }
 

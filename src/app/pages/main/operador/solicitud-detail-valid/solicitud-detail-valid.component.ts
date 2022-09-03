@@ -4,12 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { FuncionesService } from 'src/app/utils/funciones.service';
 import Swal from 'sweetalert2';
+
 @Component({
-  selector: 'app-solicitud-detail',
-  templateUrl: './solicitud-detail.component.html',
-  styleUrls: ['./solicitud-detail.component.scss'],
+  selector: 'app-solicitud-detail-valid',
+  templateUrl: './solicitud-detail-valid.component.html',
+  styleUrls: ['./solicitud-detail-valid.component.scss']
 })
-export class SolicitudDetailComponent implements OnInit {
+export class SolicitudDetailValidComponent implements OnInit {
+
+
   load = false;
 
   id;
@@ -41,23 +44,13 @@ export class SolicitudDetailComponent implements OnInit {
     this.getDataUser();
   }
 
+
   async getDataUser() {
     const info = await this.usuarioService.getUserDetail(this.id).toPromise();
 
     if (!info) return;
     this.data = info.user;
-    if(this.data.enAtencion == true || this.data.enAtencion == undefined){
 
-      this.funcionesService.mensajeInfo("El registro ya está siendo atendido.") .then((resp) => {
-      
-        this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"",ordenFec:"desc"});
-        this.linkRedirect('list-boxes')   
-    
-    })
-    .catch((err) => {});
-
-   
-    }
 
     console.log('informacion', info);
     
@@ -66,6 +59,10 @@ export class SolicitudDetailComponent implements OnInit {
     if (this.data.imageDNI) {
       this.imageURlss = this._arrayBufferToBase64(this.data.imageDNI);
     }
+  }
+  cancelar(){
+    this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"",ordenFec:"desc"});    
+    this.linkRedirect('list-boxes');
   }
 
   linkRedirect(section: any) {

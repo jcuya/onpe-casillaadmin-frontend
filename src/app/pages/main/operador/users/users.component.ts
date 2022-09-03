@@ -31,6 +31,7 @@ export class UsersComponent implements OnInit {
   txtestado : string =''
   txtfechaini : string = '';
   txtfechafin : string = '';
+  ordenFec : string = 'desc';
   listReadyCheck: boolean;
   pageEvent: PageEvent;
   toDay = new Date();
@@ -102,7 +103,7 @@ export class UsersComponent implements OnInit {
 
 
 
-  loadUsers(uerySearch: string, page?: number, pageSize?: number, estado ?:string, fechaini ?:string , fechafin ?: string) {
+  loadUsers(uerySearch: string, page?: number, pageSize?: number, estado ?:string, fechaini ?:string , fechafin ?: string, ordenFec ?: string) {
     this.listReadyCheck = false;
     this.userRequest = new UserRequest();
     this.userRequest.search = uerySearch;
@@ -112,6 +113,7 @@ export class UsersComponent implements OnInit {
     this.userRequest.estado = estado;
     this.userRequest.fechaInicio = fechaini;
     this.userRequest.fechaFin = fechafin;
+    this.userRequest.ordenFec = ordenFec;
     const promesa = this.esAdministrador && this.esVentanadeCasillas == false ? this.userService.ListUsers(this.userRequest) :
       this.userService.GetUsers(this.userRequest);
       promesa.subscribe(
@@ -134,7 +136,7 @@ export class UsersComponent implements OnInit {
       );
   }
   searchByQuery() {
-    this.loadUsers(this.textSearch, 1, 5, this.txtestado, this.txtfechaini, this.txtfechafin);
+    this.loadUsers(this.textSearch, 1, 5, this.txtestado, this.txtfechaini, this.txtfechafin, this.ordenFec);
   }
   deleteUser(user: any) {
     this.funcionesService
@@ -182,9 +184,12 @@ export class UsersComponent implements OnInit {
   redirectDetail(user){
     this.route.navigate(['/main/operador/solicitud-detalle',user.id]);
   }
+  redirectDetailRegCasilla(user){
+    this.route.navigate(['/main/operador/solicitud-detalle-valid',user.id]);
+  }
 
   pageChangeEvent(event) {
-    this.loadUsers(this.textSearch, event.pageIndex + 1, event.pageSize,this.txtestado, this.txtfechaini, this.txtfechafin);
+    this.loadUsers(this.textSearch, event.pageIndex + 1, event.pageSize,this.txtestado, this.txtfechaini, this.txtfechafin, this.ordenFec);
   }
   private rangoPaginacion = (
     page: number,
@@ -252,6 +257,7 @@ export class UsersComponent implements OnInit {
     this.txtestado = "";
     this.txtfechaini = "";
     this.txtfechafin = "";
+    this.ordenFec = "desc";
 
   }
 

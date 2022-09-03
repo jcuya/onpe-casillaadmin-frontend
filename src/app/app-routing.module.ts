@@ -20,6 +20,7 @@ import { AdminComponent } from './pages/main/admin/admin.component';
 import { ColeccionesComponent } from './pages/main/admin/colecciones/colecciones.component';
 import { CatalogComponent } from './pages/main/admin/catalog/catalog/catalog.component';
 import { SolicitudDetailComponent } from './pages/main/operador/solicitud-detail/solicitud-detail.component';
+import { SolicitudDetailValidComponent } from './pages/main/operador/solicitud-detail-valid/solicitud-detail-valid.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -127,6 +128,11 @@ const routes: Routes = [
           {
             path: 'solicitud-detalle/:id',
             component: SolicitudDetailComponent,
+            canActivate: [AuthGuard],
+          },
+          {
+            path: 'solicitud-detalle-valid/:id',
+            component: SolicitudDetailValidComponent,
             canActivate: [AuthGuard],
           },
         ],

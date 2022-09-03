@@ -8,6 +8,7 @@ export class UserRequest {
     estado :string;
     fechaInicio: string;
     fechaFin : string;
+    ordenFec : string;
 }
 
 export class BoxRequest {

@@ -18,7 +18,7 @@
 
                 </div>
 
-                <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100" style="display: none">
+                <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100">
                     <div class="labelsColor">Estado</div>
                     <mat-form-field appearance="outline" style="width: 100%">
                         <mat-select [(ngModel)]="txtestado" name="txtestado">
@@ -42,6 +42,15 @@
                     <div class="labelsColor">Fecha fin</div>
                     <mat-form-field appearance="outline" style="width: 100%">
                         <input type="date" matInput placeholder="dd/MM/YYY" name="txtfechafin" [(ngModel)]="txtfechafin" [max]="dateMax" [min]="txtfechaini" />
+                      </mat-form-field>
+                </div>
+                <div class="marg_r10" fxFlex fxFlex.sm="100" fxFlex.xs="100">
+                    <div class="labelsColor">Orden</div>
+                    <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-select [(ngModel)]="ordenFec" name="ordenFec">
+                            <mat-option value="asc">Ascendente</mat-option>
+                            <mat-option value="desc">Descendente</mat-option>
+                        </mat-select>
                       </mat-form-field>
                 </div>
                 <div class="marg_r10" fxFlex fxFlex.sm="40" fxFlex.xs="40">
@@ -94,7 +103,8 @@
                                 <p class="lOrganizacion">
                                     {{ user.organization }}
                                 </p>
-                                <p class="lDocument" (click)="handleVerCasilla(user);">{{ user.doc_type }}: {{ user.doc }}</p>
+                                <!-- <p class="lDocument" (click)="handleVerCasilla(user);">{{ user.doc_type }}: {{ user.doc }}</p> -->
+                                <p class="lDocument">{{ user.doc_type }}: {{ user.doc }}</p>
                                 <p class="lOrganizacion" *ngIf="esAdministrador">
                                     Creado por: {{user.createUser}}
                                 </p>
@@ -112,6 +122,8 @@
                                 </div>
                                 <div style="margin-left: 20px;">
                                     <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'PENDIENTE' && !user.enAtencion" (click)="redirectDetail(user)">Validar</Button>
+                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && (user.estate_inbox === 'APROBADO' || user.estate_inbox === 'DESAPROBADO')" (click)="redirectDetailRegCasilla(user)">Ver Detalle</Button>
+                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'Registro interno' && !user.enAtencion" (click)="handleVerCasilla(user);">Ver Detalle</Button>
                                     <Button mat-stroked-button class="aprobacionBoton" *ngIf="user.enAtencion">En Atención</Button>
                                     <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
                                         <span class="material-icons" style="color: green;">edit</span>
