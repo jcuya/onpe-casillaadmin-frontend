@@ -121,16 +121,14 @@
                                     </p>
                                 </div>
                                 <div style="margin-left: 20px;">
-                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'PENDIENTE' && !user.enAtencion" (click)="redirectDetail(user)">Validar</Button>
+                                    <!-- <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'PENDIENTE' && !user.enAtencion" (click)="redirectDetail(user)">Validar</Button> -->
                                     <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && (user.estate_inbox === 'APROBADO' || user.estate_inbox === 'DESAPROBADO')" (click)="redirectDetailRegCasilla(user)">Ver Detalle</Button>
                                     <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'Registro interno' && !user.enAtencion" (click)="handleVerCasilla(user);">Ver Detalle</Button>
-                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="user.enAtencion">En Atención</Button>
-                                    <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)">
-                                        <span class="material-icons" style="color: green;">edit</span>
-                                    </button>
-                                    <button mat-stroked-button *ngIf="esAdministrador" (click)="deleteUser(user)">
-                                        <span class="material-icons" style="color: red;">delete</span>
-                                    </button>
+                                    <!-- <Button mat-stroked-button class="aprobacionBoton" *ngIf="user.enAtencion && user.estate_inbox === 'PENDIENTE'">En Atención</Button> -->
+                                    <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'PENDIENTE'" (click)="redirectDetail(user)">{{ user.enAtencion == true ? 'En Atención' : 'Validar' }}</Button>
+                                    <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)"><span class="material-icons" style="color: green;">edit</span></button>
+                                    <button mat-stroked-button *ngIf="esAdministrador && esVentanadeCasillas" (click)="editCasilla(user)"><span class="material-icons" style="color: green;">edit</span></button>
+                                    <button mat-stroked-button *ngIf="esAdministrador" (click)="deleteUser(user)"><span class="material-icons" style="color: red;">delete</span></button>
                                 </div>
                             </div>
 

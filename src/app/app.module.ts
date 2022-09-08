@@ -43,6 +43,7 @@ import { NewCatalogComponent } from './pages/main/admin/catalog/new-catalog/new-
 import { SolicitudDetailComponent } from './pages/main/operador/solicitud-detail/solicitud-detail.component';
 import { DatePipe } from '@angular/common';
 import { SolicitudDetailValidComponent } from './pages/main/operador/solicitud-detail-valid/solicitud-detail-valid.component';
+import { EditUserComponent } from './pages/main/user/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { SolicitudDetailValidComponent } from './pages/main/operador/solicitud-d
     NewCatalogComponent,
     SolicitudDetailComponent,
     SolicitudDetailValidComponent,
+    EditUserComponent,
   ],
   imports: [
     BrowserModule,

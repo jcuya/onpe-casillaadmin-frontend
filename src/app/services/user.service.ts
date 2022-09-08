@@ -72,14 +72,15 @@ export class UserService {
       .post<any>(API_URL + '/list-users', userRequest, httpOptions)
       .pipe(map((res) => res));
   }
-  crearteUser(request: { docType: string, doc: string, profile: String, name: string, lastname: string, email: string }
+  crearteUser(request: { docType: string, doc: string, profile: String, name: string, lastname: string,second_lastname: string, email: string }
   ) {
     return this.http
       .post<any>(API_URL + '/create-user', request)
       .pipe(map((res) => res));
   }
 
-  EditUser(request: { doc: string, name: string, lastname: string, email: string }
+  EditUser(request: { doc: string, name: string, lastname: string,second_lastname: string, email: string}
+    //EditUser(request: { doc: string, name: string, lastname: string,second_lastname: string, email: string, id: string }
   ) {
     return this.http
       .put<any>(API_URL + '/edit-user', request)

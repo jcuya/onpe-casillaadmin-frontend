@@ -28,10 +28,11 @@ export class UsersComponent implements OnInit, AfterViewInit {
   userData: UserData;
   filterSelected: string = '0';
   textSearch: string = '';
-  txtestado : string =''
+  txtestado : string ='PENDIENTE'
   txtfechaini : string = '';
   txtfechafin : string = '';
-  ordenFec : string = 'desc';
+  ordenFec : string = 'asc';
+  tamanoPaginado: number = 100;
   listReadyCheck: boolean;
   pageEvent: PageEvent;
   toDay = new Date();
@@ -66,7 +67,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-     this.loadUsers('', 1, 100,'','','');
+     this.loadUsers('', 1, this.tamanoPaginado,'PENDIENTE','','asc');
   }
 
 
@@ -136,7 +137,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
       );
   }
   searchByQuery() {
-    this.loadUsers(this.textSearch, 1, 100, this.txtestado, this.txtfechaini, this.txtfechafin, this.ordenFec);
+    this.loadUsers(this.textSearch, 1, this.tamanoPaginado, this.txtestado, this.txtfechaini, this.txtfechafin, this.ordenFec);
   }
   deleteUser(user: any) {
     this.funcionesService
@@ -149,7 +150,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
             this.loadUsers(
               this.textSearch,
               this.pageEvent?.pageIndex || 1,
-              this.pageEvent?.pageSize || 100
+              this.pageEvent?.pageSize || this.tamanoPaginado
             );
           } else {
             this.funcionesService.mensajeError(
@@ -222,7 +223,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
       component.afterClosed().subscribe(resp => {
         if (resp) {
-          this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || 100);
+          this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
         }
       })
     }
@@ -233,31 +234,43 @@ export class UsersComponent implements OnInit, AfterViewInit {
       disableClose: true,
       data: user,
     });
-
     component.afterClosed().subscribe(resp => {
       if (resp) {
-        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || 100);
+        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
+      }
+    })
+  }
+  
+  editCasilla(user) {
+    const component = this.dialog.open(NewUserComponent, {
+      disableClose: true,
+      data: user,
+    });
+    component.afterClosed().subscribe(resp => {
+      if (resp) {
+        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
       }
     })
   }
 
   handleVerCasilla(user){
-    if((this.esAdministrador || this.esRegistrador) && !this.esVentanadeCasillas){
+    /*if((this.esAdministrador || this.esRegistrador) && !this.esVentanadeCasillas){
       this.route.navigate(['/main/view-box',user.id]);
-    }
+    }*/
+    this.route.navigate(['/main/view-box',user.id]);
   }
 
   cleanSearch(){
-    this.loadUsers('', 1, 100,'','','');
+    this.loadUsers('', 1, this.tamanoPaginado,'PENDIENTE','','asc');
     this.cleanInputs();
   }
 
   cleanInputs(){
     this.textSearch = "";
-    this.txtestado = "";
+    this.txtestado = "PENDIENTE";
     this.txtfechaini = "";
     this.txtfechafin = "";
-    this.ordenFec = "desc";
+    this.ordenFec = "asc";
 
   }
 

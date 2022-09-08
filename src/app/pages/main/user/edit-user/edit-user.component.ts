@@ -7,11 +7,12 @@ import { Profile } from 'src/app/transversal/enums/global.enum';
 import { FuncionesService } from 'src/app/utils/funciones.service';
 
 @Component({
-  selector: 'app-new-user',
-  templateUrl: './new-user.component.html',
-  styleUrls: ['./new-user.component.scss'],
+  selector: 'app-edit-user',
+  templateUrl: './edit-user.component.html',
+  styleUrls: ['./edit-user.component.scss']
 })
-export class NewUserComponent implements OnInit {
+export class EditUserComponent implements OnInit {
+
   Formulario: FormGroup;
   inputDisabled = false;
   documentTypeSelected: string = '';
@@ -20,7 +21,7 @@ export class NewUserComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<NewUserComponent>,
+    private dialogRef: MatDialogRef<EditUserComponent>,
     private fb: FormBuilder,
     private userService: UserService,
     private funcionesService: FuncionesService

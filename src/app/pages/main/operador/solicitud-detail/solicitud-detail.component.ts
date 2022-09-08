@@ -48,7 +48,7 @@ export class SolicitudDetailComponent implements OnInit {
     this.data = info.user;
     if(this.data.enAtencion == true || this.data.enAtencion == undefined){
 
-      this.funcionesService.mensajeInfo("El registro ya está siendo atendido.") .then((resp) => {
+      this.funcionesService.mensajeInfo("El registro ya está siendo atendido por "+ this.data.enAtencionPor) .then((resp) => {
       
         this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"",ordenFec:"desc"});
         this.linkRedirect('list-boxes')   
