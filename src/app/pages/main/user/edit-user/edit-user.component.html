@@ -58,8 +58,8 @@
                         <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Departamento</div>
                             <mat-form-field appearance="outline" style="width: 100%">
-                                <mat-select disabled placeholder="Seleccione" name="dep" formControlName="fm_departamento" (selectionChange)="cambiarProvincia()">
-                                    <mat-option *ngFor="let item of departamentoList" [value]="item.nodep">{{item.nodep}} </mat-option>
+                                <mat-select  placeholder="Seleccione" name="dep" formControlName="fm_departamento" (selectionChange)="cambiarProvincia()">
+                                    <mat-option *ngFor="let item of departamentoList" [value]="item">{{item.nodep}} </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -68,8 +68,8 @@
                         <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Provincia</div>
                             <mat-form-field appearance="outline" style="width: 100%">
-                                <mat-select disabled placeholder="Seleccione" name="prov" formControlName="fm_provincia" (selectionChange)="cambiarDistrito()">
-                                    <mat-option *ngFor="let item of departamentoList" [value]="item.noprov">{{item.noprov}} </mat-option>
+                                <mat-select  placeholder="Seleccione" name="prov" formControlName="fm_provincia" (selectionChange)="cambiarDistrito()">
+                                    <mat-option *ngFor="let item of departamentoList" [value]="item">{{item.noprov}} </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -77,8 +77,8 @@
                         <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Distrito</div>
                             <mat-form-field appearance="outline" style="width: 100%">
-                                <mat-select disabled placeholder="Seleccione" name="dis" formControlName="fm_distrito" >
-                                    <mat-option *ngFor="let item of departamentoList" [value]="item.nodis">{{item.nodis}} </mat-option>
+                                <mat-select  placeholder="Seleccione" name="dis" formControlName="fm_distrito" >
+                                    <mat-option *ngFor="let item of departamentoList" [value]="item">{{item.nodis}} </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>

@@ -81,6 +81,7 @@ export class EditUserComponent implements OnInit {
       var dep = cadenaUbigeo[0].trim();
       var prov = cadenaUbigeo[1].trim();
       var dis = cadenaUbigeo[2].trim();
+      console.log("dep- prov- dis", dep + " - "+ prov + " - " + dis)
 
       this.Formulario.controls["fm_departamento"].setValue(dep);
       // this.Formulario.controls["fm_provincia"].setValue(prov);
@@ -110,13 +111,14 @@ export class EditUserComponent implements OnInit {
     this.Formulario.get("fm_provincia")?.reset();
     this.Formulario.get("fm_distrito")?.reset();
 
-    var value  = this.Formulario.get('fm_departamento')?.value;
+    var value  = this.Formulario.get('fm_departamento')?.value.ubdep;
 
     this.ubigeoService.getProvinciaList(value).subscribe((resp)=>{
 
       this.provinciaList = resp
       if(prov != "" && dis != ""){
-      this.Formulario.controls["fm_provincia"].setValue(prov);
+      var foundProv = this.provinciaList.find( provincia => provincia.noprv == prov)
+      this.Formulario.controls["fm_provincia"].setValue(foundProv);
         this.cambiarDistrito(dis);
       }
   
@@ -125,24 +127,25 @@ export class EditUserComponent implements OnInit {
 
   cambiarDistrito(dis = ""){
     this.Formulario.get("fm_distrito")?.reset();
-    var valueprovincia = this.Formulario.get('fm_provincia')?.value;
-    var valuedepar = this.Formulario.get('fm_departamento')?.value;
+    var valueprovincia = this.Formulario.get('fm_provincia')?.value.ubprv;
+    var valuedepar = this.Formulario.get('fm_departamento')?.value.ubdep;
 
     this.ubigeoService.getDistritoList(valuedepar, valueprovincia).subscribe((resp)=>{
 
       this.distritoList = resp
-      if(dis != "")
-      this.Formulario.controls["fm_distrito"].setValue(dis);
-  
+      if(dis != ""){
+      var foundDist = this.distritoList.find( distrito => distrito.nodis == dis)
+      this.Formulario.controls["fm_distrito"].setValue(foundDist);
+      }
     })
   }
 
 
   saveEdit(){
 
-    var _dept = this.Formulario.controls["fm_departamento"].value;;
-    var _prov = this.Formulario.controls["fm_provincia"].value;;
-    var _dist = this.Formulario.controls["fm_distrito"].value; ;
+    var _dept = this.Formulario.controls["fm_departamento"].value.nodep;
+    var _prov = this.Formulario.controls["fm_provincia"].value.noprov;
+    var _dist = this.Formulario.controls["fm_distrito"].value.nodis; 
 
     var userDet = new UserDetail ();
     userDet.inbox_id = this.data ;
