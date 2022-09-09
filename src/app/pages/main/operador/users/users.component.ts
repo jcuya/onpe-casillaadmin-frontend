@@ -11,6 +11,7 @@ import { SeguridadService } from 'src/app/services/seguridad.service';
 import { UserService } from 'src/app/services/user.service';
 import { Profile } from 'src/app/transversal/enums/global.enum';
 import { FuncionesService } from 'src/app/utils/funciones.service';
+import { EditUserComponent } from '../../user/edit-user/edit-user.component';
 import { NewUserComponent } from '../../user/new-user/new-user.component';
 
 interface Filtro {
@@ -28,7 +29,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   userData: UserData;
   filterSelected: string = '0';
   textSearch: string = '';
-  txtestado : string ='PENDIENTE'
+  txtestado : string =''
   txtfechaini : string = '';
   txtfechafin : string = '';
   ordenFec : string = 'asc';
@@ -67,7 +68,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-     this.loadUsers('', 1, this.tamanoPaginado,'PENDIENTE','','asc');
+     this.loadUsers('', 1, this.tamanoPaginado,'','','','asc');
   }
 
 
@@ -241,10 +242,10 @@ export class UsersComponent implements OnInit, AfterViewInit {
     })
   }
   
-  editCasilla(user) {
-    const component = this.dialog.open(NewUserComponent, {
+ async editCasilla(user) {
+    const component = this.dialog.open(EditUserComponent, {
       disableClose: true,
-      data: user,
+      data: user.id,
     });
     component.afterClosed().subscribe(resp => {
       if (resp) {
@@ -261,13 +262,13 @@ export class UsersComponent implements OnInit, AfterViewInit {
   }
 
   cleanSearch(){
-    this.loadUsers('', 1, this.tamanoPaginado,'PENDIENTE','','asc');
+    this.loadUsers('', 1, this.tamanoPaginado,'','', '','asc');
     this.cleanInputs();
   }
 
   cleanInputs(){
     this.textSearch = "";
-    this.txtestado = "PENDIENTE";
+    this.txtestado = "";
     this.txtfechaini = "";
     this.txtfechafin = "";
     this.ordenFec = "asc";

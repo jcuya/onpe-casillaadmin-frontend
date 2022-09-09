@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TypeDocument } from 'src/app/models/notifications/notification';
+import { UserDetail } from 'src/app/models/users/user';
 import { UserService } from 'src/app/services/user.service';
 import { Profile } from 'src/app/transversal/enums/global.enum';
 import { FuncionesService } from 'src/app/utils/funciones.service';
@@ -18,17 +19,21 @@ export class EditUserComponent implements OnInit {
   documentTypeSelected: string = '';
   maxlengthNumDoc: number;
   placeHolder = 'Ingrese número de documento';
-
+  user : any ;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<EditUserComponent>,
     private fb: FormBuilder,
     private userService: UserService,
     private funcionesService: FuncionesService
-  ) {}
+  ) {
+    
+  }
 
   ngOnInit(): void {
+   // this.getInfo();
     this.initForm();
+    this.getInfo();
   }
 
   typeDocument: TypeDocument[] = [
@@ -50,38 +55,78 @@ export class EditUserComponent implements OnInit {
     );
   }
 
+
+
+  getInfo(){
+    const  id = this.data;
+
+    this.userService.getUserDetail(id).subscribe((resp)=>{
+ 
+     console.log("informacion edit",resp)
+    this.user = resp.user;
+      this.Formulario.controls["fm_optiontipo"].setValue( this.user.doc_type);
+      this.Formulario.controls["fm_numerodoc"].setValue( this.user.doc);
+      this.Formulario.controls["fm_nombres"].setValue( this.user.name);
+      this.Formulario.controls["fm_apellidoPaterno"].setValue( this.user.lastname);
+      this.Formulario.controls["fm_apellidoMaterno"].setValue( this.user.second_lastname);
+      this.Formulario.controls["fm_correo"].setValue( this.user.email);
+      this.Formulario.controls["fm_telefono"].setValue( this.user.cellphone);
+      this.Formulario.controls["fm_direccion"].setValue( this.user.address);
+ 
+     }, (error)=>{
+       console.error(error)
+     })   
+  }
+
+
+  saveEdit(){
+    var userDet = new UserDetail ();
+    userDet.inbox_id = this.data ;
+    userDet.email = this.Formulario.controls["fm_correo"].value;
+    userDet.cellphone = this.Formulario.controls["fm_telefono"].value;
+    userDet.ubigeo = this.user.ubigeo;//this.Formulario.controls[""].value;
+    userDet.address = this.Formulario.controls["fm_direccion"].value;
+    userDet!.user!.name = "owner"
+    userDet!.user!.lastname = "lastname owner"
+    this.userService.editUserDetail(userDet).subscribe((resp)=>{
+      if(!resp.success){
+        console.error("error en el servicio")
+      }
+    })
+  }
+
   initForm() {
     this.Formulario = this.fb.group({
       fm_optiontipo: this.fb.control({
-        value: this.data ? this.data.doc_type : '',
+        value: '',// this.data ? this.data.doc_type : '',
         disabled: this.data ? true : this.inputDisabled,
       }),
       fm_numerodoc: this.fb.control(
         {
-          value: this.data ? this.data.doc : '',
+          value: '',//this.data ? this.data.doc : '',
           disabled: this.data ? true : this.inputDisabled,
         },
         [Validators.pattern('^[0-9]+$')]
       ),
       fm_nombres: this.fb.control({
-        value: this.data ? this.data.name : '',
-        disabled: this.inputDisabled,
+        value:'',// this.data ? this.data.name : '',
+        disabled: this.data ? true : this.inputDisabled,
       }),
       // fm_apellidos: this.fb.control({
       //   value: this.data ? this.data.lastname : '',
       //   disabled: this.inputDisabled,
       // }),
       fm_apellidoPaterno: this.fb.control({
-        value: this.data ? this.data.lastname : '',
-        disabled: this.inputDisabled,
+        value:'',// this.data ? this.data.lastname : '',
+        disabled: this.data ? true : this.inputDisabled,
       }),
       fm_apellidoMaterno: this.fb.control({
-        value: this.data ? this.data.second_lastname : '',
-        disabled: this.inputDisabled,
+        value:'',// this.data ? this.data.second_lastname : '',
+        disabled: this.data ? true : this.inputDisabled,
       }),
       fm_correo: this.fb.control(
         {
-          value: this.data ? this.data.email : '',
+          value:'',// this.data ? this.data.email : '',
           disabled: this.inputDisabled,
         },
         [
@@ -91,10 +136,17 @@ export class EditUserComponent implements OnInit {
           ),
         ]
       ),
-      fm_profile: this.fb.control(
+      fm_telefono: this.fb.control(
         {
-          value: this.data ? this.data.profile : '',
-          disabled: this.data ? true : this.inputDisabled,
+          value: '',//this.data ? this.data.profile : '',
+          disabled: this.inputDisabled,
+        },
+        [Validators.required]
+      ),
+      fm_direccion: this.fb.control(
+        {
+          value: '',//this.data ? this.data.profile : '',
+          disabled: this.inputDisabled,
         },
         [Validators.required]
       ),

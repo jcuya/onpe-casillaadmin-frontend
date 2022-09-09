@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { BoxRequest, UserRequest } from '../models/users/user-request';
 import { UserData } from '../models/users/user-data';
 import { convertObjectToGetParams } from '../utils/http-utils';
+import { UserDetail } from '../models/users/user';
 
 const API_URL = environment.URL_SERVICES;
 
@@ -55,12 +56,21 @@ export class UserService {
       }).pipe(map((res) => res));
   }
 
+
+
   updateEstateInbox(request: { idUser: string, estado: string, motivo: {},name :string ,email : string }
     ) {
       return this.http
         .post<any>(API_URL + '/updateEstateInbox', request)
         .pipe(map((res) => res));
     }
+
+    editUserDetail(userDetail: UserDetail
+      ) {
+        return this.http
+          .post<any>(API_URL + '/inbox/edit', userDetail)
+          .pipe(map((res) => res));
+      }
 
   GetUsers(userRequest: UserRequest): Observable<UserData> {
     return this.http

@@ -25,3 +25,19 @@ export class TypeAccreditation {
   code: string;
   value: string;
 }
+
+
+export class UserDetail {
+  inbox_id : string;
+  email : string;
+  cellphone : string;
+  ubigeo : string;
+  address : string;
+  user : _User = new _User();
+}
+
+
+export class _User{
+  name : string = "";
+    lastname : string = "";
+}
