@@ -144,7 +144,7 @@ export class EditUserComponent implements OnInit {
   saveEdit(){
 
     var _dept = this.Formulario.controls["fm_departamento"].value.nodep;
-    var _prov = this.Formulario.controls["fm_provincia"].value.noprov;
+    var _prov = this.Formulario.controls["fm_provincia"].value.noprv;
     var _dist = this.Formulario.controls["fm_distrito"].value.nodis; 
 
     var userDet = new UserDetail ();
@@ -156,8 +156,10 @@ export class EditUserComponent implements OnInit {
     userDet!.user!.name = "owner"
     userDet!.user!.lastname = "lastname owner"
     this.userService.editUserDetail(userDet).subscribe((resp)=>{
-      if(!resp.success){
-        console.error("error en el servicio")
+      if(!resp.success){        
+        this.funcionesService.mensajeError(
+          resp.error
+        );
       }
     })
   }
