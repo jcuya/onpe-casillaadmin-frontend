@@ -83,9 +83,9 @@ export class EditUserComponent implements OnInit {
       var dis = cadenaUbigeo[2].trim();
       console.log("dep- prov- dis", dep + " - "+ prov + " - " + dis)
 
-      this.Formulario.controls["fm_departamento"].setValue(dep);
-      // this.Formulario.controls["fm_provincia"].setValue(prov);
-      // this.Formulario.controls["fm_distrito"].setValue(dis);
+      
+      var foundProv = this.departamentoList.find( departamento => departamento.nodep == dep)
+      this.Formulario.controls["fm_departamento"].setValue(foundProv);
 
       this.cambiarProvincia(prov,dis);
 
