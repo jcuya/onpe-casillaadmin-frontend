@@ -2,18 +2,21 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TypeDocument } from 'src/app/models/notifications/notification';
+import { Departamento, Distrito, Provincia } from 'src/app/models/ubigeo';
 import { UserDetail } from 'src/app/models/users/user';
+import { UbigeoService } from 'src/app/services/ubigeo.service';
 import { UserService } from 'src/app/services/user.service';
 import { Profile } from 'src/app/transversal/enums/global.enum';
 import { FuncionesService } from 'src/app/utils/funciones.service';
-
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.scss']
 })
 export class EditUserComponent implements OnInit {
-
+  departamentoList: Array<Departamento> = []
+  provinciaList: Array<Provincia> = []
+  distritoList: Array<Distrito> = []
   Formulario: FormGroup;
   inputDisabled = false;
   documentTypeSelected: string = '';
@@ -25,7 +28,8 @@ export class EditUserComponent implements OnInit {
     private dialogRef: MatDialogRef<EditUserComponent>,
     private fb: FormBuilder,
     private userService: UserService,
-    private funcionesService: FuncionesService
+    private funcionesService: FuncionesService,
+    private ubigeoService: UbigeoService
   ) {
     
   }
@@ -78,13 +82,57 @@ export class EditUserComponent implements OnInit {
      })   
   }
 
+  getDepartamento(){
+
+  this.ubigeoService.getDepartamentoList().subscribe((resp)=>{
+
+    this.departamentoList = resp
+
+
+  })
+
+  }
+
+  cambiarProvincia(){
+
+    this.Formulario.get("fm_provincia")?.reset();
+    this.Formulario.get("distrito")?.reset();
+
+    var value  = this.Formulario.get('fm_departamento')?.value;
+
+    this.ubigeoService.getProvinciaList(value).subscribe((resp)=>{
+
+      this.provinciaList = resp
+  
+  
+    })
+  }
+
+  cambiarDistrito(){
+    this.Formulario.get("fm_distrito")?.reset();
+    var valueprovincia = this.Formulario.get('fm_provincia')?.value;
+    var valuedepar = this.Formulario.get('fm_departamento')?.value;
+
+    this.ubigeoService.getDistritoList(valuedepar, valueprovincia).subscribe((resp)=>{
+
+      this.distritoList = resp
+  
+  
+    })
+  }
+
 
   saveEdit(){
+
+    var _dept = this.Formulario.controls["fm_departamento"].value;;
+    var _prov = this.Formulario.controls["fm_provincia"].value;;
+    var _dist = this.Formulario.controls["fm_distrito"].value; ;
+
     var userDet = new UserDetail ();
     userDet.inbox_id = this.data ;
     userDet.email = this.Formulario.controls["fm_correo"].value;
     userDet.cellphone = this.Formulario.controls["fm_telefono"].value;
-    userDet.ubigeo = this.user.ubigeo;//this.Formulario.controls[""].value;
+    userDet.ubigeo = _dept + " / "+ _prov + " / " + _dist; //this.user.ubigeo;//this.Formulario.controls[""].value;
     userDet.address = this.Formulario.controls["fm_direccion"].value;
     userDet!.user!.name = "owner"
     userDet!.user!.lastname = "lastname owner"
@@ -150,7 +198,29 @@ export class EditUserComponent implements OnInit {
         },
         [Validators.required]
       ),
+      fm_departamento: this.fb.control(
+        {
+          value: '',//this.data ? this.data.profile : '',
+          disabled: this.inputDisabled,
+        },
+        [Validators.required]
+      ),
+      fm_provincia: this.fb.control(
+        {
+          value: '',//this.data ? this.data.profile : '',
+          disabled: this.inputDisabled,
+        },
+        [Validators.required]
+      ),
+      fm_distrito: this.fb.control(
+        {
+          value: '',//this.data ? this.data.profile : '',
+          disabled: this.inputDisabled,
+        },
+        [Validators.required]
+      ),
     });
+    this.getDepartamento();
   }
 
   changeTypeDocument(event) {
@@ -172,48 +242,7 @@ export class EditUserComponent implements OnInit {
     }
     return true;
   }
-  submit = () => {
-    if (!this.Formulario.valid) return;
-    const formValue = this.Formulario.getRawValue();
 
-    this.inputDisabled = true;
-    const promise = this.data
-      ? this.userService.EditUser({
-          doc: formValue.fm_numerodoc,
-          email: formValue.fm_correo,
-          lastname: formValue.fm_apellidoPaterno,
-          second_lastname: formValue.fm_apellidoMaterno,
-          name: formValue.fm_nombres,
-          //id: this.data.id,
-        })
-      : this.userService.crearteUser({
-          doc: formValue.fm_numerodoc,
-          docType: formValue.fm_optiontipo,
-          email: formValue.fm_correo,
-          lastname: formValue.fm_apellidoPaterno,
-          second_lastname: formValue.fm_apellidoMaterno,
-          name: formValue.fm_nombres,
-          profile: formValue.fm_profile,
-        });
-
-    promise.subscribe(
-      (res) => {
-        this.inputDisabled = false;
-        if (res.success) {
-          this.funcionesService.mensajeOk(
-            'Los datos del usuario fueron registrados con éxito'
-          );
-          this.dialogRef.close(true);
-        } else {
-          this.funcionesService.mensajeError(res.error);
-        }
-      },
-      (err) => {
-        this.inputDisabled = false;
-        console.log('Problemas del servicio', err);
-      }
-    );
-  };
 
   cancelar() {
     this.dialogRef.close(false);
