@@ -68,7 +68,7 @@
                             <div class="labelsColor">Provincia</div>
                             <mat-form-field appearance="outline" style="width: 100%">
                                 <mat-select placeholder="Seleccione" name="prov" formControlName="fm_provincia" (selectionChange)="cambiarDistrito()">
-                                    <mat-option *ngFor="let item of departamentoList" [value]="item">{{item.noprov}} </mat-option>
+                                    <mat-option *ngFor="let item of provinciaList" [value]="item">{{item.noprv}} </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -78,7 +78,7 @@
                             <div class="labelsColor">Distrito</div>
                             <mat-form-field appearance="outline" style="width: 100%">
                                 <mat-select placeholder="Seleccione" name="dis" formControlName="fm_distrito" >
-                                    <mat-option *ngFor="let item of departamentoList" [value]="item">{{item.nodis}} </mat-option>
+                                    <mat-option *ngFor="let item of distritoList" [value]="item">{{item.nodis}} </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>

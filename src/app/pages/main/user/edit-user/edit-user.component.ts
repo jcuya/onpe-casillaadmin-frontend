@@ -144,7 +144,7 @@ export class EditUserComponent implements OnInit {
   saveEdit(){
 
     var _dept = this.Formulario.controls["fm_departamento"].value.nodep;
-    var _prov = this.Formulario.controls["fm_provincia"].value.noprov;
+    var _prov = this.Formulario.controls["fm_provincia"].value.noprv;
     var _dist = this.Formulario.controls["fm_distrito"].value.nodis; 
 
     var userDet = new UserDetail ();
