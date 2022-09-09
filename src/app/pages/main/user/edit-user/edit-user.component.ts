@@ -76,6 +76,18 @@ export class EditUserComponent implements OnInit {
       this.Formulario.controls["fm_correo"].setValue( this.user.email);
       this.Formulario.controls["fm_telefono"].setValue( this.user.cellphone);
       this.Formulario.controls["fm_direccion"].setValue( this.user.address);
+
+      var cadenaUbigeo = this.user.ubigeo.split("/");
+      var dep = cadenaUbigeo[0].trim();
+      var prov = cadenaUbigeo[1].trim();
+      var dis = cadenaUbigeo[2].trim();
+
+      this.Formulario.controls["fm_departamento"].setValue(dep);
+      // this.Formulario.controls["fm_provincia"].setValue(prov);
+      // this.Formulario.controls["fm_distrito"].setValue(dis);
+
+      this.cambiarProvincia(prov,dis);
+
  
      }, (error)=>{
        console.error(error)
@@ -93,22 +105,25 @@ export class EditUserComponent implements OnInit {
 
   }
 
-  cambiarProvincia(){
+  cambiarProvincia(prov = "" , dis = "" ){
 
     this.Formulario.get("fm_provincia")?.reset();
-    this.Formulario.get("distrito")?.reset();
+    this.Formulario.get("fm_distrito")?.reset();
 
     var value  = this.Formulario.get('fm_departamento')?.value;
 
     this.ubigeoService.getProvinciaList(value).subscribe((resp)=>{
 
       this.provinciaList = resp
-  
+      if(prov != "" && dis != ""){
+      this.Formulario.controls["fm_provincia"].setValue(prov);
+        this.cambiarDistrito(dis);
+      }
   
     })
   }
 
-  cambiarDistrito(){
+  cambiarDistrito(dis = ""){
     this.Formulario.get("fm_distrito")?.reset();
     var valueprovincia = this.Formulario.get('fm_provincia')?.value;
     var valuedepar = this.Formulario.get('fm_departamento')?.value;
@@ -116,7 +131,8 @@ export class EditUserComponent implements OnInit {
     this.ubigeoService.getDistritoList(valuedepar, valueprovincia).subscribe((resp)=>{
 
       this.distritoList = resp
-  
+      if(dis != "")
+      this.Formulario.controls["fm_distrito"].setValue(dis);
   
     })
   }
@@ -201,21 +217,21 @@ export class EditUserComponent implements OnInit {
       fm_departamento: this.fb.control(
         {
           value: '',//this.data ? this.data.profile : '',
-          disabled: this.inputDisabled,
+          disabled: this.data ? true : this.inputDisabled,
         },
         [Validators.required]
       ),
       fm_provincia: this.fb.control(
         {
           value: '',//this.data ? this.data.profile : '',
-          disabled: this.inputDisabled,
+          disabled: this.data ? true : this.inputDisabled,
         },
         [Validators.required]
       ),
       fm_distrito: this.fb.control(
         {
           value: '',//this.data ? this.data.profile : '',
-          disabled: this.inputDisabled,
+          disabled: this.data ? true : this.inputDisabled,
         },
         [Validators.required]
       ),
