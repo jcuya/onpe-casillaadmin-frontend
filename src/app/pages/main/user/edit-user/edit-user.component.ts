@@ -156,8 +156,10 @@ export class EditUserComponent implements OnInit {
     userDet!.user!.name = "owner"
     userDet!.user!.lastname = "lastname owner"
     this.userService.editUserDetail(userDet).subscribe((resp)=>{
-      if(!resp.success){
-        console.error("error en el servicio")
+      if(!resp.success){        
+        this.funcionesService.mensajeError(
+          resp.error
+        );
       }
     })
   }
