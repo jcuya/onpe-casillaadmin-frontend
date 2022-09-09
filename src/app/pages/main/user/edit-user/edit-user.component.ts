@@ -217,21 +217,21 @@ export class EditUserComponent implements OnInit {
       fm_departamento: this.fb.control(
         {
           value: '',//this.data ? this.data.profile : '',
-          disabled: this.data ? true : this.inputDisabled,
+          disabled: false,
         },
         [Validators.required]
       ),
       fm_provincia: this.fb.control(
         {
           value: '',//this.data ? this.data.profile : '',
-          disabled: this.data ? true : this.inputDisabled,
+          disabled: false,
         },
         [Validators.required]
       ),
       fm_distrito: this.fb.control(
         {
           value: '',//this.data ? this.data.profile : '',
-          disabled: this.data ? true : this.inputDisabled,
+          disabled: false,
         },
         [Validators.required]
       ),
