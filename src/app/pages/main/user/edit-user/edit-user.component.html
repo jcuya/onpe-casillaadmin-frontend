@@ -41,9 +41,8 @@
                         </div>
                         <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Teléfono</div>
-                            <mat-form-field appearance="outline" style="width: 100%">
-                             
-                                <input type="text" disabled class="form-control" formControlName="fm_telefono" maxlength="9" [class.control-invalid]="formInvalid('fm_telefono')" matInput placeholder="Teléfono" />
+                            <mat-form-field appearance="outline" style="width: 100%">                             
+                                <input type="text" disabled class="form-control" formControlName="fm_telefono" maxlength="9" minlength="9" [class.control-invalid]="formInvalid('fm_telefono')" matInput placeholder="Teléfono" />
                             
                             </mat-form-field>
                         </div>
