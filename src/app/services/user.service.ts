@@ -46,17 +46,16 @@ export class UserService {
         })
       }).pipe(map((res) => res));
   }
- 
-  getUserDetail(id: string): Observable<any> {
+
+  getUserDetail(id: string, enAtencion: boolean): Observable<any> {
+    const atender = enAtencion ? 'true' : 'false';
     return this.http
       .get<any>(API_URL + '/get-user-info-detail', {
-        params: { id }, headers: new HttpHeaders({
+        params: { id, atender }, headers: new HttpHeaders({
           'Content-Type': 'application/json',
         })
       }).pipe(map((res) => res));
   }
-
-
 
   updateEstateInbox(request: { idUser: string, estado: string, motivo: {},name :string ,email : string }
     ) {
@@ -171,7 +170,7 @@ export class UserService {
       }),
     });
   }
-  
+
   ConsultaClaridad(doc: string): Observable<any> {
     return this.http.post<any>('', '', httpOptions);
   }

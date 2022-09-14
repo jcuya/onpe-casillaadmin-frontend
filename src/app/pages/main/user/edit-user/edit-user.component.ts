@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TypeDocument } from 'src/app/models/notifications/notification';
@@ -29,15 +29,17 @@ export class EditUserComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private funcionesService: FuncionesService,
-    private ubigeoService: UbigeoService
+    private ubigeoService: UbigeoService,
+    private renderer: Renderer2
   ) {
-    
+    console.log("datauser", this.data)
   }
 
   ngOnInit(): void {
    // this.getInfo();
     this.initForm();
     this.getInfo();
+    
   }
 
   typeDocument: TypeDocument[] = [
@@ -62,9 +64,10 @@ export class EditUserComponent implements OnInit {
 
 
   getInfo(){
-    const  id = this.data;
+    const  id = this.data.inbox_id;
+    const  id2 = this.data.id;
 
-    this.userService.getUserDetail(id).subscribe((resp)=>{
+    this.userService.getUserDetail(id2, false).subscribe((resp)=>{
  
      console.log("informacion edit",resp)
     this.user = resp.user;
@@ -77,18 +80,21 @@ export class EditUserComponent implements OnInit {
       this.Formulario.controls["fm_telefono"].setValue( this.user.cellphone);
       this.Formulario.controls["fm_direccion"].setValue( this.user.address);
 
-      var cadenaUbigeo = this.user.ubigeo.split("/");
-      var dep = cadenaUbigeo[0].trim();
-      var prov = cadenaUbigeo[1].trim();
-      var dis = cadenaUbigeo[2].trim();
-      console.log("dep- prov- dis", dep + " - "+ prov + " - " + dis)
+      if(this.user.ubigeo != undefined){
+        var cadenaUbigeo = this.user.ubigeo.split("/");
+        var dep = cadenaUbigeo[0].trim();
+        var prov = cadenaUbigeo[1].trim();
+        var dis = cadenaUbigeo[2].trim();
+        console.log("dep- prov- dis", dep + " - "+ prov + " - " + dis)  
 
       
-      var foundProv = this.departamentoList.find( departamento => departamento.nodep == dep)
-      this.Formulario.controls["fm_departamento"].setValue(foundProv);
+        var foundProv = this.departamentoList.find( departamento => departamento.nodep == dep)
+        this.Formulario.controls["fm_departamento"].setValue(foundProv);
 
-      this.cambiarProvincia(prov,dis);
-
+        this.cambiarProvincia(prov,dis); 
+      }
+  
+ 
  
      }, (error)=>{
        console.error(error)
@@ -148,7 +154,7 @@ export class EditUserComponent implements OnInit {
     var _dist = this.Formulario.controls["fm_distrito"].value.nodis; 
 
     var userDet = new UserDetail ();
-    userDet.inbox_id = this.data ;
+    userDet.inbox_id = this.data.inbox_id ;
     userDet.email = this.Formulario.controls["fm_correo"].value;
     userDet.cellphone = this.Formulario.controls["fm_telefono"].value;
     userDet.ubigeo = _dept + " / "+ _prov + " / " + _dist; //this.user.ubigeo;//this.Formulario.controls[""].value;
@@ -160,6 +166,8 @@ export class EditUserComponent implements OnInit {
         this.funcionesService.mensajeError(
           resp.error
         );
+      }else{
+        this.dialogRef.close(true);
       }
     })
   }
@@ -168,18 +176,18 @@ export class EditUserComponent implements OnInit {
     this.Formulario = this.fb.group({
       fm_optiontipo: this.fb.control({
         value: '',// this.data ? this.data.doc_type : '',
-        disabled: this.data ? true : this.inputDisabled,
+        disabled: this.data.id ? true : this.inputDisabled,
       }),
       fm_numerodoc: this.fb.control(
         {
           value: '',//this.data ? this.data.doc : '',
-          disabled: this.data ? true : this.inputDisabled,
+          disabled: this.data.id ? true : this.inputDisabled,
         },
         [Validators.pattern('^[0-9]+$')]
       ),
       fm_nombres: this.fb.control({
         value:'',// this.data ? this.data.name : '',
-        disabled: this.data ? true : this.inputDisabled,
+        disabled: this.data.id ? true : this.inputDisabled,
       }),
       // fm_apellidos: this.fb.control({
       //   value: this.data ? this.data.lastname : '',
@@ -187,11 +195,11 @@ export class EditUserComponent implements OnInit {
       // }),
       fm_apellidoPaterno: this.fb.control({
         value:'',// this.data ? this.data.lastname : '',
-        disabled: this.data ? true : this.inputDisabled,
+        disabled: this.data.id ? true : this.inputDisabled,
       }),
       fm_apellidoMaterno: this.fb.control({
         value:'',// this.data ? this.data.second_lastname : '',
-        disabled: this.data ? true : this.inputDisabled,
+        disabled: this.data.id ? true : this.inputDisabled,
       }),
       fm_correo: this.fb.control(
         {
@@ -241,6 +249,14 @@ export class EditUserComponent implements OnInit {
         [Validators.required]
       ),
     });
+    if(this.data.estate_inbox === 'Registro interno'){
+      this.Formulario.get('fm_departamento').clearValidators();
+      this.Formulario.get('fm_provincia').clearValidators();
+      this.Formulario.get('fm_distrito').clearValidators();
+      this.Formulario.get('fm_departamento').updateValueAndValidity();
+      this.Formulario.get('fm_provincia').updateValueAndValidity();
+      this.Formulario.get('fm_distrito').updateValueAndValidity();
+    }
     this.getDepartamento();
   }
 
@@ -268,4 +284,43 @@ export class EditUserComponent implements OnInit {
   cancelar() {
     this.dialogRef.close(false);
   }
+
+
+  validarCelular(event : any): boolean{
+    const charCode = (event.which) ? event.which : event.keyCode;
+    const numCelular = this.Formulario.get('fm_telefono')?.value;
+    var primerDigito = event.target.selectionStart;
+    var primerdato = numCelular[0];
+    if(primerDigito == 0   ){
+      if(charCode == 57 ){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      if( charCode > 31 && (charCode < 48 || charCode > 57)){
+        return false;
+      }else {
+        return true;
+      }
+    }
+   }
+
+  validardomicilio(e : any, idInput: string){
+    var value = this.Formulario.get('fm_direccion')?.value;
+
+    let inicio = this.renderer.selectRootElement(`#${idInput}`).selectionStart;
+    let fin = this.renderer.selectRootElement(`#${idInput}`).selectionEnd;
+    if (e.metaKey || e.ctrlKey) {
+      return true;
+    }
+    if(inicio == 0 && e.key === ' ') return false;
+    
+    this.Formulario.get('fm_direccion')?.setValue(value.replace(/ {2,}/g, ' '));
+    this.renderer.selectRootElement(`#${idInput}`).setSelectionRange(inicio, fin, 'none');
+
+
+return true;
+   }
+
 }

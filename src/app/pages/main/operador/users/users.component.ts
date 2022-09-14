@@ -237,18 +237,22 @@ export class UsersComponent implements OnInit, AfterViewInit {
     });
     component.afterClosed().subscribe(resp => {
       if (resp) {
+        this.funcionesService.mensajeOk("El registro fue actualizado correctamente");
         this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
       }
     })
   }
   
  async editCasilla(user) {
+  console.log("Esto es lo que llega en edit user", user)
     const component = this.dialog.open(EditUserComponent, {
       disableClose: true,
-      data: user.id,
+      //data: user.id,
+      data: user,
     });
     component.afterClosed().subscribe(resp => {
       if (resp) {
+        this.funcionesService.mensajeOk("El registro fue actualizado correctamente");
         this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
       }
     })

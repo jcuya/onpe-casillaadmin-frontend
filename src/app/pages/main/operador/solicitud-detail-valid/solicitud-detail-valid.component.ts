@@ -46,14 +46,14 @@ export class SolicitudDetailValidComponent implements OnInit {
 
 
   async getDataUser() {
-    const info = await this.usuarioService.getUserDetail(this.id).toPromise();
+    const info = await this.usuarioService.getUserDetail(this.id, false).toPromise();
 
     if (!info) return;
     this.data = info.user;
 
 
     console.log('informacion', info);
-    
+
     this.representante = this.data.representante;
     console.log('DATA-INFO', this.data);
     if (this.data.imageDNI) {
@@ -61,7 +61,7 @@ export class SolicitudDetailValidComponent implements OnInit {
     }
   }
   cancelar(){
-    this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"",ordenFec:"desc"});    
+    this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"",ordenFec:"desc"});
     this.linkRedirect('list-boxes');
   }
 
@@ -145,7 +145,7 @@ export class SolicitudDetailValidComponent implements OnInit {
       palabra = 'desaprobar';
       envioestado = 'DESAPROBADO';
       palabraRespues = 'desaprobada';
-    
+
 
       Swal.fire({
         width: '800px',
@@ -159,7 +159,7 @@ export class SolicitudDetailValidComponent implements OnInit {
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="value1">
             <label class="form-check-label" for="value1">
-            ${this.motivo1_detalle}   
+            ${this.motivo1_detalle}
             </label>
         </div>
         <div class="form-check">
@@ -211,13 +211,13 @@ export class SolicitudDetailValidComponent implements OnInit {
 
       <div class="form">
       <label class="form-check-label" for="value9">
-      ${this.motivo9_detalle} : 
+      ${this.motivo9_detalle} :
       </label>
       <input class="form-check-input" type="text" value="" id="value9">
       </div>
       </div>
           `,
-          
+
         focusConfirm: false,
         preConfirm: () => {
           return {
@@ -278,9 +278,9 @@ export class SolicitudDetailValidComponent implements OnInit {
         let val8 = (<HTMLInputElement>document.getElementById('value8')).checked;
         let val9 = (<HTMLInputElement>document.getElementById('value9')).value.length;
         let valTotal = (val1 || val2 || val3 || val4 || val5 || val6 || val7 || val8 || val9>0);
-        
-      
-        
+
+
+
           if (result.isConfirmed) {
             console.log('resultado', result);
             console.log('Resultado total checks', valTotal);

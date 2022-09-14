@@ -9,7 +9,7 @@
                             <div class="labelsColor">Tipo de documento</div>
                             <mat-form-field appearance="outline" style="width: 100%">
                                 <mat-select disabled placeholder="Seleccione" name="typeDoc" formControlName="fm_optiontipo" (selectionChange)="changeTypeDocument($event)">
-                                    <mat-option *ngFor="let doc of typeDocument" [value]="doc.value">
+                                    <mat-option *ngFor="let doc of typeDocument" [value]="doc.id">
                                         {{ doc.value }}
                                     </mat-option>
                                 </mat-select>
@@ -42,7 +42,7 @@
                         <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Teléfono</div>
                             <mat-form-field appearance="outline" style="width: 100%">                             
-                                <input type="text" disabled class="form-control" formControlName="fm_telefono" maxlength="9" minlength="9" [class.control-invalid]="formInvalid('fm_telefono')" matInput placeholder="Teléfono" />
+                                <input type="text" (keypress)="validarCelular($event)" disabled class="form-control" formControlName="fm_telefono" maxlength="9" minlength="9" [class.control-invalid]="formInvalid('fm_telefono')" matInput placeholder="Teléfono" />
                             
                             </mat-form-field>
                         </div>
@@ -82,14 +82,10 @@
                             </mat-form-field>
                         </div>
 
-
-
-
-
                         <div fxFlex="100" fxFlex.md="100" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Dirección</div>
                             <mat-form-field class="" disabled="true" appearance="outline" style="width: 100%">
-                                <input type="email" class="form-control" formControlName="fm_direccion" [class.control-invalid]="formInvalid('fm_direccion')" name="email" [attr.disabled]="inputDisabled ? '' : null" matInput placeholder="Dirección" />
+                                <input id="domicilioID" type="text" (keypress)="validardomicilio($event, 'domicilioID')" minlength="10" maxlength="200" class="form-control" formControlName="fm_direccion" [class.control-invalid]="formInvalid('fm_direccion')" name="email" [attr.disabled]="inputDisabled ? '' : null" matInput placeholder="Dirección" />
                             </mat-form-field>
                         </div>
                     </div>
