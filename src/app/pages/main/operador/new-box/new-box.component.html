@@ -9,6 +9,64 @@
       <!-- <div class="centerTitle">CANDIDATO A ELECCIÓN POPULAR</div> -->
       <form #myform="ngForm" [formGroup]="Formulario" (keydown.enter)="$event.preventDefault()" autocomplete="on">
         <div class="formNotif" fxLayout="row wrap">
+
+          <!-- SECCION NUEVA -->
+          
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Número de expediente*</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                id="fm_nroExpediente"
+                type="text"
+                class="form-control"
+                formControlName="fm_nroExpediente"
+                [class.control-invalid]="formInvalid('fm_nroExpediente')"
+                [minlength]="9"
+                [maxlength]="30"
+                [attr.disabled]="inputDisabled ? '' : null"
+                matInput
+                placeholder="Ingrese número de expediente"
+                name="nroExpediente"
+                (keypress)="quitarDobleEspacio('fm_nroExpediente', fm_nroExpediente, $event)"
+              />
+              <mat-error *ngIf="Formulario.controls.fm_nroExpediente.invalid">{{
+                eShowError("fm_nroExpediente", Formulario.controls.fm_nroExpediente.errors)
+              }}</mat-error>                
+            </mat-form-field>
+          </div>
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Fecha de presentación</div> 
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                id="fm_txtfechapres"
+                type="date"
+                class="form-control"
+                matInput 
+                formControlName="fm_txtfechapres"
+                [max]="dateMax"
+                placeholder="dd/MM/YYY"
+                [class.control-invalid]="formInvalid('fm_txtfechapres')"
+                name="txtfechapres"
+                (keypress)="quitarDobleEspacio('fm_txtfechapres', fm_txtfechapres, $event)"
+              />
+              <mat-error *ngIf="Formulario.controls.fm_txtfechapres.invalid">{{
+                eShowError("fm_txtfechapres", Formulario.controls.fm_txtfechapres.errors)
+              }}</mat-error>                
+            </mat-form-field>   
+          </div>
+
           <!-- SECCION CANDIDATO-->
           <div
             fxFlex="50"
@@ -139,7 +197,7 @@
               }}</mat-error>     
             </mat-form-field>
           </div>
-          <div
+          <!--<div
             fxFlex="50"
             fxFlex.md="50"
             fxFlex.sm="100"
@@ -163,7 +221,7 @@
                 eShowError("fm_nombres", nombres.errors)
               }}</mat-error>               
             </mat-form-field>
-          </div>
+          </div>-->
 
           <div
             fxFlex="50"
@@ -217,6 +275,27 @@
             </mat-form-field>
           </div>
 
+          
+          <div fxFlex="100" class="padd_4" >
+            <div class="labelsColor">Nombres*</div>
+            <mat-form-field class="" appearance="outline" style="width: 100%">
+              <input
+                id="nombres"
+                type="text"
+                class="input_text"
+                formControlName="nombres"
+                matInput
+                placeholder="Nombres"
+                [maxlength]="100"
+                [readonly]="existData"
+                (keypress)="soloExpLetras('nombres', nombres, $event)"
+              />
+              <mat-error *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)">{{
+                eShowError("fm_nombres", nombres.errors)
+              }}</mat-error>               
+            </mat-form-field>
+          </div>
+
           <div
             fxFlex="50"
             fxFlex.md="50"
@@ -249,7 +328,38 @@
               }}</mat-error>                
             </mat-form-field>
           </div>
-          <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100">
+          <div
+            fxFlex="50"
+            fxFlex.md="50"
+            fxFlex.sm="100"
+            fxFlex.xs="100"
+            class="padd_4"
+          >
+            <div class="labelsColor">Teléfono celular*</div>
+            <mat-form-field
+              class=""
+              appearance="outline"
+              style="width: 100%"
+            >
+              <input
+                type="text"
+                class="form-control"
+                formControlName="fm_celular"
+                [class.control-invalid]="formInvalid('fm_celular')"
+                [maxlength]="9"
+                [minlength]="9"
+                (keypress)="validar_campo($event, 'fm_celular')"
+                matInput
+                placeholder="Número de celular"
+                name="cellphone"
+                (input)="onKeydown($event, 'fm_celular')"
+              />
+              <mat-error *ngIf="Formulario.controls.fm_celular.invalid">{{
+                eShowError("fm_celular", Formulario.controls.fm_celular.errors)
+              }}</mat-error>                      
+            </mat-form-field>
+          </div>
+          <!-- <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100">
             <div class="labelsColor">
               Teléfono celular* y/o fijo opcional
             </div>
@@ -303,37 +413,82 @@
                 </mat-form-field>
               </div>
             </div>
-          </div>
+          </div> -->
           <div
-            fxFlex="50"
-            fxFlex.md="50"
-            fxFlex.sm="100"
-            fxFlex.xs="100"
-            class="padd_4"
-          >
-            <div class="labelsColor">Dirección domiciliaria*</div>
-            <mat-form-field class="" appearance="outline" style="width: 100%">
-              <input
-                id="fm_direccion"
-                type="text"
-                class="form-control"
-                formControlName="fm_direccion"
-                [class.control-invalid]="formInvalid('fm_direccion')"
-                [minlength]="9"
-                [maxlength]="100"
-                [attr.disabled]="inputDisabled ? '' : null"
-                matInput
-                placeholder="Ingrese dirección"
-                name="address"
-                (keypress)="quitarDobleEspacio('fm_direccion', fm_direccion, $event)"
-              />
-              <mat-error *ngIf="Formulario.controls.fm_direccion.invalid">{{
-                eShowError("fm_direccion", Formulario.controls.fm_direccion.errors)
-              }}</mat-error>                
-            </mat-form-field>
-          </div>
+          fxFlex="50"
+          fxFlex.md="50"
+          fxFlex.sm="100"
+          fxFlex.xs="100"
+          class="padd_4"
+        >
+          <div class="labelsColor">Departamento*</div>
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-select placeholder="Seleccione" name="fm_departamentoList" formControlName="fm_departamentoList" (selectionChange)="eChangeDocumento($event)">
+              <mat-option *ngFor="let item of departamentoList" [value]="item.id">{{ item.value }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="Formulario.controls.fm_departamentoList.invalid">{{eShowError("fm_departamentoList", Formulario.controls.fm_departamentoList.errors)}}</mat-error>
+          </mat-form-field>
+        </div>
+          <div
+          fxFlex="50"
+          fxFlex.md="50"
+          fxFlex.sm="100"
+          fxFlex.xs="100"
+          class="padd_4"
+        >
+          <div class="labelsColor">Provincia*</div>
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-select placeholder="Seleccione" name="fm_provinciaList" formControlName="fm_provinciaList" (selectionChange)="eChangeDocumento($event)">
+              <mat-option *ngFor="let item of provinciaList" [value]="item.id">{{ item.value }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="Formulario.controls.fm_provinciaList.invalid">{{eShowError("fm_provinciaList", Formulario.controls.fm_provinciaList.errors)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div
+          fxFlex="50"
+          fxFlex.md="50"
+          fxFlex.sm="100"
+          fxFlex.xs="100"
+          class="padd_4"
+        >
+          <div class="labelsColor">Distrito*</div>
+          <mat-form-field appearance="outline" style="width: 100%">
+            <mat-select placeholder="Seleccione" name="fm_distritoList" formControlName="fm_distritoList" (selectionChange)="eChangeDocumento($event)">
+              <mat-option *ngFor="let item of distritoList" [value]="item.id">{{ item.value }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="Formulario.controls.fm_distritoList.invalid">{{eShowError("fm_distritoList", Formulario.controls.fm_distritoList.errors)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div
+          fxFlex="50"
+          fxFlex.md="50"
+          fxFlex.sm="100"
+          fxFlex.xs="100"
+          class="padd_4"
+        >
+          <div class="labelsColor">Domicilio físico*</div>
+          <mat-form-field class="" appearance="outline" style="width: 100%">
+            <input
+              id="fm_direccion"
+              type="text"
+              class="form-control"
+              formControlName="fm_direccion"
+              [class.control-invalid]="formInvalid('fm_direccion')"
+              [minlength]="9"
+              [maxlength]="100"
+              [attr.disabled]="inputDisabled ? '' : null"
+              matInput
+              placeholder="Ingrese dirección"
+              name="address"
+              (keypress)="quitarDobleEspacio('fm_direccion', fm_direccion, $event)"
+            />
+            <mat-error *ngIf="Formulario.controls.fm_direccion.invalid">{{
+              eShowError("fm_direccion", Formulario.controls.fm_direccion.errors)
+            }}</mat-error>                
+          </mat-form-field>
+        </div>
 
-          <div
+          <!-- <div
             fxFlex="50"
             fxFlex.md="50"
             fxFlex.sm="100"
@@ -388,7 +543,7 @@
                 eShowError("fm_optiontacreditacion", Formulario.controls.fm_optiontacreditacion.errors)
               }}</mat-error>                
             </mat-form-field>
-          </div>
+          </div> -->
 
           <div fxFlex="100" class="padd_4">
             <div class="labelsColor">

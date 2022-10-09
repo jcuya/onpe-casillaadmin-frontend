@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { recoverypass, userChangePass, UserLogin } from '../models/UserLogin';
+import {Departamento, Distrito, Provincia} from "src/app/models/ubigeo";
 
 const API_URL = environment.URL_SERVICES;
 const httpOptions = {
@@ -132,5 +133,17 @@ export class SeguridadService {
     }
     const decodedToken = this.jwtHelper.decodeToken(token);
     return decodedToken.job_area_name;
+  }
+  
+  getDepartamentoList(): Observable<Array<Departamento>> {
+    return this.http.get<Array<Departamento>>(`${API_URL}/departamento`)
+  }
+
+  getProvinciaList(codigoDepartamento:string): Observable<Array<Provincia>> {
+    return this.http.get<Array<Provincia>>(`${API_URL}/departamento/${codigoDepartamento}`)
+  }
+
+  getDistritoList(codigoDepartamento:string, codigoProvincia:string): Observable<Array<Distrito>> {
+    return this.http.get<Array<Distrito>>(`${API_URL}/departamento/${codigoDepartamento}/${codigoProvincia}`)
   }
 }

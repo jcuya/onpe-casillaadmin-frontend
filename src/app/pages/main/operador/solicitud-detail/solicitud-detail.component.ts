@@ -134,7 +134,7 @@ export class SolicitudDetailComponent implements OnInit {
               if (res.success) {
                 this.funcionesService.mensajeOk(
                   'La casilla ha sido aprobada con éxito',
-                  '/main/operador/usuarios'
+                  '/main/list-boxes'
                 );
               } else {
                 this.funcionesService.mensajeError(
@@ -302,7 +302,7 @@ export class SolicitudDetailComponent implements OnInit {
                 if (res.success) {
                   this.funcionesService.mensajeOk(
                     'La casilla ha sido desaprobada',
-                    '/main/operador/usuarios'
+                    '/main/list-boxes'
                   );
                 } else {
                   this.funcionesService.mensajeError(res.error);

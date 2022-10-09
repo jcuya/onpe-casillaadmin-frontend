@@ -6,26 +6,20 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder,FormControl,FormGroup,Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { TypeDocument } from 'src/app/models/notifications/notification';
 import { Box, TypeAccreditation } from 'src/app/models/users/user';
 import { BoxRequest } from 'src/app/models/users/user-request';
 import { UserService } from 'src/app/services/user.service';
 import { FuncionesService } from 'src/app/utils/funciones.service';
-import {
-  FileUploadControl,
-  FileUploadValidators,
-} from '@iplab/ngx-file-upload';
+import { FileUploadControl, FileUploadValidators} from '@iplab/ngx-file-upload';
 import { Profile } from 'src/app/transversal/enums/global.enum';
 import { SeguridadService } from 'src/app/services/seguridad.service';
 import { LBL_ADD_FILES, LBL_ERROR_MAX_LENGTH_NAME, LBL_ERROR_ONLY_FILE, LBL_FEATURES_FILE, MAXFILES, MAX_LENGTH_NAME_FILES, MAX_TAM_FILES_10, MIN_TAM_FILES, 
   LBL_ERROR_MAX_SIZE_FILE, LBL_ERROR_MAX_FILES } from '../../../../shared/constantes';
+  import { DatePipe } from '@angular/common';
+  import {Departamento, Distrito, Provincia} from "src/app/models/ubigeo";
 
 interface Filtro {
   value: string;
@@ -41,6 +35,9 @@ interface Filtro {
 export class NewBoxComponent implements OnInit {
   @ViewChild('fileUpload', { static: false }) fileUpload: ElementRef;
 
+  departamentoList: Array<Departamento> = []
+  provinciaList: Array<Provincia> = []
+  distritoList: Array<Distrito> = []
   load: boolean = false;
   boxRequest: BoxRequest = new BoxRequest();
   box: Box = new Box();
@@ -56,13 +53,15 @@ export class NewBoxComponent implements OnInit {
   inputDisabled: boolean = false;
   deshabilitado: boolean = false;
   placeHolder = 'Ingrese número ';
-  Formulario: FormGroup;
+  Formulario!: FormGroup;
   nombres: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
   apPaterno: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
   apMaterno: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
   fm_direccion: FormControl = new FormControl({ value: '', disabled: this.inputDisabled }, [Validators.required, Validators.minLength(9)]);
   fm_correo: FormControl = new FormControl({ value: '', disabled: this.inputDisabled }, [Validators.required, Validators.pattern('[a-zA-Z0-9.+-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]);
   fm_organizacion: FormControl = new FormControl({value: '', disabled: this.inputDisabled},[]);
+  fm_nroExpediente: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
+  fm_txtfechapres: FormControl = new FormControl({ value: '', disabled: this.inputDisabled });
   
   fileLoad: any;
   public fileToUpload: File;
@@ -82,7 +81,10 @@ export class NewBoxComponent implements OnInit {
   lblErrorOnlyFile: string = LBL_ERROR_ONLY_FILE;
   lblErrorMaxLengthName : string = LBL_ERROR_MAX_LENGTH_NAME;
   lblErrorMaxSizeFile: string = LBL_ERROR_MAX_SIZE_FILE;
-  lblErrorMaxFiles: string = LBL_ERROR_MAX_FILES;
+  lblErrorMaxFiles: string = LBL_ERROR_MAX_FILES;  
+  txtfechapres : string = '';
+  dateMax ="";
+  toDay = new Date();
 
   existData = true;
   typeDocument: TypeDocument[] = [
@@ -107,19 +109,44 @@ export class NewBoxComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private renderer: Renderer2,
+    private datePipe: DatePipe,
     private seguridadService: SeguridadService
-  ) {}
+  ) {
+    this.dateMax = this.datePipe.transform(this.toDay, "yyyy-MM-dd");
+  }
 
   ngOnInit(): void {
     this.buildForm();
     this.getTypeAcreditacion();
     this.validarFiles();
+    this.listarDepartamento();
   }
 
   ///----------------------------
   private buildForm = () => {
     this.Formulario = this.fb.group({
       fm_optiontipo: this.fb.control(
+        {
+          value: '',
+          disabled: this.inputDisabled,
+        },
+        [Validators.required]
+      ),
+      fm_departamentoList: this.fb.control(
+        {
+          value: '',
+          disabled: this.inputDisabled,
+        },
+        [Validators.required]
+      ),
+      fm_provinciaList: this.fb.control(
+        {
+          value: '',
+          disabled: this.inputDisabled,
+        },
+        [Validators.required]
+      ),
+      fm_distritoList: this.fb.control(
         {
           value: '',
           disabled: this.inputDisabled,
@@ -166,6 +193,8 @@ export class NewBoxComponent implements OnInit {
         Validators.pattern('^(?=.*).{7,}$'),
       ]),
       fm_direccion: this.fm_direccion,
+      fm_nroExpediente: this.fm_nroExpediente,
+      fm_txtfechapres: this.fm_txtfechapres,
       fm_optiontacreditacion: this.fb.control(
         {
           value: '',
@@ -802,6 +831,8 @@ export class NewBoxComponent implements OnInit {
     fd.append('user_organization_name', esRuc ? this.Formulario.controls['fm_razon_social'].value : this.fm_organizacion.value);  
 
     //casilla
+    fd.append('user_nroExpediente', this.Formulario.controls['fm_nroExpediente'].value);
+    fd.append('box_doc_type', this.Formulario.controls['fm_optiontipo'].value);
     fd.append('box_doc_type', this.Formulario.controls['fm_optiontipo'].value);
     fd.append('box_doc', this.Formulario.controls['fm_numerodoc'].value);
     fd.append('box_organization_name', esRuc ? this.Formulario.controls['fm_razon_social'].value : this.fm_organizacion.value);
@@ -856,7 +887,8 @@ export class NewBoxComponent implements OnInit {
   }
   refreshUsuarios(){
     this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"", ordenFec:"desc"});
-    this.linkRedirect('admin/usuarios')
+    //this.linkRedirect('admin/usuarios')
+    this.linkRedirect('/list-boxes')
   }
 
   get esAdministrador() {
@@ -1014,4 +1046,30 @@ export class NewBoxComponent implements OnInit {
     if(this.isCE) this.eSearch('general');
     if(this.isCERep) this.eSearch('representante');
   }
+
+  listarDepartamento(){    
+    this.seguridadService.getDepartamentoList().subscribe(resp=>{
+      this.departamentoList=resp;
+    })
+  }
+  
+  async cambiarProvincia() {
+    this.Formulario.get("provincia")?.reset("");
+    this.Formulario.get("distrito")?.reset("");
+    var value  = this.Formulario.get('departamento')?.value.ubdep;    
+    this.seguridadService.getProvinciaList(value).subscribe(resp=>{
+      this.provinciaList=resp;
+    })
+    this.distritoList = []    
+  }
+
+  async cambiarDistrito() {
+    this.Formulario.get("distrito")?.reset("");
+    var valueprovincia = this.Formulario.get('provincia')?.value.ubprv
+    var valuedepar = this.Formulario.get('departamento')?.value.ubdep
+    this.seguridadService.getDistritoList(valuedepar, valueprovincia).subscribe(resp=>{
+      this.distritoList=resp;
+    })
+  }
+
 }

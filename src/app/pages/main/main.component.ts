@@ -46,12 +46,12 @@ export class MainComponent implements OnInit {
 
 
   refreshUsuarios(){
-    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"", ordenFec:"desc"});
+    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"PENDIENTE",fechaInicio:"",fechaFin:"", ordenFec:"desc"});
     this.linkRedirect('admin/usuarios')
   }
 
   refreshCasilla(){
-    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"", ordenFec:"desc"});
+    this.userService.searchListuser({search:"",filter : "",page:1,count:5,estado:"PENDIENTE",fechaInicio:"",fechaFin:"", ordenFec:"desc"});
     this.linkRedirect('list-boxes')
   }
 
@@ -59,6 +59,7 @@ export class MainComponent implements OnInit {
   validateProfile() {
     if (this.seguridadService.getUserProfile() !== '') {
       this.typeProfile = this.seguridadService.getUserProfile();
+      console.log("--->", this.typeProfile);
       if (this.typeProfile === Profile.Administrador) {
         this.sidebar = Profile.Administrador;
         this.labelProfile = 'Administrador';

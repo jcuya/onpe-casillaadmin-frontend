@@ -61,6 +61,7 @@ export class SolicitudDetailValidComponent implements OnInit {
     }
   }
   cancelar(){
+    //this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"",ordenFec:"desc"});
     this.usuarioService.searchListuser({search:"",filter : "",page:1,count:5,estado:"",fechaInicio:"",fechaFin:"",ordenFec:"desc"});
     this.linkRedirect('list-boxes');
   }

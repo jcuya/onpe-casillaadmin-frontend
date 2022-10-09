@@ -1,7 +1,7 @@
 <section>
     <div class="allTitles" fxLayout="row">
         <span class="brownCircle"></span>
-        <span class="greyLine"></span> {{esVentanadeCasillas?'Casilla Electrónicas':'Usuarios'}}
+        <span class="greyLine"></span> {{esVentanadeCasillas?'Casillas Electrónicas':'Usuarios'}}
     </div>
     <div class="generalBox">
         <div class="controlBox inputColor">
@@ -128,7 +128,7 @@
                                     <Button mat-stroked-button class="aprobacionBoton" *ngIf="(esAdministrador || esRegistrador) && user.estate_inbox === 'PENDIENTE'" (click)="redirectDetail(user)">{{ user.enAtencion == true ? 'En Atención' : 'Validar' }}</Button>
                                     <!-- <button mat-stroked-button *ngIf="esAdministrador && !esVentanadeCasillas" (click)="editUser(user)"><span class="material-icons" style="color: green;">edit</span></button> -->
                                     <button mat-stroked-button *ngIf="(esAdministrador && user.estate_inbox != 'PENDIENTE' && user.estate_inbox != 'DESAPROBADO') || (esAdministrador && user.estate_inbox === 'APROBADO')" (click)="editCasilla(user)"><span class="material-icons" style="color: green;">edit</span></button>
-                                    <button mat-stroked-button *ngIf="esAdministrador" (click)="deleteUser(user)"><span class="material-icons" style="color: red;">delete</span></button>
+                                    <!-- <button mat-stroked-button *ngIf="esAdministrador" (click)="deleteUser(user)"><span class="material-icons" style="color: red;">delete</span></button> -->
                                 </div>
                             </div>
 

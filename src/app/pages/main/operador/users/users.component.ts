@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   userData: UserData;
   filterSelected: string = '0';
   textSearch: string = '';
-  txtestado : string =''
+  txtestado : string ='PENDIENTE'
   txtfechaini : string = '';
   txtfechafin : string = '';
   ordenFec : string = 'asc';
@@ -39,6 +39,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   toDay = new Date();
   dateMax ="";
   subscription: Subscription;
+  
 
   listEstados = [
     {name: "- TODOS -", value:""},
@@ -68,7 +69,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-     this.loadUsers('', 1, this.tamanoPaginado,'','','','asc');
+     this.loadUsers('', 1, this.tamanoPaginado,'PENDIENTE','','','asc');
   }
 
 
@@ -151,7 +152,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
             this.loadUsers(
               this.textSearch,
               this.pageEvent?.pageIndex || 1,
-              this.pageEvent?.pageSize || this.tamanoPaginado
+              this.pageEvent?.pageSize || this.tamanoPaginado,this.txtestado,this.txtfechaini,this.txtfechafin,this.ordenFec
             );
           } else {
             this.funcionesService.mensajeError(
@@ -224,7 +225,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 
       component.afterClosed().subscribe(resp => {
         if (resp) {
-          this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
+          this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado,this.txtestado,this.txtfechaini,this.txtfechafin,this.ordenFec);
         }
       })
     }
@@ -238,7 +239,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
     component.afterClosed().subscribe(resp => {
       if (resp) {
         this.funcionesService.mensajeOk("El registro fue actualizado correctamente");
-        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
+        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado,this.txtestado,this.txtfechaini,this.txtfechafin,this.ordenFec);
       }
     })
   }
@@ -253,7 +254,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
     component.afterClosed().subscribe(resp => {
       if (resp) {
         this.funcionesService.mensajeOk("El registro fue actualizado correctamente");
-        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado);
+        this.loadUsers(this.textSearch, this.pageEvent?.pageIndex || 1, this.pageEvent?.pageSize || this.tamanoPaginado,this.txtestado,this.txtfechaini,this.txtfechafin,this.ordenFec);
       }
     })
   }
@@ -266,13 +267,13 @@ export class UsersComponent implements OnInit, AfterViewInit {
   }
 
   cleanSearch(){
-    this.loadUsers('', 1, this.tamanoPaginado,'','', '','asc');
+    this.loadUsers('', 1, this.tamanoPaginado,'PENDIENTE','', '','asc');
     this.cleanInputs();
   }
 
   cleanInputs(){
     this.textSearch = "";
-    this.txtestado = "";
+    this.txtestado = "PENDIENTE";
     this.txtfechaini = "";
     this.txtfechafin = "";
     this.ordenFec = "asc";

@@ -23,6 +23,7 @@ export class EditUserComponent implements OnInit {
   maxlengthNumDoc: number;
   placeHolder = 'Ingrese número de documento';
   user : any ;
+  esInterno: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<EditUserComponent>,
@@ -39,7 +40,7 @@ export class EditUserComponent implements OnInit {
    // this.getInfo();
     this.initForm();
     this.getInfo();
-    
+    if(this.data.estate_inbox == 'Registro interno') this.esInterno = true;
   }
 
   typeDocument: TypeDocument[] = [
@@ -116,6 +117,7 @@ export class EditUserComponent implements OnInit {
 
     this.Formulario.get("fm_provincia")?.reset();
     this.Formulario.get("fm_distrito")?.reset();
+    this.distritoList = [];
 
     var value  = this.Formulario.get('fm_departamento')?.value.ubdep;
 

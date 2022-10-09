@@ -49,12 +49,12 @@
                         <div fxFlex="50" fxFlex.md="50" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Correo electrónico</div>
                             <mat-form-field class="" disabled="true" appearance="outline" style="width: 100%">
-                                <input type="email" class="form-control" formControlName="fm_correo" [class.control-invalid]="formInvalid('fm_correo')" name="email" [attr.disabled]="inputDisabled ? '' : null" matInput placeholder="Ingrese correo electrónico" />
+                                <input type="email" minlength="5" maxlength="50" class="form-control" formControlName="fm_correo" [class.control-invalid]="formInvalid('fm_correo')" name="email" [attr.disabled]="inputDisabled ? '' : null" matInput placeholder="Ingrese correo electrónico" />
                             </mat-form-field>
                         </div>
 
 
-                        <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
+                        <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4" *ngIf="!esInterno">
                             <div class="labelsColor">Departamento</div>
                             <mat-form-field appearance="outline" style="width: 100%">
                                 <mat-select placeholder="Seleccione" name="dep" formControlName="fm_departamento" (selectionChange)="cambiarProvincia()">
@@ -63,7 +63,7 @@
                             </mat-form-field>
                         </div>
 
-                        <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
+                        <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4" *ngIf="!esInterno">
                             <div class="labelsColor">Provincia</div>
                             <mat-form-field appearance="outline" style="width: 100%">
                                 <mat-select placeholder="Seleccione" name="prov" formControlName="fm_provincia" (selectionChange)="cambiarDistrito()">
@@ -73,7 +73,7 @@
                         </div>
                         
 
-                        <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
+                        <div fxFlex="33" fxFlex.md="33" fxFlex.sm="100" fxFlex.xs="100" class="padd_4" *ngIf="!esInterno">
                             <div class="labelsColor">Distrito</div>
                             <mat-form-field appearance="outline" style="width: 100%">
                                 <mat-select placeholder="Seleccione" name="dis" formControlName="fm_distrito" >
@@ -85,7 +85,7 @@
                         <div fxFlex="100" fxFlex.md="100" fxFlex.sm="100" fxFlex.xs="100" class="padd_4">
                             <div class="labelsColor">Dirección</div>
                             <mat-form-field class="" disabled="true" appearance="outline" style="width: 100%">
-                                <input id="domicilioID" type="text" (keypress)="validardomicilio($event, 'domicilioID')" minlength="10" maxlength="200" class="form-control" formControlName="fm_direccion" [class.control-invalid]="formInvalid('fm_direccion')" name="email" [attr.disabled]="inputDisabled ? '' : null" matInput placeholder="Dirección" />
+                                <input id="domicilioID" type="text" (keypress)="validardomicilio($event, 'domicilioID')" minlength="10" maxlength="100" class="form-control" formControlName="fm_direccion" [class.control-invalid]="formInvalid('fm_direccion')" name="email" [attr.disabled]="inputDisabled ? '' : null" matInput placeholder="Dirección" />
                             </mat-form-field>
                         </div>
                     </div>

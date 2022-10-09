@@ -39,30 +39,30 @@
         </div>
       </div>
       <div class="separatorLine"></div>
-      <div *ngIf="sidebar == 'admin'" class="menuOptions">
+      <div *ngIf="sidebar == 'admin' || sidebar == 'register'" class="menuOptions">
         <button mat-stroked-button (click)="refreshCasilla()">
           <span class="material-icons">work</span> Casillas Electrónicas
         </button>
-        <button mat-stroked-button (click)="refreshUsuarios()">
+        <!-- <button mat-stroked-button (click)="refreshUsuarios()">
           <span class="material-icons">supervisor_account</span> Usuarios
         </button>
-        <!-- <button mat-stroked-button (click)="linkRedirect('notificaciones')">
+        <button mat-stroked-button (click)="linkRedirect('notificaciones')">
           <span class="material-icons">mail_outline</span> Notificaciones
-        </button> -->
+        </button> 
         <button mat-stroked-button (click)="linkRedirect('admin/catalog')">
           <span class="material-icons">mail_outline</span> Catálogo
-        </button>
+        </button>-->
       </div>
       <div *ngIf="sidebar == 'notifier'" class="menuOptions">
         <button mat-stroked-button (click)="refreshNotifications()">
           <span class="material-icons">mail_outline</span> Notificaciones
         </button>
       </div>
-      <div *ngIf="sidebar == 'register'" class="menuOptions">
+      <!-- <div *ngIf="sidebar == 'register'" class="menuOptions">
         <button mat-stroked-button (click)="linkRedirect('operador/usuarios')">
           <span class="material-icons">supervisor_account</span> Usuarios
         </button>
-      </div>
+      </div> -->
       <div *ngIf="sidebar == 'evaluator'" class="menuOptions">
         <button mat-stroked-button (click)="linkRedirect('operador/usuarios')">
           <span class="material-icons">supervisor_account</span> Usuarios

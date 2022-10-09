@@ -139,13 +139,16 @@ export class LoginComponent implements OnInit {
     if (this.seguridadService.getUserProfile() !== '') {
       this.typeProfile = this.seguridadService.getUserProfile();
       if (this.typeProfile === Profile.Administrador) {
-        this.router.navigate(['/main/admin/usuarios']);
+        //this.router.navigate(['/main/admin/usuarios']);
+        this.router.navigate(['/main/list-boxes']);
+        
       }
       if (this.typeProfile === Profile.Notifier) {
         this.router.navigate(['/main']);
       }
       if (this.typeProfile === Profile.RegistryOperator) {
-        this.router.navigate(['/main/admin/usuarios']);
+        //this.router.navigate(['/main/admin/usuarios']);
+        this.router.navigate(['/main/list-boxes']);
       }
     } 
   }
