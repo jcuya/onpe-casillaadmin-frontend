@@ -187,21 +187,21 @@ export class NewBoxComponent implements OnInit {
         Validators.minLength(9),
         this.validatorRepeatMovil,
       ]),
-      fm_fijo: this.fb.control({ value: '', disabled: this.inputDisabled }, [
-        // Validators.required,
-        this.validatorRepeatFijo,
-        Validators.pattern('^(?=.*).{7,}$'),
-      ]),
+      // fm_fijo: this.fb.control({ value: '', disabled: this.inputDisabled }, [
+      //   // Validators.required,
+      //   this.validatorRepeatFijo,
+      //   Validators.pattern('^(?=.*).{7,}$'),
+      // ]),
       fm_direccion: this.fm_direccion,
       fm_nroExpediente: this.fm_nroExpediente,
       fm_txtfechapres: this.fm_txtfechapres,
-      fm_optiontacreditacion: this.fb.control(
-        {
-          value: '',
-          disabled: this.inputDisabled,
-        },
-        [Validators.required]
-      ),
+      // fm_optiontacreditacion: this.fb.control(
+      //   {
+      //     value: '',
+      //     disabled: this.inputDisabled,
+      //   },
+      //   [Validators.required]
+      // ),
       files: this.filesControl,
     });
 
@@ -726,7 +726,7 @@ export class NewBoxComponent implements OnInit {
   enableForm() {
     this.fm_correo.enable();
     this.Formulario.get('fm_celular').enable();
-    this.Formulario.get('fm_fijo').enable();
+    //this.Formulario.get('fm_fijo').enable();
     this.fm_direccion.enable();
   }
 
@@ -825,9 +825,9 @@ export class NewBoxComponent implements OnInit {
     fd.append('user_second_lastname',this.apMaterno.value);
     fd.append('user_email', this.fm_correo.value);
     fd.append('user_cellphone', this.Formulario.controls['fm_celular'].value);
-    fd.append('user_phone', this.Formulario.controls['fm_fijo'].value);
+   // fd.append('user_phone', this.Formulario.controls['fm_fijo'].value);
     fd.append('user_address', this.fm_direccion.value);
-    fd.append('user_acreditation_type',this.Formulario.controls['fm_optiontacreditacion'].value);    
+   // fd.append('user_acreditation_type',this.Formulario.controls['fm_optiontacreditacion'].value);    
     fd.append('user_organization_name', esRuc ? this.Formulario.controls['fm_razon_social'].value : this.fm_organizacion.value);  
 
     //casilla
@@ -838,7 +838,15 @@ export class NewBoxComponent implements OnInit {
     fd.append('box_organization_name', esRuc ? this.Formulario.controls['fm_razon_social'].value : this.fm_organizacion.value);
     fd.append('box_email', this.fm_correo.value);
     fd.append('box_address', this.fm_direccion.value);        
-    fd.append('box_acreditation_type',this.Formulario.controls['fm_optiontacreditacion'].value);
+    //fd.append('box_acreditation_type',this.Formulario.controls['fm_optiontacreditacion'].value);
+
+    /**nuevos */
+    fd.append('dateFiling',this.Formulario.controls['fm_txtfechapres'].value);
+    const ubigeo = this.Formulario.controls['fm_departamentoList'].value.nodep + " / "+ this.Formulario.controls['fm_provinciaList'].value.noprv + " / " +this.Formulario.controls['fm_distritoList'].value.nodis
+    fd.append('ubigeo',ubigeo );
+    // fd.append('department',this.Formulario.controls['fm_departamentoList'].value.ubdep);
+    // fd.append('province',this.Formulario.controls['fm_provinciaList'].value.ubprv);
+    // fd.append('district',this.Formulario.controls['fm_distritoList'].value.ubdis);
 
     var files = this.Formulario.controls['files'].value;
 
@@ -1054,9 +1062,9 @@ export class NewBoxComponent implements OnInit {
   }
   
   async cambiarProvincia() {
-    this.Formulario.get("provincia")?.reset("");
-    this.Formulario.get("distrito")?.reset("");
-    var value  = this.Formulario.get('departamento')?.value.ubdep;    
+    this.Formulario.get("fm_provinciaList")?.reset("");
+    this.Formulario.get("fm_distritoList")?.reset("");
+    var value  = this.Formulario.get('fm_departamentoList')?.value.ubdep;    
     this.seguridadService.getProvinciaList(value).subscribe(resp=>{
       this.provinciaList=resp;
     })
@@ -1064,9 +1072,9 @@ export class NewBoxComponent implements OnInit {
   }
 
   async cambiarDistrito() {
-    this.Formulario.get("distrito")?.reset("");
-    var valueprovincia = this.Formulario.get('provincia')?.value.ubprv
-    var valuedepar = this.Formulario.get('departamento')?.value.ubdep
+    this.Formulario.get("fm_distritoList")?.reset("");
+    var valueprovincia = this.Formulario.get('fm_provinciaList')?.value.ubprv
+    var valuedepar = this.Formulario.get('fm_departamentoList')?.value.ubdep
     this.seguridadService.getDistritoList(valuedepar, valueprovincia).subscribe(resp=>{
       this.distritoList=resp;
     })

@@ -136,14 +136,14 @@ export class SeguridadService {
   }
   
   getDepartamentoList(): Observable<Array<Departamento>> {
-    return this.http.get<Array<Departamento>>(`${API_URL}/departamento`)
+    return this.http.get<Array<Departamento>>(`${API_URL}/ubigeo/departamentos`)
   }
 
   getProvinciaList(codigoDepartamento:string): Observable<Array<Provincia>> {
-    return this.http.get<Array<Provincia>>(`${API_URL}/departamento/${codigoDepartamento}`)
+    return this.http.get<Array<Provincia>>(`${API_URL}/ubigeo/provincias/${codigoDepartamento}`)
   }
 
   getDistritoList(codigoDepartamento:string, codigoProvincia:string): Observable<Array<Distrito>> {
-    return this.http.get<Array<Distrito>>(`${API_URL}/departamento/${codigoDepartamento}/${codigoProvincia}`)
+    return this.http.get<Array<Distrito>>(`${API_URL}/ubigeo/distritos/${codigoDepartamento}/${codigoProvincia}`)
   }
 }

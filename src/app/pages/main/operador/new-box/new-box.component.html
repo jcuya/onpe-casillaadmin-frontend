@@ -423,8 +423,8 @@
         >
           <div class="labelsColor">Departamento*</div>
           <mat-form-field appearance="outline" style="width: 100%">
-            <mat-select placeholder="Seleccione" name="fm_departamentoList" formControlName="fm_departamentoList" (selectionChange)="eChangeDocumento($event)">
-              <mat-option *ngFor="let item of departamentoList" [value]="item.id">{{ item.value }}</mat-option>
+            <mat-select placeholder="Seleccione" name="fm_departamentoList" formControlName="fm_departamentoList" (selectionChange)="cambiarProvincia()">
+              <mat-option *ngFor="let item of departamentoList" [value]="item">{{ item.nodep }}</mat-option>
             </mat-select>
             <mat-error *ngIf="Formulario.controls.fm_departamentoList.invalid">{{eShowError("fm_departamentoList", Formulario.controls.fm_departamentoList.errors)}}</mat-error>
           </mat-form-field>
@@ -438,8 +438,8 @@
         >
           <div class="labelsColor">Provincia*</div>
           <mat-form-field appearance="outline" style="width: 100%">
-            <mat-select placeholder="Seleccione" name="fm_provinciaList" formControlName="fm_provinciaList" (selectionChange)="eChangeDocumento($event)">
-              <mat-option *ngFor="let item of provinciaList" [value]="item.id">{{ item.value }}</mat-option>
+            <mat-select placeholder="Seleccione" name="fm_provinciaList" formControlName="fm_provinciaList" (selectionChange)="cambiarDistrito()">
+              <mat-option *ngFor="let item of provinciaList" [value]="item">{{ item.noprv }}</mat-option>
             </mat-select>
             <mat-error *ngIf="Formulario.controls.fm_provinciaList.invalid">{{eShowError("fm_provinciaList", Formulario.controls.fm_provinciaList.errors)}}</mat-error>
           </mat-form-field>
@@ -453,8 +453,8 @@
         >
           <div class="labelsColor">Distrito*</div>
           <mat-form-field appearance="outline" style="width: 100%">
-            <mat-select placeholder="Seleccione" name="fm_distritoList" formControlName="fm_distritoList" (selectionChange)="eChangeDocumento($event)">
-              <mat-option *ngFor="let item of distritoList" [value]="item.id">{{ item.value }}</mat-option>
+            <mat-select placeholder="Seleccione" name="fm_distritoList" formControlName="fm_distritoList" >
+              <mat-option *ngFor="let item of distritoList" [value]="item">{{ item.nodis }}</mat-option>
             </mat-select>
             <mat-error *ngIf="Formulario.controls.fm_distritoList.invalid">{{eShowError("fm_distritoList", Formulario.controls.fm_distritoList.errors)}}</mat-error>
           </mat-form-field>
@@ -609,7 +609,7 @@
               type="submit"
               class="btnBlue"
               mat-button     
-              [disabled]="!(Formulario.valid && Formulario.dirty) || deshabilitado"         
+              [disabled]="!(Formulario.valid && Formulario.dirty)"         
               (click)="alert()"
             >
               ACEPTAR
